@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode } from 'utils/numHelpers';
-import KryptoTable from '../utils/KryptoTable';
+import KryptoTable from 'utils/KryptoTable';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import WordAndSolution from 'utils/WordAndSolution';
+import LineForLetter from 'utils/line-for-letter/LineForLetter';
 import SolutionPerChar from './SolutionPerChar';
 
 const cezarForLetter = (letter, key) => getLetter(getCode(letter) + key);

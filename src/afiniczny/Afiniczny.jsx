@@ -5,11 +5,10 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import { getLetter, getCode, modInverse } from 'utils/numHelpers';
+import { getLetter, getCode, modInverse, mod } from 'utils/numHelpers';
 import KryptoTable from '../utils/KryptoTable';
 import WordAndSolution from 'utils/WordAndSolution';
 import SolutionPerChar from './SolutionPerChar';
-import { mod } from 'utils/numHelpers';
 
 const affine = (word, [a, b], isEncode = true) => {
 	let result = '';
@@ -18,11 +17,9 @@ const affine = (word, [a, b], isEncode = true) => {
 	for (let c of word) {
 		if (!isEncode) {
 			const newA = modInverse(a, 26);
-			console.log({ newA });
 			code = newA * (getCode(c) - b);
 		} else code = getCode(c) * a + b;
 
-		console.log({ code, mod: mod(code, 26) });
 		result += getLetter(mod(code, 26));
 	}
 
@@ -83,9 +80,10 @@ function Afiniczny() {
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
-						{/* {word.split('').map((c) => (
-							<SolutionPerChar letter={c} keyValue={key} isEncryption={isEncrypt} />
-						))} */}
+						TODO Liczenie odwroconego klucza
+						{word.split('').map((c) => (
+							<SolutionPerChar letter={c} a={a} b={b} isEncryption={isEncrypt} />
+						))}
 					</Box>
 				</Paper>
 			</Box>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import { getLetter, getCode } from 'utils/numHelpers';
+import { getLetter, getCode } from './line-for-letter/node_modules/utils/numHelpers';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
