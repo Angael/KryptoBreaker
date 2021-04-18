@@ -79,8 +79,12 @@ function Afiniczny() {
 						<KryptoTable startStr={word} endStr={result} isEncryption={isEncrypt} />
 					</Box>
 					<Box p={2}>
-						<Typography variant='h4'>Letter by letter:</Typography>
+						<Typography variant='h4'>Klucz odwrócony:</Typography>
 						TODO Liczenie odwroconego klucza
+					</Box>
+					<Box p={2}>
+						<Typography variant='h4'>Letter by letter:</Typography>
+
 						{word.split('').map((c) => (
 							<SolutionPerChar letter={c} a={a} b={b} isEncryption={isEncrypt} />
 						))}
