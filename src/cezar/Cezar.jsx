@@ -8,30 +8,25 @@ import Grid from '@material-ui/core/Grid';
 import WordAndSolution from 'utils/WordAndSolution';
 import SolutionPerChar from './SolutionPerChar';
 
-const cezarForLetter = (letter, key) => getLetter(getCode(letter) + key);
-
-const cezarEncrypt = (word, key) => {
-	return word
-		.split('')
-		.map((c) => cezarForLetter(c, key))
-		.join('');
-};
-
 function Cezar() {
 	const [word, setWord] = useState('kryptografia');
 	const [key, setKey] = useState(0);
 	const [isEncrypt, setIsEncrypt] = useState(true);
 
-	let result = word && key !== undefined ? cezarEncrypt(word, key) : '';
-	if (isEncrypt) {
-		result = word && key !== undefined ? cezarEncrypt(word, key) : '';
-	} else {
-		result = word && key !== undefined ? cezarEncrypt(word, -key) : '';
+	const cezarEncrypt = () => {
+		let crypted = '';
+		let newKey = parseInt(key * (isEncrypt ? 1 : -1)) || 0;
+		for (let c of word) {
+		  crypted += getLetter(getCode(c) + newKey);
+		}
+		return crypted;
 	}
 
-	const changeWord = (event) => setWord(event.target.value);
+	let result = cezarEncrypt();
+	
 	const changeKey = (event) => setKey(Number(event.target.value));
-	const changeIsEncryption = (e, v) => setIsEncrypt(e.target.value);
+	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
+	const changeWord = (event) => setWord(event.target.value);
 
 	return (
 		<>
@@ -60,7 +55,7 @@ function Cezar() {
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Solution:</Typography>
-						<WordAndSolution startStr={word} endStr={result} />
+						<WordAndSolution startStr={word} endStr={result || ''} />
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Table:</Typography>
