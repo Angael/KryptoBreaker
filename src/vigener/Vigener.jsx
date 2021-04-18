@@ -1,31 +1,35 @@
 import { useState } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import { getLetter, getCode } from 'utils/numHelpers';
-import KryptoTable from 'utils/KryptoTable';
+import { getLetter, getCode, mod } from 'utils/numHelpers';
+import KryptoTable from '../utils/KryptoTable';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import WordAndSolution from 'utils/WordAndSolution';
-import LineForLetter from 'utils/line-for-letter/LineForLetter';
 import SolutionPerChar from './SolutionPerChar';
 
-function Cezar() {
+function Vigener() {
 	const [word, setWord] = useState('kryptografia');
-	const [key, setKey] = useState(0);
+	const [key, setKey] = useState(null);
 	const [isEncrypt, setIsEncrypt] = useState(true);
 
-	const cezarEncrypt = () => {
-		let crypted = '';
-		let newKey = parseInt(key * (isEncrypt ? 1 : -1)) || 0;
-		for (let c of word) {
-		  crypted += getLetter(getCode(c) + newKey);
-		}
-		return crypted;
+	const vigenerEncrypt = () => {	
+		const length = key?.length || 0;
+		if (length) {
+			let crypted = '';
+			for (let i in word) {
+				const c = word[i];
+				const k = key[i % length]
+				crypted += getLetter(mod(getCode(c) + (getCode(k) * (isEncrypt ? 1 : -1))));
+			}
+			console.log(word, key, crypted)
+			return crypted;
+		} else return word;
 	}
 
-	let result = cezarEncrypt();
+	let result = vigenerEncrypt();
 	
-	const changeKey = (event) => setKey(Number(event.target.value));
+	const changeKey = (event) => setKey(event.target.value);
 	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
 	const changeWord = (event) => setWord(event.target.value);
 
@@ -52,7 +56,7 @@ function Cezar() {
 						</Grid>
 					</Grid>
 					<Box p={2}>
-						<TextField label='key' type='number' onChange={changeKey} value={key} />
+						<TextField label='key' type='text' onChange={changeKey} value={key} />
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Solution:</Typography>
@@ -64,9 +68,10 @@ function Cezar() {
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
-						{word.split('').map((c, i) => (
-							<SolutionPerChar key={c + i} letter={c} keyValue={key} isEncryption={isEncrypt} />
-						))}
+						TBD
+						{/* {word.split('').map((c) => (
+							<SolutionPerChar letter={c} keyValue={key} isEncryption={isEncrypt} />
+						))} */}
 					</Box>
 				</Paper>
 			</Box>
@@ -74,4 +79,4 @@ function Cezar() {
 	);
 }
 
-export default Cezar;
+export default Vigener;

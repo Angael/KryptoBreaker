@@ -3,6 +3,7 @@ import './App.css';
 import Container from '@material-ui/core/Container';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import Cezar from './cezar/Cezar';
+import Vigener from './vigener/Vigener';
 import Paper from '@material-ui/core/Paper';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import Afiniczny from './afiniczny/Afiniczny';
@@ -50,6 +51,7 @@ function App() {
 			</Box>
 			<Box my={4}>{method === methods.cezar && <Cezar />}</Box>
 			<Box my={4}>{method === methods.afiniczny && <Afiniczny />}</Box>
+			<Box my={4}>{method === methods.vigenera && <Vigener />}</Box>
 		</Container>
 	);
 }
