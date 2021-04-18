@@ -1,37 +1,44 @@
 import { useState } from 'react';
+
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import { getLetter, getCode, mod } from 'utils/numHelpers';
-import KryptoTable from '../utils/KryptoTable';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+
+import { getLetter, getCode, modInverse, mod } from 'utils/numHelpers';
+import KryptoTable from '../utils/KryptoTable';
 import WordAndSolution from 'utils/WordAndSolution';
 import SolutionPerChar from './SolutionPerChar';
+import AfinicznyKluczLiczenie from './AfinicznyKluczLiczenie';
 
-function Vigener() {
+const affine = (word, [a, b], isEncode = true) => {
+	let result = '';
+	let code = null;
+
+	for (let c of word) {
+		if (!isEncode) {
+			const newA = modInverse(a, 26);
+			code = newA * (getCode(c) - b);
+		} else code = getCode(c) * a + b;
+
+		result += getLetter(mod(code, 26));
+	}
+
+	return result;
+};
+
+function Afiniczny() {
 	const [word, setWord] = useState('kryptografia');
-	const [key, setKey] = useState('');
+	const [keys, setKeys] = useState('');
 	const [isEncrypt, setIsEncrypt] = useState(true);
 
-	const vigenerEncrypt = () => {
-		const length = key?.length || 0;
-		if (length) {
-			let crypted = '';
-			for (let i in word) {
-				const c = word[i];
-				const k = key[i % length];
-				crypted += getLetter(mod(getCode(c) + getCode(k) * (isEncrypt ? 1 : -1)));
-			}
-			console.log(word, key, crypted);
-			return crypted;
-		} else return word;
-	};
+	const [a = 0, b = 0] = keys.replace(/\s/, '').split(',').map(Number);
 
-	let result = vigenerEncrypt();
+	const result = word && a !== undefined && b !== undefined ? affine(word, [a, b], isEncrypt) : '';
 
-	const changeKey = (event) => setKey(event.target.value);
-	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
 	const changeWord = (event) => setWord(event.target.value);
+	const changeKey = (event) => setKeys(event.target.value);
+	const changeIsEncryption = (e, v) => setIsEncrypt(e.target.value);
 
 	return (
 		<>
@@ -56,22 +63,35 @@ function Vigener() {
 						</Grid>
 					</Grid>
 					<Box p={2}>
-						<TextField label='key' type='text' onChange={changeKey} value={key} />
+						<TextField
+							label='keys'
+							placeholder={'3,7'}
+							type='text'
+							onChange={changeKey}
+							value={keys}
+						/>
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Solution:</Typography>
-						<WordAndSolution startStr={word} endStr={result || ''} />
+						<WordAndSolution startStr={word} endStr={result} />
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Table:</Typography>
 						<KryptoTable startStr={word} endStr={result} isEncryption={isEncrypt} />
 					</Box>
+					{!isEncrypt && (
+						<Box p={2}>
+							<Typography variant='h4'>Klucz odwrócony:</Typography>
+							<AfinicznyKluczLiczenie a={a} />
+						</Box>
+					)}
+
 					<Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
-						TBD
-						{/* {word.split('').map((c) => (
-							<SolutionPerChar letter={c} keyValue={key} isEncryption={isEncrypt} />
-						))} */}
+
+						{word.split('').map((c, i) => (
+							<SolutionPerChar key={c + i} letter={c} a={a} b={b} isEncryption={isEncrypt} />
+						))}
 					</Box>
 				</Paper>
 			</Box>
@@ -79,4 +99,4 @@ function Vigener() {
 	);
 }
 
-export default Vigener;
+export default Afiniczny;
