@@ -5,6 +5,7 @@ import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@mat
 import Cezar from './cezar/Cezar';
 import Paper from '@material-ui/core/Paper';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import Afiniczny from './afiniczny/Afiniczny';
 
 export const methods = {
 	cezar: 'c',
@@ -48,6 +49,7 @@ function App() {
 				<ArrowDownwardIcon />
 			</Box>
 			<Box my={4}>{method === methods.cezar && <Cezar />}</Box>
+			<Box my={4}>{method === methods.afiniczny && <Afiniczny />}</Box>
 		</Container>
 	);
 }
