@@ -89,8 +89,8 @@ function Afiniczny() {
 					<Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
 
-						{word.split('').map((c) => (
-							<SolutionPerChar letter={c} a={a} b={b} isEncryption={isEncrypt} />
+						{word.split('').map((c, i) => (
+							<SolutionPerChar key={c + i} letter={c} a={a} b={b} isEncryption={isEncrypt} />
 						))}
 					</Box>
 				</Paper>

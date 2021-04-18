@@ -69,8 +69,8 @@ function Cezar() {
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
-						{word.split('').map((c) => (
-							<SolutionPerChar letter={c} keyValue={key} isEncryption={isEncrypt} />
+						{word.split('').map((c, i) => (
+							<SolutionPerChar key={c + i} letter={c} keyValue={key} isEncryption={isEncrypt} />
 						))}
 					</Box>
 				</Paper>

@@ -26,7 +26,7 @@ function AfinicznyKluczLiczenie({ a }) {
 	console.log({ a });
 	const steps = getStepsForInverseKey(a);
 	return steps.map((step) => (
-		<Box>
+		<Box key={step}>
 			<Typography>{step}</Typography>
 		</Box>
 	));
