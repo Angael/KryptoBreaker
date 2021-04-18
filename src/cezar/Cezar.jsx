@@ -30,9 +30,7 @@ function Cezar() {
 	}
 
 	const changeWord = (event) => setWord(event.target.value);
-
 	const changeKey = (event) => setKey(Number(event.target.value));
-
 	const changeIsEncryption = (e, v) => setIsEncrypt(e.target.value);
 
 	return (

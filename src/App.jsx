@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Container from '@material-ui/core/Container';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
