@@ -4,8 +4,10 @@ import './App.css';
 import Container from '@material-ui/core/Container';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import Cezar from './cezar/Cezar';
+import Paper from '@material-ui/core/Paper';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
-const methods = {
+export const methods = {
 	cezar: 'c',
 	afiniczny: 'a',
 	vigenera: 'v',
@@ -22,17 +24,30 @@ function App() {
 	return (
 		<Container maxWidth='md'>
 			<Box my={4}>
-				<Typography variant='h2'>Wybierz metode:</Typography>
+				<Typography variant='h2'>Kryptobreaker:</Typography>
 			</Box>
-			<FormControl>
-				<InputLabel>Metoda</InputLabel>
-				<Select value={method} onChange={handleChange}>
-					<MenuItem value={methods.cezar}>Cezara</MenuItem>
-					<MenuItem value={methods.afiniczny}>Afiniczny</MenuItem>
-					<MenuItem value={methods.vigenera}>Vigenera</MenuItem>
-					<MenuItem value={methods.hila}>Hila</MenuItem>
-				</Select>
-			</FormControl>
+			<Paper elevation={3}>
+				<Box
+					p={2}
+					display='flex'
+					alignContent='center'
+					justifyItems='center'
+					justifyContent='center'
+				>
+					<FormControl>
+						<InputLabel>Metoda</InputLabel>
+						<Select value={method} onChange={handleChange}>
+							<MenuItem value={methods.cezar}>Cezara</MenuItem>
+							<MenuItem value={methods.afiniczny}>Afiniczny</MenuItem>
+							<MenuItem value={methods.vigenera}>Vigenera</MenuItem>
+							<MenuItem value={methods.hila}>Hila</MenuItem>
+						</Select>
+					</FormControl>
+				</Box>
+			</Paper>
+			<Box m={4} display='flex' alignContent='center' justifyItems='center' justifyContent='center'>
+				<ArrowDownwardIcon />
+			</Box>
 			<Box my={4}>{method === methods.cezar && <Cezar />}</Box>
 		</Container>
 	);
