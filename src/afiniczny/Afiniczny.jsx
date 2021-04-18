@@ -9,6 +9,7 @@ import { getLetter, getCode, modInverse, mod } from 'utils/numHelpers';
 import KryptoTable from '../utils/KryptoTable';
 import WordAndSolution from 'utils/WordAndSolution';
 import SolutionPerChar from './SolutionPerChar';
+import AfinicznyKluczLiczenie from './AfinicznyKluczLiczenie';
 
 const affine = (word, [a, b], isEncode = true) => {
 	let result = '';
@@ -78,10 +79,13 @@ function Afiniczny() {
 						<Typography variant='h4'>Table:</Typography>
 						<KryptoTable startStr={word} endStr={result} isEncryption={isEncrypt} />
 					</Box>
-					<Box p={2}>
-						<Typography variant='h4'>Klucz odwrócony:</Typography>
-						TODO Liczenie odwroconego klucza
-					</Box>
+					{!isEncrypt && (
+						<Box p={2}>
+							<Typography variant='h4'>Klucz odwrócony:</Typography>
+							<AfinicznyKluczLiczenie a={a} />
+						</Box>
+					)}
+
 					<Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
 
