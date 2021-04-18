@@ -11,7 +11,6 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import LineForLetter from 'utils/line-for-letter/LineForLetter';
 
 function SolutionPerChar({ letter, keyValue, isEncryption: isEncr }) {
-	console.log(keyValue);
 	const letterCode = getCode(letter);
 	const keyCode = getCode(keyValue);
 

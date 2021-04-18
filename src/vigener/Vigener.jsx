@@ -22,7 +22,6 @@ function Vigener() {
 				const k = key[i % length];
 				crypted += getLetter(mod(getCode(c) + getCode(k) * (isEncrypt ? 1 : -1)));
 			}
-			console.log(word, key, crypted);
 			return crypted;
 		} else return word;
 	};
@@ -42,7 +41,6 @@ function Vigener() {
 			return null;
 		}
 	}, [word, key]);
-	console.log({ middleTableRow });
 
 	return (
 		<>
