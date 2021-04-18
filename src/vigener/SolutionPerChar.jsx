@@ -18,26 +18,6 @@ function SolutionPerChar({ letter, keyValue, isEncryption: isEncr }) {
 
 	const afterMod = mod(letterAndKey, 26);
 
-	// let code;
-	// let invertedA = NaN;
-	// let calculationJsx;
-	// if (!isEncr) {
-	// 	invertedA = modInverse(a, 26);
-	// 	code = invertedA * (letterCode - b);
-	// 	calculationJsx = (
-	// 		<>
-	// 			{invertedA} * ({letterCode} - {b})
-	// 		</>
-	// 	);
-	// } else {
-	// 	code = letterCode * a + b;
-	// 	calculationJsx = (
-	// 		<>
-	// 			{a} * ({letterCode} + {b})
-	// 		</>
-	// 	);
-	// }
-
 	return (
 		<LineForLetter letter={letter} resultLetter={getLetter(afterMod)}>
 			{isEncr ? 'y' : 'x'} = {isEncr ? 'e' : 'd'}
