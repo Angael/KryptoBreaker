@@ -10,25 +10,25 @@ import SolutionPerChar from './SolutionPerChar';
 
 function Vigener() {
 	const [word, setWord] = useState('kryptografia');
-	const [key, setKey] = useState(null);
+	const [key, setKey] = useState('');
 	const [isEncrypt, setIsEncrypt] = useState(true);
 
-	const vigenerEncrypt = () => {	
+	const vigenerEncrypt = () => {
 		const length = key?.length || 0;
 		if (length) {
 			let crypted = '';
 			for (let i in word) {
 				const c = word[i];
-				const k = key[i % length]
-				crypted += getLetter(mod(getCode(c) + (getCode(k) * (isEncrypt ? 1 : -1))));
+				const k = key[i % length];
+				crypted += getLetter(mod(getCode(c) + getCode(k) * (isEncrypt ? 1 : -1)));
 			}
-			console.log(word, key, crypted)
+			console.log(word, key, crypted);
 			return crypted;
 		} else return word;
-	}
+	};
 
 	let result = vigenerEncrypt();
-	
+
 	const changeKey = (event) => setKey(event.target.value);
 	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
 	const changeWord = (event) => setWord(event.target.value);
