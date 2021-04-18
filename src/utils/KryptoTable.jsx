@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-function KryptoTable({ startStr = '', endStr = '', isEncryption = true }) {
+function KryptoTable({ startStr = '', endStr = '', middleNumbersArr, isEncryption = true }) {
 	const startRow = (
 		<TableRow>
 			<TableCell component='th' scope='row'>
@@ -64,6 +64,19 @@ function KryptoTable({ startStr = '', endStr = '', isEncryption = true }) {
 		</TableRow>
 	);
 
+	const middleRow = middleNumbersArr && (
+		<TableRow>
+			<TableCell component='th' scope='row'>
+				k
+			</TableCell>
+			{middleNumbersArr.map((v, i) => (
+				<TableCell key={v + '-' + i} align='center'>
+					{v}
+				</TableCell>
+			))}
+		</TableRow>
+	);
+
 	return (
 		<>
 			<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
@@ -71,6 +84,7 @@ function KryptoTable({ startStr = '', endStr = '', isEncryption = true }) {
 					<TableBody>
 						{startRow}
 						{startNumbers}
+						{middleRow}
 						{endNumbers}
 						{endRow}
 					</TableBody>

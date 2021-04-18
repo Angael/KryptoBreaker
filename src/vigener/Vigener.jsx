@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode, mod } from 'utils/numHelpers';
@@ -33,6 +33,17 @@ function Vigener() {
 	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
 	const changeWord = (event) => setWord(event.target.value);
 
+	const middleTableRow = useMemo(() => {
+		if (word && key) {
+			const arr = [];
+			word.split('').forEach((v, i) => arr.push(key[i % key.length]));
+			return arr.map((v) => getCode(v));
+		} else {
+			return null;
+		}
+	}, [word, key]);
+	console.log({ middleTableRow });
+
 	return (
 		<>
 			<Box my={4}>
@@ -64,15 +75,26 @@ function Vigener() {
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Table:</Typography>
-						<KryptoTable startStr={word} endStr={result} isEncryption={isEncrypt} />
+						<KryptoTable
+							startStr={word}
+							endStr={result}
+							middleNumbersArr={middleTableRow}
+							isEncryption={isEncrypt}
+						/>
 					</Box>
-					<Box p={2}>
-						<Typography variant='h4'>Letter by letter:</Typography>
-						TBD
-						{/* {word.split('').map((c) => (
-							<SolutionPerChar letter={c} keyValue={key} isEncryption={isEncrypt} />
-						))} */}
-					</Box>
+					{key && (
+						<Box p={2}>
+							<Typography variant='h4'>Letter by letter:</Typography>
+							{word.split('').map((c, i) => (
+								<SolutionPerChar
+									key={c + i}
+									letter={c}
+									keyValue={key[i % key.length]}
+									isEncryption={isEncrypt}
+								/>
+							))}
+						</Box>
+					)}
 				</Paper>
 			</Box>
 		</>
