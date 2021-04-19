@@ -18,7 +18,7 @@ export const methods = {
 };
 
 function App() {
-	const [method, setMetod] = useState(methods.cezar);
+	const [method, setMetod] = useState(methods.hila);
 
 	const handleChange = (event) => {
 		setMetod(event.target.value);

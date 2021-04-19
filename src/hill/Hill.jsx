@@ -8,40 +8,68 @@ import Grid from '@material-ui/core/Grid';
 import WordAndSolution from 'utils/WordAndSolution';
 import LineForLetter from 'utils/line-for-letter/LineForLetter';
 import SolutionPerChar from './SolutionPerChar';
-import MatrixInput from './MatrixInput';
+import MatrixInput from './Matrix';
+import useMatrixState from 'hill/useMatrixState';
 
-// const hillEncrypt = () => {
-// 	let crypted = '';
-// 	let newKey = parseInt(key * (isEncrypt ? 1 : -1)) || 0;
-// 	for (let c of word) {
-// 		crypted += getLetter(getCode(c) + newKey);
-// 	}
-// 	return crypted;
-// }
+import { Matrix } from 'ml-matrix';
+
+const hillEncrypt = (wordMatrix, keyMatrix) => {
+	return Matrix.mod(wordMatrix.mmul(keyMatrix), 26);
+};
+
+const matrixFromString = (word, matrixWidth) => {
+	console.log('a', word, matrixWidth);
+	const matrixHeight = Math.ceil(word.length / matrixWidth);
+
+	const newMatrix = Matrix.zeros(matrixHeight, matrixWidth);
+	const letters = word.split('');
+	if (letters) {
+		letters.forEach((c, i) => {
+			console.group('letter: ' + c);
+			const row = Math.floor(i / matrixWidth);
+			console.log('row:', row);
+			const col = i % matrixWidth;
+			console.log('col:', col);
+			newMatrix.set(row, col, getCode(c));
+			console.groupEnd('letter: ' + c);
+		});
+		return newMatrix;
+	} else {
+		return null;
+	}
+};
+
+const getArrayFromMatrix = (matrix) => matrix.data.map((row) => Array.from(row));
+
+window.Matrix = Matrix;
 
 function Hill() {
 	const [word, setWord] = useState('telewizor');
-	const [key, setKey] = useState(0);
+	const { rows, setValue, size, resize } = useMatrixState(3);
 	const [isEncrypt, setIsEncrypt] = useState(true);
 
+	var A = new Matrix([
+		[1, 1],
+		[2, 2],
+	]);
+	const wordMatrix = matrixFromString(word, size);
+	console.log('matrix from word', wordMatrix);
 	let result = 'placeholder'; // useMemo || hillEncrypt();
 
-	const changeKey = (event) => setKey(Number(event.target.value));
-	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
 	const changeWord = (event) => setWord(event.target.value);
+	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
+	const handleResize = (e) => resize(e.target.value);
 
 	return (
 		<>
 			<Box my={4}>
 				<Paper elevation={3}>
-					<Grid container>
-						<Grid item xs={6}>
-							<Box p={2}>
+					<Box p={2}>
+						<Grid container>
+							<Grid item xs={6}>
 								<TextField label='word' onChange={changeWord} value={word} />
-							</Box>
-						</Grid>
-						<Grid item xs={6}>
-							<Box p={2}>
+							</Grid>
+							<Grid item xs={6}>
 								<FormControl>
 									<InputLabel>Which way</InputLabel>
 									<Select value={isEncrypt} onChange={changeIsEncryption}>
@@ -49,12 +77,33 @@ function Hill() {
 										<MenuItem value={false}>Decrypt</MenuItem>
 									</Select>
 								</FormControl>
-							</Box>
+							</Grid>
 						</Grid>
-					</Grid>
+					</Box>
 					<Box p={2}>
-						<TextField label='key' type='number' onChange={changeKey} value={key} />
-						<MatrixInput />
+						<Grid container>
+							<Grid item xs={6}></Grid>
+							<Grid item xs={6}>
+								<TextField
+									label='Size of key matrix'
+									type='number'
+									value={size}
+									onChange={handleResize}
+								/>
+							</Grid>
+						</Grid>
+					</Box>
+					<Box p={2}>
+						<Grid container>
+							<Grid item xs={6}>
+								<Typography variant='h4'>Word:</Typography>
+								<MatrixInput rows={getArrayFromMatrix(wordMatrix)} />
+							</Grid>
+							<Grid item xs={6}>
+								<Typography variant='h4'>Key:</Typography>
+								<MatrixInput rows={rows} changeValue={setValue} />
+							</Grid>
+						</Grid>
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Solution:</Typography>
@@ -66,9 +115,9 @@ function Hill() {
 					</Box>
 					<Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
-						{word.split('').map((c, i) => (
+						{/* {word.split('').map((c, i) => (
 							<SolutionPerChar key={c + i} letter={c} keyValue={key} isEncryption={isEncrypt} />
-						))}
+						))} */}
 					</Box>
 				</Paper>
 			</Box>
