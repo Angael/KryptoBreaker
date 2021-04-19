@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode, mod, modInverse } from 'utils/numHelpers';
-import KryptoTable from 'hill/node_modules/utils/KryptoTable';
+import KryptoTable from 'utils/KryptoTable';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import { methods } from 'App';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import LineForLetter from 'hill/node_modules/utils/line-for-letter/LineForLetter';
+import LineForLetter from 'utils/line-for-letter/LineForLetter';
 
 const getStepsForInverseKey = (num) => {
 	const results = [];
