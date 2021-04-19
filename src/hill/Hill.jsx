@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode } from 'utils/numHelpers';
@@ -13,8 +13,13 @@ import useMatrixState from 'hill/useMatrixState';
 
 import { Matrix } from 'ml-matrix';
 
-const hillEncrypt = (wordMatrix, keyMatrix) => {
-	return Matrix.mod(wordMatrix.mmul(keyMatrix), 26);
+const hillEncrypt = (wordMatrix, keyMatrix, isEncrypt) => {
+	if (isEncrypt) {
+		return Matrix.mod(wordMatrix.mmul(keyMatrix), 26);
+	} else {
+		const invertedKey = keyMatrix.transpose();
+		return Matrix.mod(wordMatrix.mmul(invertedKey), 26);
+	}
 };
 
 const matrixFromString = (word, matrixWidth) => {
@@ -25,13 +30,9 @@ const matrixFromString = (word, matrixWidth) => {
 	const letters = word.split('');
 	if (letters) {
 		letters.forEach((c, i) => {
-			console.group('letter: ' + c);
 			const row = Math.floor(i / matrixWidth);
-			console.log('row:', row);
 			const col = i % matrixWidth;
-			console.log('col:', col);
 			newMatrix.set(row, col, getCode(c));
-			console.groupEnd('letter: ' + c);
 		});
 		return newMatrix;
 	} else {
@@ -41,6 +42,9 @@ const matrixFromString = (word, matrixWidth) => {
 
 const getArrayFromMatrix = (matrix) => matrix.data.map((row) => Array.from(row));
 
+const matrixArrayToString = (rows) =>
+	rows.map((row) => row.map((v) => getLetter(v)).join('')).join('');
+
 window.Matrix = Matrix;
 
 function Hill() {
@@ -48,13 +52,17 @@ function Hill() {
 	const { rows, setValue, size, resize } = useMatrixState(3);
 	const [isEncrypt, setIsEncrypt] = useState(true);
 
-	var A = new Matrix([
-		[1, 1],
-		[2, 2],
+	const wordMatrix = useMemo(() => matrixFromString(word, size), [word, size]);
+	const keyMatrix = useMemo(() => new Matrix(rows), [rows]);
+
+	const resultMatrix = useMemo(() => hillEncrypt(wordMatrix, keyMatrix, isEncrypt), [
+		wordMatrix,
+		keyMatrix,
+		isEncrypt,
 	]);
-	const wordMatrix = matrixFromString(word, size);
-	console.log('matrix from word', wordMatrix);
-	let result = 'placeholder'; // useMemo || hillEncrypt();
+	const result = matrixArrayToString(getArrayFromMatrix(resultMatrix));
+	console.log('test', getArrayFromMatrix(resultMatrix));
+	console.log('result', result);
 
 	const changeWord = (event) => setWord(event.target.value);
 	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
