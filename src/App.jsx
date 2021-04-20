@@ -2,11 +2,13 @@ import { useState } from 'react';
 import './App.css';
 import Container from '@material-ui/core/Container';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import Cezar from './cezar/Cezar';
-import Vigener from './vigener/Vigener';
 import Paper from '@material-ui/core/Paper';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
+import Cezar from './cezar/Cezar';
+import Vigener from './vigener/Vigener';
 import Afiniczny from './afiniczny/Afiniczny';
+import Hill from './hill/Hill';
 
 export const methods = {
 	cezar: 'c',
@@ -16,7 +18,7 @@ export const methods = {
 };
 
 function App() {
-	const [method, setMetod] = useState(methods.cezar);
+	const [method, setMetod] = useState(methods.hila);
 
 	const handleChange = (event) => {
 		setMetod(event.target.value);
@@ -52,6 +54,7 @@ function App() {
 			<Box my={4}>{method === methods.cezar && <Cezar />}</Box>
 			<Box my={4}>{method === methods.afiniczny && <Afiniczny />}</Box>
 			<Box my={4}>{method === methods.vigenera && <Vigener />}</Box>
+			<Box my={4}>{method === methods.hila && <Hill />}</Box>
 		</Container>
 	);
 }

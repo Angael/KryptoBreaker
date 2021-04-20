@@ -3,7 +3,7 @@ export function mod(n, m = 26) {
 }
 
 // odwrotnosc modularna
-export const modInverse = (a, m) => {
+export const modInverse = (a, m = 26) => {
 	for (let x = 1; x < m; x++) if (((a % m) * (x % m)) % m == 1) return x;
 };
 

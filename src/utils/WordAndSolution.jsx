@@ -27,13 +27,13 @@ function WordAndSolution({ startStr = '', endStr = '' }) {
 		<Card variant='outlined'>
 			<Box p={2} {...boxCenterProps}>
 				<Box flex={9} {...boxCenterProps}>
-					<Typography variant='h4'>{startStr}</Typography>
+					<Typography variant='h5'>{startStr}</Typography>
 				</Box>
 				<Box flex={1} {...boxCenterProps}>
 					<ArrowForwardIcon />
 				</Box>
 				<Box flex={9} {...boxCenterProps}>
-					<Typography variant='h4'>{endStr}</Typography>
+					<Typography variant='h5'>{endStr}</Typography>
 				</Box>
 			</Box>
 		</Card>
