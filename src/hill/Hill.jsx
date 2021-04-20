@@ -11,28 +11,36 @@ import SolutionPerChar from './SolutionPerChar';
 import MatrixInput from './Matrix';
 import useMatrixState from 'hill/useMatrixState';
 
-import { Matrix } from 'ml-matrix';
+import { getInvertedMatrix, modMatrix, getZeroesMatrix, isKeyMatrixInvertable } from './hillCipher';
+var Matrix = require('node-matrices');
 
 const hillEncrypt = (wordMatrix, keyMatrix, isEncrypt) => {
+	if (
+		!wordMatrix.numRows() ||
+		!wordMatrix.numColumns() ||
+		!keyMatrix.numRows() ||
+		!keyMatrix.numColumns()
+	) {
+		return wordMatrix;
+	}
 	if (isEncrypt) {
-		return Matrix.mod(wordMatrix.mmul(keyMatrix), 26);
+		return modMatrix(wordMatrix.multiply(keyMatrix), 26);
 	} else {
-		const invertedKey = keyMatrix.transpose();
-		return Matrix.mod(wordMatrix.mmul(invertedKey), 26);
+		const invertedKey = getInvertedMatrix(keyMatrix);
+		return modMatrix(wordMatrix.multiply(invertedKey), 26);
 	}
 };
 
 const matrixFromString = (word, matrixWidth) => {
-	console.log('a', word, matrixWidth);
 	const matrixHeight = Math.ceil(word.length / matrixWidth);
 
-	const newMatrix = Matrix.zeros(matrixHeight, matrixWidth);
+	let newMatrix = getZeroesMatrix(matrixWidth, matrixHeight);
 	const letters = word.split('');
 	if (letters) {
 		letters.forEach((c, i) => {
 			const row = Math.floor(i / matrixWidth);
 			const col = i % matrixWidth;
-			newMatrix.set(row, col, getCode(c));
+			newMatrix = newMatrix.replace(row, col, getCode(c));
 		});
 		return newMatrix;
 	} else {
@@ -45,8 +53,6 @@ const getArrayFromMatrix = (matrix) => matrix.data.map((row) => Array.from(row))
 const matrixArrayToString = (rows) =>
 	rows.map((row) => row.map((v) => getLetter(v)).join('')).join('');
 
-window.Matrix = Matrix;
-
 function Hill() {
 	const [word, setWord] = useState('telewizor');
 	const { rows, setValue, size, resize } = useMatrixState(3);
@@ -55,14 +61,14 @@ function Hill() {
 	const wordMatrix = useMemo(() => matrixFromString(word, size), [word, size]);
 	const keyMatrix = useMemo(() => new Matrix(rows), [rows]);
 
+	const isKeyMatrixOk = isKeyMatrixInvertable(keyMatrix);
+
 	const resultMatrix = useMemo(() => hillEncrypt(wordMatrix, keyMatrix, isEncrypt), [
 		wordMatrix,
 		keyMatrix,
 		isEncrypt,
 	]);
 	const result = matrixArrayToString(getArrayFromMatrix(resultMatrix));
-	console.log('test', getArrayFromMatrix(resultMatrix));
-	console.log('result', result);
 
 	const changeWord = (event) => setWord(event.target.value);
 	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
@@ -109,8 +115,22 @@ function Hill() {
 							</Grid>
 							<Grid item xs={6}>
 								<Typography variant='h4'>Key:</Typography>
-								<MatrixInput rows={rows} changeValue={setValue} />
+								<MatrixInput
+									rows={rows}
+									changeValue={setValue}
+									error={!isKeyMatrixOk}
+									helperText={!isKeyMatrixOk ? 'This key matrix can not be inverted' : ''}
+								/>
 							</Grid>
+							{!isEncrypt && (
+								<>
+									<Grid item xs={6}></Grid>
+									<Grid item xs={6}>
+										<Typography variant='h4'>Inverted Key:</Typography>
+										<MatrixInput rows={getArrayFromMatrix(getInvertedMatrix(keyMatrix))} />
+									</Grid>
+								</>
+							)}
 						</Grid>
 					</Box>
 					<Box p={2}>
@@ -121,12 +141,12 @@ function Hill() {
 						<Typography variant='h4'>Table:</Typography>
 						<KryptoTable startStr={word} endStr={result} isEncryption={isEncrypt} />
 					</Box>
-					<Box p={2}>
+					{/* <Box p={2}>
 						<Typography variant='h4'>Letter by letter:</Typography>
-						{/* {word.split('').map((c, i) => (
+						{word.split('').map((c, i) => (
 							<SolutionPerChar key={c + i} letter={c} keyValue={key} isEncryption={isEncrypt} />
-						))} */}
-					</Box>
+						))} 
+					</Box> */}
 				</Paper>
 			</Box>
 		</>

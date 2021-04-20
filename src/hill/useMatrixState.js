@@ -13,7 +13,8 @@ const useMatrixState = (initSize = 2) => {
 		);
 
 	const resize = (newWidth) => {
-		const newWidthNumber = clamp(Number(newWidth), 1, 14);
+		// W teorii 1 powinno działać, ale dekrypcja buguje się jak jest 1x1 klucz
+		const newWidthNumber = clamp(Number(newWidth), 2, 14);
 		setRows(defaultMatrix(newWidthNumber));
 	};
 

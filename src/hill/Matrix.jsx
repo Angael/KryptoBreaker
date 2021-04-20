@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { css } from '@emotion/css';
 
@@ -15,7 +16,7 @@ const centeredInputCss = css`
 	}
 `;
 
-function Matrix({ rows, changeValue }) {
+function Matrix({ rows, changeValue, error, helperText }) {
 	const handleChangeField = (row, column) => (e) => {
 		if (changeValue) {
 			const onlyNumbers = Number(e.target.value.replace(/\D/g, ''));
@@ -48,6 +49,7 @@ function Matrix({ rows, changeValue }) {
 												size='small'
 												className={centeredInputCss}
 												onChange={handleChangeField(i, j)}
+												error={error}
 											/>
 										) : (
 											<Typography align='center'>{field}</Typography>
@@ -58,6 +60,7 @@ function Matrix({ rows, changeValue }) {
 						))}
 					</tbody>
 				</table>
+				<FormHelperText error={!!helperText}>{helperText}</FormHelperText>
 			</Box>
 		</>
 	);
