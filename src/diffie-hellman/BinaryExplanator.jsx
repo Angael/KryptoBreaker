@@ -12,10 +12,7 @@ function BinaryExplanator({ num }) {
 				</Box>
 			</Grid>
 			<Grid item xs={12}>
-				<Box textAlign='center'>in reverse it's {binary.split('').reverse().join(',')}</Box>
-			</Grid>
-			<Grid item xs={12}>
-				<Box textAlign='center'>t = numbers above</Box>
+				<Box textAlign='center'>in reverse it's [{binary.split('').reverse().join(',')}] = t</Box>
 			</Grid>
 		</Grid>
 	);
