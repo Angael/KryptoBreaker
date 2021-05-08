@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/KryptoBreaker/static/css/main.ba713c50.chunk.css",
-    "main.js": "/KryptoBreaker/static/js/main.aae3ec92.chunk.js",
-    "main.js.map": "/KryptoBreaker/static/js/main.aae3ec92.chunk.js.map",
+    "main.js": "/KryptoBreaker/static/js/main.c40d6637.chunk.js",
+    "main.js.map": "/KryptoBreaker/static/js/main.c40d6637.chunk.js.map",
     "runtime-main.js": "/KryptoBreaker/static/js/runtime-main.fa31c4b2.js",
     "runtime-main.js.map": "/KryptoBreaker/static/js/runtime-main.fa31c4b2.js.map",
-    "static/js/2.22239c8b.chunk.js": "/KryptoBreaker/static/js/2.22239c8b.chunk.js",
-    "static/js/2.22239c8b.chunk.js.map": "/KryptoBreaker/static/js/2.22239c8b.chunk.js.map",
+    "static/js/2.b0fca147.chunk.js": "/KryptoBreaker/static/js/2.b0fca147.chunk.js",
+    "static/js/2.b0fca147.chunk.js.map": "/KryptoBreaker/static/js/2.b0fca147.chunk.js.map",
     "index.html": "/KryptoBreaker/index.html",
     "static/css/main.ba713c50.chunk.css.map": "/KryptoBreaker/static/css/main.ba713c50.chunk.css.map",
-    "static/js/2.22239c8b.chunk.js.LICENSE.txt": "/KryptoBreaker/static/js/2.22239c8b.chunk.js.LICENSE.txt"
+    "static/js/2.b0fca147.chunk.js.LICENSE.txt": "/KryptoBreaker/static/js/2.b0fca147.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.fa31c4b2.js",
-    "static/js/2.22239c8b.chunk.js",
+    "static/js/2.b0fca147.chunk.js",
     "static/css/main.ba713c50.chunk.css",
-    "static/js/main.aae3ec92.chunk.js"
+    "static/js/main.c40d6637.chunk.js"
   ]
 }
