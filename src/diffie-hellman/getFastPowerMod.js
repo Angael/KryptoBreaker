@@ -26,13 +26,13 @@ const getFastPowerMod = (p, g, power) => {
 		const prevA = steps[i - 1].a;
 		const prevX = steps[i - 1].x;
 
-		let helperTextA = `${prevA} * ${prevA}`;
 		let helperTextX = '';
 
 		let a = mod(prevA * prevA, p);
 		if (i === reversedBinaryArray.length) {
 			a = '';
 		}
+		let helperTextA = `${prevA} * ${prevA} mod ${p} =  ${a}`;
 
 		let x;
 		if (prevT) {

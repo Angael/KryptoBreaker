@@ -10,6 +10,7 @@ import {
 	TableRow,
 	Tooltip,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
 const answerCss = css`
 	background: #97ffa7;
@@ -24,6 +25,14 @@ const calculationNumbersCss = css`
 	transition: 0.3s;
 `;
 
+const TableCellHoverable = withStyles({
+	root: {
+		'&:hover': {
+			backgroundColor: 'rgb(0 ,0, 0, 0.1)',
+		},
+	},
+})(TableCell);
+
 function FastPowerTable({ stepsObj }) {
 	const [hoveringXRow, setHoveringXRow] = useState(null);
 	const onStartHover = (i) => () => {
@@ -33,7 +42,6 @@ function FastPowerTable({ stepsObj }) {
 		setHoveringXRow(null);
 	};
 
-	console.log('steps', stepsObj);
 	return (
 		<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
 			<Table>
@@ -62,20 +70,20 @@ function FastPowerTable({ stepsObj }) {
 							<TableRow key={i}>
 								<TableCell align='center'>{i}</TableCell>
 								<Tooltip title={helperTextX}>
-									<TableCell
+									<TableCellHoverable
 										align='center'
 										className={xCss}
 										onMouseEnter={onStartHover(i)}
 										onMouseLeave={onEndHover(i)}
 									>
 										<div>{x}</div>
-									</TableCell>
+									</TableCellHoverable>
 								</Tooltip>
 								{!isLast && (
 									<Tooltip title={helperTextA}>
-										<TableCell align='center' className={aCss}>
+										<TableCellHoverable align='center' className={aCss}>
 											<div>{a}</div>
-										</TableCell>
+										</TableCellHoverable>
 									</Tooltip>
 								)}
 								{!isLast && <TableCell align='center'>{t}</TableCell>}
