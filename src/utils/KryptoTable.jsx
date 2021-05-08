@@ -78,19 +78,17 @@ function KryptoTable({ startStr = '', endStr = '', middleNumbersArr, isEncryptio
 	);
 
 	return (
-		<>
-			<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
-				<Table>
-					<TableBody>
-						{startRow}
-						{startNumbers}
-						{middleRow}
-						{endNumbers}
-						{endRow}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</>
+		<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
+			<Table>
+				<TableBody>
+					{startRow}
+					{startNumbers}
+					{middleRow}
+					{endNumbers}
+					{endRow}
+				</TableBody>
+			</Table>
+		</TableContainer>
 	);
 }
 

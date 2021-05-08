@@ -9,16 +9,18 @@ import Cezar from './cezar/Cezar';
 import Vigener from './vigener/Vigener';
 import Afiniczny from './afiniczny/Afiniczny';
 import Hill from './hill/Hill';
+import DiffieHellman from './diffie-hellman/DiffieHellman';
 
 export const methods = {
 	cezar: 'c',
 	afiniczny: 'a',
 	vigenera: 'v',
 	hila: 'h',
+	diffieHellman: 'dh',
 };
 
 function App() {
-	const [method, setMetod] = useState(methods.hila);
+	const [method, setMetod] = useState(methods.diffieHellman);
 
 	const handleChange = (event) => {
 		setMetod(event.target.value);
@@ -44,6 +46,7 @@ function App() {
 							<MenuItem value={methods.afiniczny}>Afiniczny</MenuItem>
 							<MenuItem value={methods.vigenera}>Vigenera</MenuItem>
 							<MenuItem value={methods.hila}>Hila</MenuItem>
+							<MenuItem value={methods.diffieHellman}>Diffie Hellman</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
@@ -55,6 +58,7 @@ function App() {
 			<Box my={4}>{method === methods.afiniczny && <Afiniczny />}</Box>
 			<Box my={4}>{method === methods.vigenera && <Vigener />}</Box>
 			<Box my={4}>{method === methods.hila && <Hill />}</Box>
+			<Box my={4}>{method === methods.diffieHellman && <DiffieHellman />}</Box>
 		</Container>
 	);
 }
