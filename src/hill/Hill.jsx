@@ -1,5 +1,14 @@
 import { useState, useMemo } from 'react';
-import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import {
+	Typography,
+	Box,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+	Switch,
+	FormControlLabel,
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode } from 'utils/numHelpers';
 import KryptoTable from 'utils/KryptoTable';
@@ -23,12 +32,18 @@ const hillEncrypt = (wordMatrix, keyMatrix, isEncrypt) => {
 	) {
 		return wordMatrix;
 	}
+
+	let result;
 	if (isEncrypt) {
-		return modMatrix(wordMatrix.multiply(keyMatrix), 26);
+		result = wordMatrix.multiply(keyMatrix);
 	} else {
 		const invertedKey = getInvertedMatrix(keyMatrix);
-		return modMatrix(wordMatrix.multiply(invertedKey), 26);
+		result = wordMatrix.multiply(invertedKey);
 	}
+	return {
+		resultMatrixBeforeMod: JSON.parse(JSON.stringify(result)),
+		resultMatrix: modMatrix(result, 26),
+	};
 };
 
 const matrixFromString = (word, matrixWidth) => {
@@ -63,16 +78,18 @@ function Hill() {
 
 	const isKeyMatrixOk = isKeyMatrixInvertable(keyMatrix);
 
-	const resultMatrix = useMemo(() => hillEncrypt(wordMatrix, keyMatrix, isEncrypt), [
-		wordMatrix,
-		keyMatrix,
-		isEncrypt,
-	]);
+	const { resultMatrix, resultMatrixBeforeMod } = useMemo(
+		() => hillEncrypt(wordMatrix, keyMatrix, isEncrypt),
+		[wordMatrix, keyMatrix, isEncrypt]
+	);
 	const result = matrixArrayToString(getArrayFromMatrix(resultMatrix));
 
 	const changeWord = (event) => setWord(event.target.value);
 	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
 	const handleResize = (e) => resize(e.target.value);
+
+	const [showResultAfterMod, setShowResultAfterMod] = useState(true);
+	const toggleShowResultAfterMod = () => setShowResultAfterMod((v) => !v);
 
 	return (
 		<>
@@ -131,6 +148,27 @@ function Hill() {
 									</Grid>
 								</>
 							)}
+						</Grid>
+						<Grid container>
+							<Grid item xs={6}>
+								<Grid item xs={6}></Grid>
+								<Typography variant='h4'>Multiplication result:</Typography>
+								<FormControlLabel
+									control={
+										<Switch
+											checked={showResultAfterMod}
+											onClick={toggleShowResultAfterMod}
+											color='primary'
+										/>
+									}
+									label='After modulo'
+								/>
+								<MatrixInput
+									rows={getArrayFromMatrix(
+										showResultAfterMod ? resultMatrix : resultMatrixBeforeMod
+									)}
+								/>
+							</Grid>
 						</Grid>
 					</Box>
 					<Box p={2}>
