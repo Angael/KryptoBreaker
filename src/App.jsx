@@ -10,6 +10,8 @@ import Vigener from './vigener/Vigener';
 import Afiniczny from './afiniczny/Afiniczny';
 import Hill from './hill/Hill';
 import DiffieHellman from './diffie-hellman/DiffieHellman';
+import Odwrotnosc from './odwrotnosc/Odwrotnosc';
+import PotegaMod from './potega-mod/PotegaMod';
 
 export const methods = {
 	cezar: 'c',
@@ -17,6 +19,8 @@ export const methods = {
 	vigenera: 'v',
 	hila: 'h',
 	diffieHellman: 'dh',
+	odwrotnosc: 'odw',
+	potegaMod: 'potMod',
 };
 
 function App() {
@@ -47,6 +51,8 @@ function App() {
 							<MenuItem value={methods.vigenera}>Vigenera</MenuItem>
 							<MenuItem value={methods.hila}>Hila</MenuItem>
 							<MenuItem value={methods.diffieHellman}>Diffie Hellman</MenuItem>
+							<MenuItem value={methods.odwrotnosc}>Odwrotność modularna</MenuItem>
+							<MenuItem value={methods.potegaMod}>Potęga modułowa</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
@@ -59,6 +65,8 @@ function App() {
 			<Box my={4}>{method === methods.vigenera && <Vigener />}</Box>
 			<Box my={4}>{method === methods.hila && <Hill />}</Box>
 			<Box my={4}>{method === methods.diffieHellman && <DiffieHellman />}</Box>
+			<Box my={4}>{method === methods.odwrotnosc && <Odwrotnosc />}</Box>
+			<Box my={4}>{method === methods.potegaMod && <PotegaMod />}</Box>
 		</Container>
 	);
 }

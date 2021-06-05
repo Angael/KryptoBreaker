@@ -10,11 +10,11 @@ import { methods } from 'App';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import LineForLetter from 'utils/line-for-letter/LineForLetter';
 
-const getStepsForInverseKey = (num) => {
+const getStepsForInverseKey = (num, n = 26) => {
 	const results = [];
-	for (let i = 0; i < 26; i++) {
-		results.push(`${num} * ${i} mod 26 = ${mod(num * i, 26)}`);
-		if ((num * i) % 26 === 1) {
+	for (let i = 0; i < n; i++) {
+		results.push(`${num} * ${i} mod ${n} = ${mod(num * i, n)}`);
+		if ((num * i) % n === 1) {
 			results.push('Found inverted key = ' + i);
 			return results;
 		}
@@ -22,8 +22,8 @@ const getStepsForInverseKey = (num) => {
 	return results;
 };
 
-function AfinicznyKluczLiczenie({ a }) {
-	const steps = getStepsForInverseKey(a);
+function AfinicznyKluczLiczenie({ a, n }) {
+	const steps = getStepsForInverseKey(a, n);
 	return steps.map((step) => (
 		<Box key={step}>
 			<Typography>{step}</Typography>
