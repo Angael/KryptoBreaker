@@ -7,10 +7,11 @@ import Grid from '@material-ui/core/Grid';
 
 import { getLetter, getCode, modInverse, mod } from 'utils/numHelpers';
 import AfinicznyKluczLiczenie from 'afiniczny/AfinicznyKluczLiczenie';
+import OdwrotnoscTable from './OdwrotnoscTable';
 
 function Odwrotnosc() {
-	const [a, setA] = useState(12);
-	const [n, setN] = useState(26);
+	const [a, setA] = useState(215);
+	const [n, setN] = useState(25);
 
 	const changeA = (event) => setA(Number(event.target.value));
 	const changeN = (event) => setN(Number(event.target.value));
@@ -34,7 +35,11 @@ function Odwrotnosc() {
 
 					<Box p={2}>
 						<Typography variant='h4'>Odwrotność modularna:</Typography>
-						<AfinicznyKluczLiczenie a={a} n={n} />
+						{/* <AfinicznyKluczLiczenie a={a} n={n} /> */}
+
+						<OdwrotnoscTable a={a} b={n} />
+
+						
 					</Box>
 				</Paper>
 			</Box>
