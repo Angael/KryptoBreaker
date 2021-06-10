@@ -9,6 +9,7 @@ import useNumberInput from 'diffie-hellman/useNumberInput';
 import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import KluczeDisplay from './KluczeDisplay';
 
 function RSAKlucze() {
 	const [p, setP] = useNumberInput(37);
@@ -17,9 +18,6 @@ function RSAKlucze() {
 
 	const n = p * q;
 	const phi = (p - 1) * (q - 1);
-
-	const solutionPowA = useMemo(() => getFastPowerMod(e, p, q), [e, p, q]);
-
 	const d = modInverse(e, phi);
 
 	return (
@@ -81,15 +79,7 @@ function RSAKlucze() {
 							<Box p={2}>Tutaj wstaw tabelke z liczenia odwrotności modularnej, tej tuż wyżej</Box>
 						</Grid>
 					</Grid>
-					<Box p={2} pb={2} textAlign='center'>
-						<Typography variant='h3'>Klucze:</Typography>
-						<Typography variant='body1'>
-							k<sub>1</sub> = (e, n) = ({e}, {n}) - Publiczne
-						</Typography>
-						<Typography variant='body1'>
-							k<sub>2</sub> = (d, n) = ({d}, {n}) - Prywatne
-						</Typography>
-					</Box>
+					<KluczeDisplay e={e} n={n} d={d} />
 				</Paper>
 			</Box>
 		</>

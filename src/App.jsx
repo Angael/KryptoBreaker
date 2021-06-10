@@ -12,7 +12,8 @@ import Hill from './hill/Hill';
 import DiffieHellman from './diffie-hellman/DiffieHellman';
 import Odwrotnosc from './odwrotnosc/Odwrotnosc';
 import PotegaMod from './potega-mod/PotegaMod';
-import RSAKlucze from './rsa-klucze/RSAKlucze';
+import RSAKlucze from './rsa/RSAKlucze';
+import RSASzyfrowanie from 'rsa/RSASzyfrowanie';
 
 export const methods = {
 	cezar: 'c',
@@ -23,6 +24,10 @@ export const methods = {
 	odwrotnosc: 'odw',
 	potegaMod: 'potMod',
 	rsaKlucze: 'rsaKlucze',
+	rsaSzyfrowanie: 'rsaSzyfrowanie',
+	rsaDeszyfrowanie: 'rsaDeszyfrowanie',
+	rsaPodpis: 'rsaPodpis',
+	rsaWeryfikacjaPodpisu: 'rsaWeryfikacjaPodpisu',
 };
 
 function App() {
@@ -56,6 +61,10 @@ function App() {
 							<MenuItem value={methods.odwrotnosc}>Odwrotność modularna</MenuItem>
 							<MenuItem value={methods.potegaMod}>Potęga modułowa</MenuItem>
 							<MenuItem value={methods.rsaKlucze}>RSA Klucze</MenuItem>
+							<MenuItem value={methods.rsaSzyfrowanie}>RSA Szyfrowanie</MenuItem>
+							<MenuItem value={methods.rsaDeszyfrowanie}>RSA Deszyfrowanie</MenuItem>
+							<MenuItem value={methods.rsaPodpis}>RSA Podpis</MenuItem>
+							<MenuItem value={methods.rsaWeryfikacjaPodpisu}>RSA WeryfikacjaPodpisu</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
@@ -71,6 +80,7 @@ function App() {
 			<Box my={4}>{method === methods.odwrotnosc && <Odwrotnosc />}</Box>
 			<Box my={4}>{method === methods.potegaMod && <PotegaMod />}</Box>
 			<Box my={4}>{method === methods.rsaKlucze && <RSAKlucze />}</Box>
+			<Box my={4}>{method === methods.rsaSzyfrowanie && <RSASzyfrowanie />}</Box>
 		</Container>
 	);
 }
