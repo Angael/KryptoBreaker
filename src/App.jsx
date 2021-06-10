@@ -14,6 +14,7 @@ import Odwrotnosc from './odwrotnosc/Odwrotnosc';
 import PotegaMod from './potega-mod/PotegaMod';
 import RSAKlucze from './rsa/RSAKlucze';
 import RSASzyfrowanie from 'rsa/RSASzyfrowanie';
+import RSADeszyfrowanie from 'rsa/RSADeszyfrowanie';
 
 export const methods = {
 	cezar: 'c',
@@ -81,6 +82,7 @@ function App() {
 			<Box my={4}>{method === methods.potegaMod && <PotegaMod />}</Box>
 			<Box my={4}>{method === methods.rsaKlucze && <RSAKlucze />}</Box>
 			<Box my={4}>{method === methods.rsaSzyfrowanie && <RSASzyfrowanie />}</Box>
+			<Box my={4}>{method === methods.rsaDeszyfrowanie && <RSADeszyfrowanie />}</Box>
 		</Container>
 	);
 }

@@ -1,7 +1,13 @@
 import { mod } from 'utils/numHelpers';
 import { dec2bin } from 'utils/numHelpers';
 
-const getFastPowerMod = (p, g, power) => {
+/**
+ *
+ * @param {number} modulo - Modulo
+ * @param {number} generator - Liczba generator, ta po lewej
+ * @param {number} power potęga
+ */
+const getFastPowerMod = (modulo, generator, power) => {
 	// np 011011101
 	const binaryString = dec2bin(power);
 	const reversedBinaryArray = binaryString.split('').reverse();
@@ -14,9 +20,9 @@ const getFastPowerMod = (p, g, power) => {
 	steps.push({
 		i: 0,
 		x: 1,
-		a: g,
+		a: generator,
 		t: Number(reversedBinaryArray[0]),
-		helperTextA: 'initial value is g = ' + g,
+		helperTextA: 'initial value is g = ' + generator,
 		helperTextX: 'initial value is always 1 ',
 	});
 
@@ -28,16 +34,16 @@ const getFastPowerMod = (p, g, power) => {
 
 		let helperTextX = '';
 
-		let a = mod(prevA * prevA, p);
+		let a = mod(prevA * prevA, modulo);
 		if (i === reversedBinaryArray.length) {
 			a = '';
 		}
-		let helperTextA = `${prevA} * ${prevA} mod ${p} =  ${a}`;
+		let helperTextA = `${prevA} * ${prevA} mod ${modulo} =  ${a}`;
 
 		let x;
 		if (prevT) {
-			x = mod(prevX * prevA, p);
-			helperTextX = `${prevX} * ${prevA} mod ${p} =  ${x}`;
+			x = mod(prevX * prevA, modulo);
+			helperTextX = `${prevX} * ${prevA} mod ${modulo} =  ${x}`;
 		} else {
 			x = prevX;
 			helperTextX = `unchanged because previous t is 0 = ${x}`;

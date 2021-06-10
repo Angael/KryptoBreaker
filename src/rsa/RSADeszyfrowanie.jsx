@@ -11,15 +11,15 @@ import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import FastPowerTable from 'diffie-hellman/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
-function RSASzyfrowanie() {
-	//Wiadomość x
-	const [message, setMessage] = useNumberInput(20);
+function RSADeszyfrowanie() {
+	//Zaszyfrowana wiadomosc x, szyfrogram y
+	const [y, setY] = useNumberInput(1327);
 	const [e, setE] = useNumberInput(1001);
 	const [d, setD] = useNumberInput(761);
 	const [n, setN] = useNumberInput(1739);
 
-	// x^n mod e
-	const solutionPow = useMemo(() => getFastPowerMod(n, message, e), [n, message, e]);
+	// y^d mod n
+	const solutionPow = useMemo(() => getFastPowerMod(n, y, d), [n, y, d]);
 
 	return (
 		<>
@@ -31,8 +31,8 @@ function RSASzyfrowanie() {
 						</Grid>
 						<Grid item xs={12}>
 							<Box p={2}>
-								Bob chce wysłać do Alicji wiadomość, której wartość wynosi x={message} zaszyfrowaną
-								przy użyciu algorytmu RSA. Oblicz wartość szyfrogramu y.
+								Alicja otrzymała od Boba szyfrogram y={y}. Obliczyć przez Alicję wartość tekstu
+								jawnego x.
 							</Box>
 						</Grid>
 
@@ -76,23 +76,27 @@ function RSASzyfrowanie() {
 							<Box p={2}>
 								<TextField
 									label='x'
-									onChange={setMessage}
-									value={message}
+									onChange={setY}
+									value={y}
 									type='number'
-									helperText='Wiadomość'
+									helperText='Szyfrogram'
 								/>
 							</Box>
 						</Grid>
 
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
-								<Typography variant='h3'>Szyfrowanie:</Typography>
-								y = c =<DisplayFormula g={'x'} power={'n'} p={'e'} variant={'body1'} /> ={' '}
-								<DisplayFormula g={message} power={e} p={n} variant={'body1'} /> ={' '}
+								<Typography variant='h3'>Deszyfrowanie:</Typography>
+								x = wiadomość = <DisplayFormula
+									g={'y'}
+									power={'d'}
+									p={'n'}
+									variant={'body1'}
+								/> = <DisplayFormula g={y} power={d} p={n} variant={'body1'} /> ={' '}
 								{solutionPow.result}
 							</Box>
 							<Box p={2} align='center'>
-								Szyfrogram y = {solutionPow.result}
+								Wiadomość x = {solutionPow.result}
 							</Box>
 						</Grid>
 
@@ -108,4 +112,4 @@ function RSASzyfrowanie() {
 	);
 }
 
-export default RSASzyfrowanie;
+export default RSADeszyfrowanie;

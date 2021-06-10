@@ -10,6 +10,7 @@ import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import FastPowerTable from 'diffie-hellman/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
+import OdwrotnoscTable from 'odwrotnosc/OdwrotnoscTable';
 
 function RSAKlucze() {
 	const [p, setP] = useNumberInput(37);
@@ -74,9 +75,8 @@ function RSAKlucze() {
 							<hr />
 							<Box p={2}>
 								d = <DisplayFormula p={phi} g={e} power={-1} variant={'body1'} /> = {d}
+								<OdwrotnoscTable a={e} b={phi} />
 							</Box>
-							<hr />
-							<Box p={2}>Tutaj wstaw tabelke z liczenia odwrotności modularnej, tej tuż wyżej</Box>
 						</Grid>
 					</Grid>
 					<KluczeDisplay e={e} n={n} d={d} />
