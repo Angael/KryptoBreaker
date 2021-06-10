@@ -11,15 +11,15 @@ import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import FastPowerTable from 'diffie-hellman/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
-function RSADeszyfrowanie() {
-	//Zaszyfrowana wiadomosc x, szyfrogram y
-	const [y, setY] = useNumberInput(1327);
+function RSAPodpis() {
+	//Wiadomość x
+	const [x, setX] = useNumberInput(357);
 	const [e, setE] = useNumberInput(1001);
 	const [d, setD] = useNumberInput(761);
 	const [n, setN] = useNumberInput(1739);
 
-	// y^d mod n
-	const solutionPow = useMemo(() => getFastPowerMod(n, y, d), [n, y, d]);
+	// x^n mod e
+	const solutionPow = useMemo(() => getFastPowerMod(n, x, d), [n, x, d]);
 
 	return (
 		<>
@@ -31,8 +31,8 @@ function RSADeszyfrowanie() {
 						</Grid>
 						<Grid item xs={12}>
 							<Box p={2}>
-								Alicja otrzymała od Boba szyfrogram y={y}. Obliczyć przez Alicję wartość tekstu
-								jawnego x.
+								Alicja chce wysłać do Boba wiadomość, której skrót wynosi h={x}. Wygenerować przez
+								Alicję podpis cyfrowy RSA dla tej wiadomości.
 							</Box>
 						</Grid>
 
@@ -75,28 +75,23 @@ function RSADeszyfrowanie() {
 						<Grid item xs={12}>
 							<Box p={2}>
 								<TextField
-									label='x'
-									onChange={setY}
-									value={y}
+									label='x albo h'
+									onChange={setX}
+									value={x}
 									type='number'
-									helperText='Szyfrogram'
+									helperText='Wiadomość lub skrót wiadomości'
 								/>
 							</Box>
 						</Grid>
 
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
-								<Typography variant='h3'>Deszyfrowanie:</Typography>
-								x = wiadomość = <DisplayFormula
-									g={'y'}
-									power={'d'}
-									p={'n'}
-									variant={'body1'}
-								/> = <DisplayFormula g={y} power={d} p={n} variant={'body1'} /> ={' '}
-								{solutionPow.result}
+								<Typography variant='h3'>Generowanie podpisu:</Typography>
+								podpis s = <DisplayFormula g={'h'} power={'d'} p={'n'} variant={'body1'} /> ={' '}
+								<DisplayFormula g={x} power={d} p={n} variant={'body1'} /> = {solutionPow.result}
 							</Box>
 							<Box p={2} align='center'>
-								Wiadomość x = {solutionPow.result}
+								Podpis s = {solutionPow.result}
 							</Box>
 						</Grid>
 
@@ -112,4 +107,4 @@ function RSADeszyfrowanie() {
 	);
 }
 
-export default RSADeszyfrowanie;
+export default RSAPodpis;

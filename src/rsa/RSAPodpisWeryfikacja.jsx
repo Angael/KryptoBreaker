@@ -11,15 +11,16 @@ import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import FastPowerTable from 'diffie-hellman/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
-function RSADeszyfrowanie() {
-	//Zaszyfrowana wiadomosc x, szyfrogram y
-	const [y, setY] = useNumberInput(1327);
+function RSAPodpisWeryfikacja() {
+	//Wiadomość x
+	const [x, setX] = useNumberInput(357);
+	const [s, setS] = useNumberInput(1630);
 	const [e, setE] = useNumberInput(1001);
 	const [d, setD] = useNumberInput(761);
 	const [n, setN] = useNumberInput(1739);
 
-	// y^d mod n
-	const solutionPow = useMemo(() => getFastPowerMod(n, y, d), [n, y, d]);
+	// x^n mod e
+	const solutionPow = useMemo(() => getFastPowerMod(n, s, e), [n, s, e]);
 
 	return (
 		<>
@@ -31,8 +32,8 @@ function RSADeszyfrowanie() {
 						</Grid>
 						<Grid item xs={12}>
 							<Box p={2}>
-								Alicja otrzymała od Boba szyfrogram y={y}. Obliczyć przez Alicję wartość tekstu
-								jawnego x.
+								Bob otrzymał od Alicji wiadomość, której skrót wynosi h={x}, oraz jej podpis cyfrowy
+								RSA s={s}. Zweryfikuj przez Boba otrzymany od Alicji podpis cyfrowy.
 							</Box>
 						</Grid>
 
@@ -72,31 +73,43 @@ function RSADeszyfrowanie() {
 							</Box>
 						</Grid>
 
-						<Grid item xs={12}>
+						<Grid item xs={6}>
 							<Box p={2}>
 								<TextField
-									label='x'
-									onChange={setY}
-									value={y}
+									label='x albo h'
+									onChange={setX}
+									value={x}
 									type='number'
-									helperText='Szyfrogram'
+									helperText='Wiadomość lub skrót wiadomości'
+								/>
+							</Box>
+						</Grid>
+
+						<Grid item xs={6}>
+							<Box p={2}>
+								<TextField
+									label='s'
+									onChange={setS}
+									value={s}
+									type='number'
+									helperText='Podpis który weryfikujemy'
 								/>
 							</Box>
 						</Grid>
 
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
-								<Typography variant='h3'>Deszyfrowanie:</Typography>
-								x = wiadomość = <DisplayFormula
-									g={'y'}
-									power={'d'}
-									p={'n'}
-									variant={'body1'}
-								/> = <DisplayFormula g={y} power={d} p={n} variant={'body1'} /> ={' '}
-								{solutionPow.result}
+								<Typography variant='h3'>Weryfikacja podpisu:</Typography>
+								h = <DisplayFormula g={'s'} power={'e'} p={'n'} variant={'body1'} /> ={' '}
+								<DisplayFormula g={s} power={e} p={n} variant={'body1'} /> = {solutionPow.result}
 							</Box>
 							<Box p={2} align='center'>
-								Wiadomość x = {solutionPow.result}
+								Wynik sprawdzenia = {solutionPow.result} = {x} = h
+							</Box>
+							<Box p={2} pb={3} align='center'>
+								Podpis {x === solutionPow.result ? 'jest' : 'nie jest'} poprawny, ponieważ wartość
+								skrótu wysłana przez alicję {x === solutionPow.result ? 'jest' : 'nie jest'} taka
+								sama jak wartość skrótu wiadomości odebranej przez boba.
 							</Box>
 						</Grid>
 
@@ -112,4 +125,4 @@ function RSADeszyfrowanie() {
 	);
 }
 
-export default RSADeszyfrowanie;
+export default RSAPodpisWeryfikacja;

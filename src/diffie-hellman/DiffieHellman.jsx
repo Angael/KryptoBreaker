@@ -105,14 +105,12 @@ function DiffieHellman() {
 				<Grid container>
 					<Grid item xs={6}>
 						<Box p={2}>
-							<BinaryExplanator num={a} />
-							<FastPowerTable stepsObj={solutionPowA} />
+							<FastPowerTable stepsObj={solutionPowA} pow={a} />
 						</Box>
 					</Grid>
 					<Grid item xs={6}>
 						<Box p={2}>
-							<BinaryExplanator num={b} />
-							<FastPowerTable stepsObj={solutionPowB} />
+							<FastPowerTable stepsObj={solutionPowB} pow={b} />
 						</Box>
 					</Grid>
 				</Grid>
@@ -143,14 +141,12 @@ function DiffieHellman() {
 				<Grid container>
 					<Grid item xs={6}>
 						<Box p={2}>
-							<BinaryExplanator num={a} />
-							<FastPowerTable stepsObj={solutionPowBMaster} />
+							<FastPowerTable stepsObj={solutionPowBMaster} pow={a} />
 						</Box>
 					</Grid>
 					<Grid item xs={6}>
 						<Box p={2}>
-							<BinaryExplanator num={b} />
-							<FastPowerTable stepsObj={solutionPowAMaster} />
+							<FastPowerTable stepsObj={solutionPowAMaster} pow={b} />
 						</Box>
 					</Grid>
 				</Grid>

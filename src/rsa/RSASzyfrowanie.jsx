@@ -87,7 +87,7 @@ function RSASzyfrowanie() {
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
 								<Typography variant='h3'>Szyfrowanie:</Typography>
-								y = c =<DisplayFormula g={'x'} power={'n'} p={'e'} variant={'body1'} /> ={' '}
+								y = c =<DisplayFormula g={'x'} power={'e'} p={'n'} variant={'body1'} /> ={' '}
 								<DisplayFormula g={message} power={e} p={n} variant={'body1'} /> ={' '}
 								{solutionPow.result}
 							</Box>
@@ -98,7 +98,7 @@ function RSASzyfrowanie() {
 
 						<Grid container justify='center'>
 							<Grid item xs={6}>
-								<FastPowerTable stepsObj={solutionPow} />
+								<FastPowerTable stepsObj={solutionPow} pow={e} />
 							</Grid>
 						</Grid>
 					</Grid>

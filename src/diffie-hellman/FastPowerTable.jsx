@@ -11,6 +11,7 @@ import {
 	Tooltip,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import BinaryExplanator from './BinaryExplanator';
 
 const answerCss = css`
 	background: #97ffa7;
@@ -33,7 +34,7 @@ const TableCellHoverable = withStyles({
 	},
 })(TableCell);
 
-function FastPowerTable({ stepsObj }) {
+function FastPowerTable({ stepsObj, pow }) {
 	const [hoveringXRow, setHoveringXRow] = useState(null);
 	const onStartHover = (i) => () => {
 		setHoveringXRow(i);
@@ -43,56 +44,59 @@ function FastPowerTable({ stepsObj }) {
 	};
 
 	return (
-		<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
-			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell align='center'>i</TableCell>
-						<TableCell align='center'>
-							x<sub>i</sub>
-						</TableCell>
-						<TableCell align='center'>
-							a<sub>i</sub>
-						</TableCell>
-						<TableCell align='center'>
-							t<sub>i</sub>
-						</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{stepsObj.steps.map(({ i, x, a, t, helperTextA, helperTextX }) => {
-						const isLast = i === stepsObj.steps.length - 1;
+		<>
+			<BinaryExplanator num={pow} />
+			<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
+				<Table>
+					<TableHead>
+						<TableRow>
+							<TableCell align='center'>i</TableCell>
+							<TableCell align='center'>
+								x<sub>i</sub>
+							</TableCell>
+							<TableCell align='center'>
+								a<sub>i</sub>
+							</TableCell>
+							<TableCell align='center'>
+								t<sub>i</sub>
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{stepsObj.steps.map(({ i, x, a, t, helperTextA, helperTextX }) => {
+							const isLast = i === stepsObj.steps.length - 1;
 
-						const shouldBeHighlighted = hoveringXRow === i + 1;
-						const xCss = isLast ? answerCss : shouldBeHighlighted ? calculationNumbersCss : '';
-						const aCss = shouldBeHighlighted && !!t ? calculationNumbersCss : '';
-						return (
-							<TableRow key={i}>
-								<TableCell align='center'>{i}</TableCell>
-								<Tooltip title={helperTextX}>
-									<TableCellHoverable
-										align='center'
-										className={xCss}
-										onMouseEnter={onStartHover(i)}
-										onMouseLeave={onEndHover(i)}
-									>
-										<div>{x}</div>
-									</TableCellHoverable>
-								</Tooltip>
-								{!isLast && (
-									<Tooltip title={helperTextA}>
-										<TableCellHoverable align='center' className={aCss}>
-											<div>{a}</div>
+							const shouldBeHighlighted = hoveringXRow === i + 1;
+							const xCss = isLast ? answerCss : shouldBeHighlighted ? calculationNumbersCss : '';
+							const aCss = shouldBeHighlighted && !!t ? calculationNumbersCss : '';
+							return (
+								<TableRow key={i}>
+									<TableCell align='center'>{i}</TableCell>
+									<Tooltip title={helperTextX}>
+										<TableCellHoverable
+											align='center'
+											className={xCss}
+											onMouseEnter={onStartHover(i)}
+											onMouseLeave={onEndHover(i)}
+										>
+											<div>{x}</div>
 										</TableCellHoverable>
 									</Tooltip>
-								)}
-								{!isLast && <TableCell align='center'>{t}</TableCell>}
-							</TableRow>
-						);
-					})}
-				</TableBody>
-			</Table>
-		</TableContainer>
+									{!isLast && (
+										<Tooltip title={helperTextA}>
+											<TableCellHoverable align='center' className={aCss}>
+												<div>{a}</div>
+											</TableCellHoverable>
+										</Tooltip>
+									)}
+									{!isLast && <TableCell align='center'>{t}</TableCell>}
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
+			</TableContainer>
+		</>
 	);
 }
 

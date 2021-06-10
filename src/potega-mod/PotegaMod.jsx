@@ -45,7 +45,7 @@ function PotegaMod() {
 					</Box>
 					<Grid container justify='center'>
 						<Grid item xs={6}>
-							<FastPowerTable stepsObj={solutionPowA} />
+							<FastPowerTable stepsObj={solutionPowA} pow={pow} />
 						</Grid>
 					</Grid>
 				</Paper>

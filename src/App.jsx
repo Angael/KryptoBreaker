@@ -15,6 +15,9 @@ import PotegaMod from './potega-mod/PotegaMod';
 import RSAKlucze from './rsa/RSAKlucze';
 import RSASzyfrowanie from 'rsa/RSASzyfrowanie';
 import RSADeszyfrowanie from 'rsa/RSADeszyfrowanie';
+import RSAPodpis from './rsa/RSAPodpis';
+import RSAPodpisWeryfikacja from './rsa/RSAPodpisWeryfikacja';
+import useLocalStorage from 'utils/useLocalStorage';
 
 export const methods = {
 	cezar: 'c',
@@ -32,7 +35,7 @@ export const methods = {
 };
 
 function App() {
-	const [method, setMetod] = useState(methods.diffieHellman);
+	const [method, setMetod] = useLocalStorage('method', methods.diffieHellman);
 
 	const handleChange = (event) => {
 		setMetod(event.target.value);
@@ -65,7 +68,7 @@ function App() {
 							<MenuItem value={methods.rsaSzyfrowanie}>RSA Szyfrowanie</MenuItem>
 							<MenuItem value={methods.rsaDeszyfrowanie}>RSA Deszyfrowanie</MenuItem>
 							<MenuItem value={methods.rsaPodpis}>RSA Podpis</MenuItem>
-							<MenuItem value={methods.rsaWeryfikacjaPodpisu}>RSA WeryfikacjaPodpisu</MenuItem>
+							<MenuItem value={methods.rsaWeryfikacjaPodpisu}>RSA Weryfikacja Podpisu</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
@@ -83,6 +86,8 @@ function App() {
 			<Box my={4}>{method === methods.rsaKlucze && <RSAKlucze />}</Box>
 			<Box my={4}>{method === methods.rsaSzyfrowanie && <RSASzyfrowanie />}</Box>
 			<Box my={4}>{method === methods.rsaDeszyfrowanie && <RSADeszyfrowanie />}</Box>
+			<Box my={4}>{method === methods.rsaPodpis && <RSAPodpis />}</Box>
+			<Box my={4}>{method === methods.rsaWeryfikacjaPodpisu && <RSAPodpisWeryfikacja />}</Box>
 		</Container>
 	);
 }
