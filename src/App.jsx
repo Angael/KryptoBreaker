@@ -12,6 +12,7 @@ import Hill from './hill/Hill';
 import DiffieHellman from './diffie-hellman/DiffieHellman';
 import Odwrotnosc from './odwrotnosc/Odwrotnosc';
 import PotegaMod from './potega-mod/PotegaMod';
+import RSAKlucze from './rsa-klucze/RSAKlucze';
 
 export const methods = {
 	cezar: 'c',
@@ -21,6 +22,7 @@ export const methods = {
 	diffieHellman: 'dh',
 	odwrotnosc: 'odw',
 	potegaMod: 'potMod',
+	rsaKlucze: 'rsaKlucze',
 };
 
 function App() {
@@ -53,6 +55,7 @@ function App() {
 							<MenuItem value={methods.diffieHellman}>Diffie Hellman</MenuItem>
 							<MenuItem value={methods.odwrotnosc}>Odwrotność modularna</MenuItem>
 							<MenuItem value={methods.potegaMod}>Potęga modułowa</MenuItem>
+							<MenuItem value={methods.rsaKlucze}>RSA Klucze</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
@@ -67,6 +70,7 @@ function App() {
 			<Box my={4}>{method === methods.diffieHellman && <DiffieHellman />}</Box>
 			<Box my={4}>{method === methods.odwrotnosc && <Odwrotnosc />}</Box>
 			<Box my={4}>{method === methods.potegaMod && <PotegaMod />}</Box>
+			<Box my={4}>{method === methods.rsaKlucze && <RSAKlucze />}</Box>
 		</Container>
 	);
 }

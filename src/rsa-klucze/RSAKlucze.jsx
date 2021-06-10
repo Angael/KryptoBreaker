@@ -1,0 +1,99 @@
+import { useMemo } from 'react';
+import { Typography, Box } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import { isPrime, modInverse } from 'utils/numHelpers';
+
+import useNumberInput from 'diffie-hellman/useNumberInput';
+import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import DisplayFormula from 'diffie-hellman/DisplayFormula';
+import FastPowerTable from 'diffie-hellman/FastPowerTable';
+
+function RSAKlucze() {
+	const [p, setP] = useNumberInput(37);
+	const [q, setQ] = useNumberInput(47);
+	const [e, setE] = useNumberInput(1001);
+
+	const n = p * q;
+	const phi = (p - 1) * (q - 1);
+
+	const solutionPowA = useMemo(() => getFastPowerMod(e, p, q), [e, p, q]);
+
+	const d = modInverse(e, phi);
+
+	return (
+		<>
+			<Box my={4}>
+				<Paper elevation={3}>
+					<Grid container>
+						<Grid item xs={4}>
+							<Box p={2}>
+								<TextField
+									label='p'
+									onChange={setP}
+									value={p}
+									type='number'
+									helperText='Wylosowana wartość pierwsza'
+								/>
+							</Box>
+						</Grid>
+
+						<Grid item xs={4}>
+							<Box p={2}>
+								<TextField
+									label='q'
+									onChange={setQ}
+									value={q}
+									type='number'
+									helperText='Wylosowana wartość druga'
+								/>
+							</Box>
+						</Grid>
+
+						<Grid item xs={4}>
+							<Box p={2}>
+								<TextField
+									label='e'
+									onChange={setE}
+									value={e}
+									type='number'
+									helperText='Wylosowana liczba całkowita od 1 do Φ'
+									error={e > phi || e <= 1 || e % 1 !== 0}
+								/>
+							</Box>
+						</Grid>
+
+						<Grid item xs={12}>
+							<hr />
+							<Box p={2}>
+								n = {p} * {q} = {n}
+							</Box>
+							<hr />
+							<Box p={2}>
+								phi = Φ = ({p} - 1) * ({q}- 1)= {phi}
+							</Box>
+							<hr />
+							<Box p={2}>
+								d = <DisplayFormula p={phi} g={e} power={-1} variant={'body1'} /> = {d}
+							</Box>
+							<hr />
+							<Box p={2}>Tutaj wstaw tabelke z liczenia odwrotności modularnej, tej tuż wyżej</Box>
+						</Grid>
+					</Grid>
+					<Box p={2} pb={2} textAlign='center'>
+						<Typography variant='h3'>Klucze:</Typography>
+						<Typography variant='body1'>
+							k<sub>1</sub> = (e, n) = ({e}, {n}) - Publiczne
+						</Typography>
+						<Typography variant='body1'>
+							k<sub>2</sub> = (d, n) = ({d}, {n}) - Prywatne
+						</Typography>
+					</Box>
+				</Paper>
+			</Box>
+		</>
+	);
+}
+
+export default RSAKlucze;
