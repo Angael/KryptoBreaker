@@ -1,9 +1,20 @@
 import { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
 import Container from '@material-ui/core/Container';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
 
 import Cezar from './cezar/Cezar';
 import Vigener from './vigener/Vigener';
@@ -21,35 +32,110 @@ import ElGamal from './elgamal/ElGamal';
 
 import useLocalStorage from 'utils/useLocalStorage';
 
+export const helpers = {
+	odwrotnosc: { key: 'odwrotnosc', name: 'Odwrotność multiplikatywna' },
+	potegaMod: { key: 'potegaMod', name: 'Potęgowanie modularne' }
+}
+
 export const methods = {
-	cezar: 'c',
-	afiniczny: 'a',
-	vigenera: 'v',
-	hila: 'h',
-	diffieHellman: 'dh',
-	odwrotnosc: 'odw',
-	potegaMod: 'potMod',
-	rsaKlucze: 'rsaKlucze',
-	rsaSzyfrowanie: 'rsaSzyfrowanie',
-	rsaDeszyfrowanie: 'rsaDeszyfrowanie',
-	rsaPodpis: 'rsaPodpis',
-	rsaWeryfikacjaPodpisu: 'rsaWeryfikacjaPodpisu',
-	elGamal: 'elGamal'
+	cezar: { key: 'cezar', name: 'Cezar' },
+	afiniczny: { key: 'afiniczny', name: 'Afiniczny' },
+	vigener: { key: 'vigener', name: 'Vigener' },
+	hill: { key: 'hill', name: 'Hill' },
+	diffieHellman: { key: 'diffieHellman', name: 'Diffie Hellman', divider: true },
+
+	rsaKlucze: { key: 'rsaKlucze', name: 'RSA | Klucze' },
+	rsaSzyfrowanie: { key: 'rsaSzyfrowanie', name: 'RSA | Szyfrowanie' },
+	rsaDeszyfrowanie: { key: 'rsaDeszyfrowanie', name: 'RSA | Deszyfrowanie' },
+	rsaPodpis: { key: 'rsaPodpis', name: 'RSA | Podpis' },
+	rsaWeryfikacjaPodpisu: { key: 'rsaWeryfikacjaPodpisu', name: 'RSA | Weryfikacja podpisu', divider: true },
+	elGamal: { key: 'elGamal', name: 'El Gamal' }
 };
 
-function App() {
-	const [method, setMetod] = useLocalStorage('method', methods.diffieHellman);
+const drawerWidth = 240;
 
-	const handleChange = (event) => {
-		setMetod(event.target.value);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+	backgroundColor: theme.palette.background.paper,
+  },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    backgroundColor: 'whitesmoke',
+	// backgroundColor: 'oldlace',
+    padding: theme.spacing(3),
+  },
+}));
+
+function App() {
+	const [method, setMethod] = useLocalStorage('method', methods.diffieHellman.key);
+	const [title, setTitle] = useLocalStorage('title', methods.diffieHellman.name);
+	const classes = useStyles();
+
+	const handleChange = (key, name) => {
+		console.log(key, name)
+		setMethod(key);
+		setTitle(name);
 	};
 
 	return (
-		<Container maxWidth='md'>
+		<div className={classes.root}>
+		<Drawer
+			className={classes.drawer}
+			variant="permanent"
+			PaperProps={{
+				elevation: 3
+			}}
+			classes={{
+				paper: classes.drawerPaper,
+			}}
+			anchor="left"
+		>
+			<List>
+				<ListItem>
+					<Typography variant='h5'>KryptoBreaker</Typography>
+				</ListItem>
+				<Divider />
+				<ListItem disabled>
+					Helpers
+				</ListItem>
+				{Object.values(helpers).map(({ key, name, divider }) => <>
+					<ListItem button key={key} onClick={() => handleChange(key, name)}>
+						<ListItemText primary={name} />
+					</ListItem>
+					{divider && <Divider />}
+				</> )}
+				<Divider />
+				{Object.values(methods).map(({ key, name, divider }) => <>
+					<ListItem button key={key} onClick={() => handleChange(key, name)}>
+						<ListItemText primary={name} />
+					</ListItem>
+					{divider && <Divider />}
+				</> )}
+			</List>
+			<Divider />
+
+		</Drawer>
+		
+		<Paper className={classes.content}>
+			<Container maxWidth='md'>
 			<Box my={4}>
-				<Typography variant='h2'>Kryptobreaker:</Typography>
+				<Typography variant='h2'>{title}</Typography>
 			</Box>
-			<Paper elevation={3}>
+			{/* <Paper elevation={3}>
 				<Box
 					p={2}
 					display='flex'
@@ -60,40 +146,33 @@ function App() {
 					<FormControl>
 						<InputLabel>Metoda</InputLabel>
 						<Select value={method} onChange={handleChange}>
-							<MenuItem value={methods.cezar}>Cezara</MenuItem>
-							<MenuItem value={methods.afiniczny}>Afiniczny</MenuItem>
-							<MenuItem value={methods.vigenera}>Vigenera</MenuItem>
-							<MenuItem value={methods.hila}>Hila</MenuItem>
-							<MenuItem value={methods.diffieHellman}>Diffie Hellman</MenuItem>
-							<MenuItem value={methods.odwrotnosc}>Odwrotność modularna</MenuItem>
-							<MenuItem value={methods.potegaMod}>Potęga modułowa</MenuItem>
-							<MenuItem value={methods.rsaKlucze}>RSA Klucze</MenuItem>
-							<MenuItem value={methods.rsaSzyfrowanie}>RSA Szyfrowanie</MenuItem>
-							<MenuItem value={methods.rsaDeszyfrowanie}>RSA Deszyfrowanie</MenuItem>
-							<MenuItem value={methods.rsaPodpis}>RSA Podpis</MenuItem>
-							<MenuItem value={methods.rsaWeryfikacjaPodpisu}>RSA Weryfikacja Podpisu</MenuItem>
-							<MenuItem value={methods.elGamal}>El Gamal</MenuItem>
+							{Object.values(methods).map(({ key, name }) => 
+								<MenuItem value={key}>{name}</MenuItem>
+							)}
 						</Select>
 					</FormControl>
 				</Box>
-			</Paper>
+			</Paper> */}
 			{/* <Box m={4} display='flex' alignContent='center' justifyItems='center' justifyContent='center'>
 				<ArrowDownwardIcon />
 			</Box> */}
-			<Box my={4}>{method === methods.cezar && <Cezar />}</Box>
-			<Box my={4}>{method === methods.afiniczny && <Afiniczny />}</Box>
-			<Box my={4}>{method === methods.vigenera && <Vigener />}</Box>
-			<Box my={4}>{method === methods.hila && <Hill />}</Box>
-			<Box my={4}>{method === methods.diffieHellman && <DiffieHellman />}</Box>
-			<Box my={4}>{method === methods.odwrotnosc && <Odwrotnosc />}</Box>
-			<Box my={4}>{method === methods.potegaMod && <PotegaMod />}</Box>
-			<Box my={4}>{method === methods.rsaKlucze && <RSAKlucze />}</Box>
-			<Box my={4}>{method === methods.rsaSzyfrowanie && <RSASzyfrowanie />}</Box>
-			<Box my={4}>{method === methods.rsaDeszyfrowanie && <RSADeszyfrowanie />}</Box>
-			<Box my={4}>{method === methods.rsaPodpis && <RSAPodpis />}</Box>
-			<Box my={4}>{method === methods.rsaWeryfikacjaPodpisu && <RSAPodpisWeryfikacja />}</Box>
-			<Box my={4}>{method === methods.elGamal && <ElGamal />}</Box>
+			<Box my={4}>{method === helpers.odwrotnosc.key && <Odwrotnosc />}</Box>
+			<Box my={4}>{method === helpers.potegaMod.key && <PotegaMod />}</Box>
+
+			<Box my={4}>{method === methods.cezar.key && <Cezar />}</Box>
+			<Box my={4}>{method === methods.afiniczny.key && <Afiniczny />}</Box>
+			<Box my={4}>{method === methods.vigener.key && <Vigener />}</Box>
+			<Box my={4}>{method === methods.hill.key && <Hill />}</Box>
+			<Box my={4}>{method === methods.diffieHellman.key && <DiffieHellman />}</Box>
+			<Box my={4}>{method === methods.rsaKlucze.key && <RSAKlucze />}</Box>
+			<Box my={4}>{method === methods.rsaSzyfrowanie.key && <RSASzyfrowanie />}</Box>
+			<Box my={4}>{method === methods.rsaDeszyfrowanie.key && <RSADeszyfrowanie />}</Box>
+			<Box my={4}>{method === methods.rsaPodpis.key && <RSAPodpis />}</Box>
+			<Box my={4}>{method === methods.rsaWeryfikacjaPodpisu.key && <RSAPodpisWeryfikacja />}</Box>
+			<Box my={4}>{method === methods.elGamal.key && <ElGamal />}</Box>
 		</Container>
+		</Paper>
+		</div>
 	);
 }
 
