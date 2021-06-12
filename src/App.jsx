@@ -17,6 +17,8 @@ import RSASzyfrowanie from 'rsa/RSASzyfrowanie';
 import RSADeszyfrowanie from 'rsa/RSADeszyfrowanie';
 import RSAPodpis from './rsa/RSAPodpis';
 import RSAPodpisWeryfikacja from './rsa/RSAPodpisWeryfikacja';
+import ElGamal from './elgamal/ElGamal';
+
 import useLocalStorage from 'utils/useLocalStorage';
 
 export const methods = {
@@ -32,6 +34,7 @@ export const methods = {
 	rsaDeszyfrowanie: 'rsaDeszyfrowanie',
 	rsaPodpis: 'rsaPodpis',
 	rsaWeryfikacjaPodpisu: 'rsaWeryfikacjaPodpisu',
+	elGamal: 'elGamal'
 };
 
 function App() {
@@ -69,13 +72,14 @@ function App() {
 							<MenuItem value={methods.rsaDeszyfrowanie}>RSA Deszyfrowanie</MenuItem>
 							<MenuItem value={methods.rsaPodpis}>RSA Podpis</MenuItem>
 							<MenuItem value={methods.rsaWeryfikacjaPodpisu}>RSA Weryfikacja Podpisu</MenuItem>
+							<MenuItem value={methods.elGamal}>El Gamal</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
 			</Paper>
-			<Box m={4} display='flex' alignContent='center' justifyItems='center' justifyContent='center'>
+			{/* <Box m={4} display='flex' alignContent='center' justifyItems='center' justifyContent='center'>
 				<ArrowDownwardIcon />
-			</Box>
+			</Box> */}
 			<Box my={4}>{method === methods.cezar && <Cezar />}</Box>
 			<Box my={4}>{method === methods.afiniczny && <Afiniczny />}</Box>
 			<Box my={4}>{method === methods.vigenera && <Vigener />}</Box>
@@ -88,6 +92,7 @@ function App() {
 			<Box my={4}>{method === methods.rsaDeszyfrowanie && <RSADeszyfrowanie />}</Box>
 			<Box my={4}>{method === methods.rsaPodpis && <RSAPodpis />}</Box>
 			<Box my={4}>{method === methods.rsaWeryfikacjaPodpisu && <RSAPodpisWeryfikacja />}</Box>
+			<Box my={4}>{method === methods.elGamal && <ElGamal />}</Box>
 		</Container>
 	);
 }
