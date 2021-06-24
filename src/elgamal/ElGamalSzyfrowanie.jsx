@@ -79,7 +79,19 @@ function ElGamalSzyfrowanie() {
 								/>
 							</Box>
 						</Grid>
-						<Grid item xs={6}>
+						<Grid item xs={12} align='center'>
+							<Box p={2}>
+								<Typography variant='h4'>Opis zadania:</Typography>
+								<Typography>
+									Bob chce wysłać do Alicji wiadomość której wartość liczbowa wynosi x={x}.
+								</Typography>
+								<Typography>
+									Oblicz wartość tekstu zaszyfrowanego y, wiedząc, że do zaszyfrowania wybrany
+									został randomizer r={r}
+								</Typography>
+							</Box>
+						</Grid>
+						<Grid item xs={6} align='right'>
 							<Box p={2}>
 								<TextField
 									label='x'
@@ -90,7 +102,7 @@ function ElGamalSzyfrowanie() {
 								/>
 							</Box>
 						</Grid>
-						<Grid item xs={6}>
+						<Grid item xs={6} align='left'>
 							<Box p={2}>
 								<TextField
 									label='r'
@@ -99,6 +111,21 @@ function ElGamalSzyfrowanie() {
 									type='number'
 									helperText='Randomizer'
 								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12} align='center'>
+							<Box m={2} p={2} display='inline-block'>
+								<Paper variant='outlined'>
+									<Box m={2}>
+										<Typography variant='h4' align='center'>
+											C = (y<sub>1</sub>, y<sub>2</sub>) = E
+											<sub>
+												k<sub>1</sub>
+											</sub>
+											(r,x) = (α<sup>r</sup> mod p, x * β<sup>r</sup> mod p)
+										</Typography>
+									</Box>
+								</Paper>
 							</Box>
 						</Grid>
 						<Grid item xs={6}>
@@ -127,7 +154,7 @@ function ElGamalSzyfrowanie() {
 						</Grid>
 						<Grid item xs={12}>
 							<Box p={2}>
-								<Typography variant='h4' gutterBottom>
+								<Typography variant='h4' gutterBottom align='center'>
 									Wynik = (y<sub>1</sub>, y<sub>2</sub>) = ({y1}, {y2})
 								</Typography>
 							</Box>
