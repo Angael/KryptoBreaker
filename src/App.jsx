@@ -37,6 +37,8 @@ import ElGamalDeszyfrowanie from './elgamal/ElGamalDeszyfrowanie';
 import ElGamalPodpis from './elgamal/ElGamalPodpis';
 import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
 
+import GitHubIcon from '@material-ui/icons/GitHub';
+
 export const helpers = {
 	odwrotnosc: { key: 'odwrotnosc', name: 'Odwrotność multiplikatywna' },
 	potegaMod: { key: 'potegaMod', name: 'Potęgowanie modularne' },
@@ -144,6 +146,12 @@ function App() {
 							{divider && <Divider />}
 						</>
 					))}
+					<ListItem component='a' href='https://github.com/Angael/KryptoBreaker' target='_blank'>
+						<ListItemIcon>
+							<GitHubIcon />
+						</ListItemIcon>
+						<ListItemText primary='Github repository' secondary='source code' />
+					</ListItem>
 				</List>
 				<Divider />
 			</Drawer>
