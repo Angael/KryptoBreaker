@@ -18,3 +18,10 @@ export function isPrime(num) {
 	for (var i = 2; i < num; i++) if (num % i === 0) return false;
 	return num > 1;
 }
+
+window.mod = mod;
+window.modInverse = modInverse;
+window.getCode = getCode;
+window.getLetter = getLetter;
+window.dec2bin = dec2bin;
+window.isPrime = isPrime;
