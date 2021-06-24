@@ -32,6 +32,10 @@ import ElGamal from './elgamal/ElGamal';
 import Mod from './mod/Mod';
 
 import useLocalStorage from 'utils/useLocalStorage';
+import ElGamalSzyfrowanie from './elgamal/ElGamalSzyfrowanie';
+import ElGamalDeszyfrowanie from './elgamal/ElGamalDeszyfrowanie';
+import ElGamalPodpis from './elgamal/ElGamalPodpis';
+import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
 
 export const helpers = {
 	odwrotnosc: { key: 'odwrotnosc', name: 'Odwrotność multiplikatywna' },
@@ -55,7 +59,15 @@ export const methods = {
 		name: 'RSA | Weryfikacja podpisu',
 		divider: true,
 	},
-	elGamal: { key: 'elGamal', name: 'El Gamal' },
+	elGamalKlucze: { key: 'elGamal keys', name: 'El Gamal | Klucze' },
+	elGamalSzyfrowanie: { key: 'elGamal szfr', name: 'El Gamal | Szyfrowanie' },
+	elGamalDeszyfrowanie: { key: 'elGamal deszfr', name: 'El Gamal | Deszyfrowanie' },
+	elGamalPodpis: { key: 'elGamal sign', name: 'El Gamal | Podpis' },
+	elGamalWeryfikacjaPodpisu: {
+		key: 'elGamal veryfsign',
+		name: 'El Gamal | Weryfikacja podpisu',
+		divider: true,
+	},
 };
 
 const drawerWidth = 240;
@@ -158,7 +170,15 @@ function App() {
 					<Box my={4}>
 						{method === methods.rsaWeryfikacjaPodpisu.key && <RSAPodpisWeryfikacja />}
 					</Box>
-					<Box my={4}>{method === methods.elGamal.key && <ElGamal />}</Box>
+					<Box my={4}>{method === methods.elGamalKlucze.key && <ElGamal />}</Box>
+					<Box my={4}>{method === methods.elGamalSzyfrowanie.key && <ElGamalSzyfrowanie />}</Box>
+					<Box my={4}>
+						{method === methods.elGamalDeszyfrowanie.key && <ElGamalDeszyfrowanie />}
+					</Box>
+					<Box my={4}>{method === methods.elGamalPodpis.key && <ElGamalPodpis />}</Box>
+					<Box my={4}>
+						{method === methods.elGamalWeryfikacjaPodpisu.key && <ElGamalPodpisWeryfikacja />}
+					</Box>
 				</Container>
 			</Paper>
 		</div>
