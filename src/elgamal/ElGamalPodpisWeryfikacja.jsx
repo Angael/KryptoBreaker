@@ -38,7 +38,7 @@ function ElGamalPodpisWeryfikacja() {
 							<Grid container>
 								<Grid item xs={12}>
 									<Grid item xs={12}>
-										<KluczeDisplay p={p} g={alpha} beta={u} t={t} />
+										<KluczeDisplay p={p} g={alpha} beta={beta} t={t} />
 									</Grid>
 								</Grid>
 								<Grid item xs={3}>
