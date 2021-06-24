@@ -156,7 +156,7 @@ function App() {
 				<Divider />
 			</Drawer>
 
-			<Paper className={classes.content}>
+			<Paper className={classes.content} elevation={0}>
 				<Container maxWidth='md'>
 					<Box my={4}>
 						<Typography variant='h2'>{title}</Typography>
