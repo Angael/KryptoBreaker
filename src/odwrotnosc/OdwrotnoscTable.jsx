@@ -15,7 +15,7 @@ import { mod } from '../utils/numHelpers';
 
 
 const cellCss = css`
-	background: #97ffa7;
+	background: #f0e98b;
 `;
 
 const noSelect = css`
