@@ -1,22 +1,32 @@
 import { useMemo } from 'react';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, Divider } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import { isPrime } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
 import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
-import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
+import DisplayFormula from 'diffie-hellman/DisplayFormula';
+import { mod } from 'utils/numHelpers';
+import FastPowerTable from './../diffie-hellman/FastPowerTable';
 
 function ElGamalDeszyfrowanie() {
-	const [g, setG] = useNumberInput(2);
 	const [p, setP] = useNumberInput(1619);
+	const [alpha, setAlpha] = useNumberInput(2);
 	const [t, setT] = useNumberInput(937);
+	const [y1, setY1] = useNumberInput(130);
+	const [y2, setY2] = useNumberInput(414);
 
-	const solutionPowA = useMemo(() => getFastPowerMod(p, g, t), [p, g, t]);
+	const solutionPowA = useMemo(() => getFastPowerMod(p, alpha, t), [p, alpha, t]);
+
+	const beta = solutionPowA.result;
+
+	const power = p - 1 - t;
+	const error = power <= 0 || power % 1 !== 0;
+	const solutionPowX = useMemo(() => getFastPowerMod(p, y1, power), [p, y1, power]);
+
+	const x = mod(y2 * solutionPowX.result, p);
 
 	return (
 		<>
@@ -24,34 +34,39 @@ function ElGamalDeszyfrowanie() {
 				<Paper elevation={3}>
 					<Grid container>
 						<Grid item xs={12}>
-							<Box p={2} pb={2} textAlign='center'>
-								<Typography variant='h3'>Kryptosystem El Gamala</Typography>
-							</Box>
-							<Box p={2}>
-								Alicja chce wygenerować klucze asymetryczne ElGamala. W tym celu przyjęła wartość{' '}
-								<b>p={p}</b> oraz generator <b>g={g}</b>.<br />
-								Wyznacz klucze asymetryczne Alicji dla jej wartości prywatnej <b>t={t}</b>.
-							</Box>
+							<Grid item xs={12}>
+								<KluczeDisplay p={p} g={alpha} beta={beta} t={t} />
+							</Grid>
 						</Grid>
-						<Grid item xs={4}>
+
+						<Grid item xs={3}>
 							<Box p={2}>
 								<TextField
-									label='g \\'
-									onChange={setG}
-									value={g}
+									label='α'
+									onChange={setAlpha}
+									value={alpha}
 									type='number'
 									helperText='Generator'
 								/>
 							</Box>
 						</Grid>
-
-						<Grid item xs={4}>
+						<Grid item xs={3}>
 							<Box p={2}>
-								<TextField label='p' onChange={setP} value={p} type='number' helperText='p?' />
+								<TextField label='p' onChange={setP} value={p} type='number' />
 							</Box>
 						</Grid>
-
-						<Grid item xs={4}>
+						<Grid item xs={3}>
+							<Box p={2}>
+								<TextField
+									label='β'
+									disabled
+									value={solutionPowA.result}
+									type='number'
+									helperText='Wygenerowana liczba'
+								/>
+							</Box>
+						</Grid>
+						<Grid item xs={3}>
 							<Box p={2}>
 								<TextField
 									label='t'
@@ -62,18 +77,85 @@ function ElGamalDeszyfrowanie() {
 								/>
 							</Box>
 						</Grid>
-					</Grid>
-					<Box p={2} pb={2} textAlign='center'>
-						<DisplayFormula p={p} g={g} power={t} variant={'h4'} />
-					</Box>
-					<Grid container justify='center'>
-						<Grid item xs={6}>
-							<FastPowerTable stepsObj={solutionPowA} pow={p} />
+						<Grid item xs={12} align='center'>
+							<Box p={2}>
+								<Typography variant='h4'>Opis zadania:</Typography>
+								<Typography>
+									Alicja otrzymała od Boba szyfrogram Y=({y1}, {y2})
+								</Typography>
+								<Typography> Obliczyć przez Alicję wartość tekstu jawnego x.</Typography>
+							</Box>
 						</Grid>
-					</Grid>
-
-					<Grid item xs={12}>
-						<KluczeDisplay p={p} g={g} beta={solutionPowA.result} t={t} />
+						<Grid item xs={6} align='right'>
+							<Box p={2}>
+								<TextField
+									label={
+										<>
+											y<sub>1</sub>
+										</>
+									}
+									onChange={setY1}
+									value={y1}
+									type='number'
+								/>
+							</Box>
+						</Grid>
+						<Grid item xs={6} align='left'>
+							<Box p={2}>
+								<TextField
+									label={
+										<>
+											y<sub>2</sub>
+										</>
+									}
+									onChange={setY2}
+									value={y2}
+									type='number'
+								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12} align='center'>
+							<Box m={2} p={2} display='inline-block'>
+								<Paper variant='outlined'>
+									<Box m={2}>
+										<Typography variant='h4' align='center'>
+											X = P = y<sub>2</sub>* y<sub>1</sub>
+											<sup>p - 1 - t</sup> mod p
+										</Typography>
+									</Box>
+								</Paper>
+							</Box>
+							<Box m={2} p={2} display='inline-block'>
+								<Paper variant='outlined'>
+									<Box m={2}>
+										<Typography variant='h4' align='center'>
+											X = P = {y2} * {y1}
+											<sup>{p - 1 - t}</sup> mod {p}
+										</Typography>
+									</Box>
+								</Paper>
+							</Box>
+						</Grid>
+						<Grid item xs={3}></Grid>
+						<Grid item xs={6} align='center'>
+							<Box p={2} align='center'>
+								<Typography variant='h4' gutterBottom>
+									Liczenie x (wiadomości)
+								</Typography>
+								{y2} * <DisplayFormula g={y1} power={power} p={p} />
+								<FastPowerTable stepsObj={solutionPowX} pow={power} />{' '}
+								<Box p={2}>
+									x = {y2} * {solutionPowX.result} mod {p}
+								</Box>
+							</Box>
+						</Grid>
+						<Grid item xs={12}>
+							<Box p={2}>
+								<Typography variant='h4' gutterBottom align='center'>
+									X = {x}
+								</Typography>
+							</Box>
+						</Grid>
 					</Grid>
 				</Paper>
 			</Box>

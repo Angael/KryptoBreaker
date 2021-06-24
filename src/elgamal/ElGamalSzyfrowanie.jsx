@@ -33,9 +33,6 @@ function ElGamalSzyfrowanie() {
 				<Paper elevation={3}>
 					<Grid container>
 						<Grid item xs={12}>
-							<Box p={2} pb={2} textAlign='center'>
-								<Typography variant='h3'>Kryptosystem El Gamala</Typography>
-							</Box>
 							<Grid item xs={12}>
 								<KluczeDisplay p={p} g={alpha} beta={beta} t={t} />
 							</Grid>
