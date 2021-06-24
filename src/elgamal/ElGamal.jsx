@@ -20,13 +20,10 @@ function ElGamal() {
 
 	return (
 		<>
-			<Box my={4}>
+			<Box>
 				<Paper elevation={3}>
 					<Grid container>
 						<Grid item xs={12}>
-							<Box p={2} pb={2} textAlign='center'>
-								<Typography variant='h3'>Kryptosystem El Gamala</Typography>
-							</Box>
 							<Box p={2}>
 								Alicja chce wygenerować klucze asymetryczne ElGamala. W tym celu przyjęła wartość{' '}
 								<b>p={p}</b> oraz generator <b>g={g}</b>.<br />

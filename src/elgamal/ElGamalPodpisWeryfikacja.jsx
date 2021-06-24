@@ -31,19 +31,12 @@ function ElGamalPodpisWeryfikacja() {
 
 	return (
 		<>
-			<Box my={4}>
+			<Box>
 				<Paper elevation={3}>
 					<Grid container>
-						<Box my={4}>
+						<Box>
 							<Grid container>
 								<Grid item xs={12}>
-									<Box p={2} pb={2} textAlign='center'>
-										<Typography variant='h3'>Kryptosystem El Gamala</Typography>
-									</Box>
-									<Box p={2}>
-										Bob otrzymał od Alicji wiadomość, której skrót wynosi h={h}, oraz podpis cyfrowy ELGamala (u, s) = ({u}, {s}).
-										Zweryfikuj przez Boba otrzymany od Alicji podpis cyfrowy.
-									</Box>
 									<Grid item xs={12}>
 										<KluczeDisplay p={p} g={alpha} beta={u} t={t} />
 									</Grid>
@@ -82,9 +75,15 @@ function ElGamalPodpisWeryfikacja() {
 											onChange={setT}
 											value={t}
 											type='number'
-											disabled
 											helperText='Wylosowana wartość pierwsza'
 										/>
+									</Box>
+								</Grid>
+								<Grid item xs={12}>
+									<Box p={2}>
+										Bob otrzymał od Alicji wiadomość, której skrót wynosi h={h}, oraz podpis cyfrowy
+										ELGamala (u, s) = ({u}, {s}). Zweryfikuj przez Boba otrzymany od Alicji podpis
+										cyfrowy.
 									</Box>
 								</Grid>
 								<Grid item xs={3}>
@@ -122,11 +121,13 @@ function ElGamalPodpisWeryfikacja() {
 								</Grid>
 							</Grid>
 							<Box p={2} pb={2} textAlign='center'>
-
 								<Grid item xs={12} justify='center'>
 									<Box p={2} align='center'>
 										<Typography variant='h3'>Weryfikacja podpisu:</Typography>
-										<Typography variant="body1" component="p">f = <DisplayFormula g={'α'} power={'h'} p={'p'} variant={'body1'} /> = {solutionPowF.result}</Typography>
+										<Typography variant='body1' component='p'>
+											f = <DisplayFormula g={'α'} power={'h'} p={'p'} variant={'body1'} /> ={' '}
+											{solutionPowF.result}
+										</Typography>
 										<DisplayFormula p={p} g={alpha} power={h} variant={'h5'} />
 									</Box>
 								</Grid>
@@ -138,14 +139,14 @@ function ElGamalPodpisWeryfikacja() {
 							</Grid>
 
 							<Box p={2} align='center'>
-								<Typography variant="body1" component="p">
+								<Typography variant='body1' component='p'>
 									<b>wzór: (a * b) mod c = (a mod c * b mod c) mod c</b>
 								</Typography>
-								
-								<Typography variant="body1" component="p">
+
+								<Typography variant='body1' component='p'>
 									g = β<sup>u'</sup> * u'<sup>s'</sup> mod p = 
-									<DisplayFormula g={'β'} power={'u\''} p={'p'} variant={'body1'} /> * 
-									<DisplayFormula g={'u\''} power={'s\''} p={'p'} variant={'body1'} />
+									<DisplayFormula g={'β'} power={"u'"} p={'p'} variant={'body1'} /> * 
+									<DisplayFormula g={"u'"} power={"s'"} p={'p'} variant={'body1'} />
 								</Typography>
 							</Box>
 
@@ -161,16 +162,21 @@ function ElGamalPodpisWeryfikacja() {
 							</Box>
 
 							<Box p={2} align='center'>
-								<Typography variant="body1" component="p">
-									g = 
-									({solutionPowLeft.result} * {solutionPowRight.result}) mod {p} = 
-									{solutionPowLeft.result * solutionPowRight.result} mod {p} 
-									{g == f ? '=' : '≠'} {f}
+								<Typography variant='body1' component='p'>
+									g =  ({solutionPowLeft.result} * {solutionPowRight.result}) mod {p} = 
+									{solutionPowLeft.result * solutionPowRight.result} mod {p} {g == f ? '=' : '≠'}{' '}
+									{f}
 								</Typography>
-								<Typography variant="body1" component="p"><b>Podpis {g == f ? 'jest' : 'nie jest'} zgodny</b></Typography>
+								<Typography variant='body1' component='p'>
+									f {g == f ? '=' : '≠'} g
+								</Typography>
+								<Typography variant='body1' component='p'>
+									{f} {g == f ? '=' : '≠'} {g}
+								</Typography>
+								<Typography variant='body1' component='p'>
+									<b>Podpis {g == f ? 'jest' : 'nie jest'} zgodny</b>
+								</Typography>
 							</Box>
-							
-
 						</Box>
 					</Grid>
 				</Paper>

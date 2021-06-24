@@ -19,6 +19,9 @@ function ElGamalPodpis() {
 	const [h, setH] = useNumberInput(357);
 	const [r, setR] = useNumberInput(515);
 
+	const solutionPowBeta = useMemo(() => getFastPowerMod(p, alpha, t), [p, alpha, t]);
+	const beta = solutionPowBeta.result;
+
 	const inverted = modInverse(r, p - 1);
 	const solutionPowA = useMemo(() => getFastPowerMod(p, alpha, r), [p, alpha, r]);
 
@@ -27,20 +30,12 @@ function ElGamalPodpis() {
 
 	return (
 		<>
-			<Box my={4}>
+			<Box>
 				<Paper elevation={3}>
 					<Grid container>
-						<Box my={4}>
+						<Box>
 							<Grid container>
 								<Grid item xs={12}>
-									<Box p={2} pb={2} textAlign='center'>
-										<Typography variant='h3'>Kryptosystem El Gamala</Typography>
-									</Box>
-									<Box p={2}>
-										Alicja chce wysłać do Boba wiadomość, której skrót wynosi h={h}.
-										Wygenerować przez Alicję podpis cyfrowy ElGamala dla tej wiadomości,
-										wiedząc, że Alicja użyła randomizera r={r}.
-									</Box>
 									<Grid item xs={12}>
 										<KluczeDisplay p={p} g={alpha} beta={u} t={t} />
 									</Grid>
@@ -66,7 +61,7 @@ function ElGamalPodpis() {
 										<TextField
 											label='β'
 											disabled
-											value={solutionPowA.result}
+											value={beta}
 											type='number'
 											helperText='Wygenerowana liczba'
 										/>
@@ -81,6 +76,13 @@ function ElGamalPodpis() {
 											type='number'
 											helperText='Wylosowana wartość pierwsza'
 										/>
+									</Box>
+								</Grid>
+								<Grid item xs={12}>
+									<Box p={2}>
+										Alicja chce wysłać do Boba wiadomość, której skrót wynosi h={h}. Wygenerować
+										przez Alicję podpis cyfrowy ElGamala dla tej wiadomości, wiedząc, że Alicja
+										użyła randomizera r={r}.
 									</Box>
 								</Grid>
 								<Grid item xs={3}>
@@ -105,7 +107,6 @@ function ElGamalPodpis() {
 										/>
 									</Box>
 								</Grid>
-
 							</Grid>
 							<Box p={2} pb={2} textAlign='center'>
 								<DisplayFormula p={p} g={alpha} power={r} variant={'h4'} />
@@ -119,25 +120,31 @@ function ElGamalPodpis() {
 							<Grid item xs={12} justify='center'>
 								<Box p={2}>
 									<Box p={2}>
-										<Typography variant='h3' align='center' m={2}>Generowanie podpisu:</Typography>
+										<Typography variant='h3' align='center' m={2}>
+											Generowanie podpisu:
+										</Typography>
 									</Box>
 									<Box p={2} align='center'>
 										<OdwrotnoscTable a={r} b={p - 1} />
 									</Box>
-									<Typography component="p">
+									<Typography component='p'>
 										<b>u</b> = 
 										<DisplayFormula g={'α'} power={'r'} p={'p'} variant={'body1'} /> = 
 										<DisplayFormula g={alpha} power={r} p={p} variant={'body1'} /> = {u}
 									</Typography>
-									<Typography component="p">
-										<b>s</b> =
-										α<sup>-1</sup> * (h - t * u) mod (p -1) =
-										({inverted} * ({h} - {t} * {solutionPowA.result})) mod {p - 1} = {s}
+									<Typography component='p'>
+										<b>s</b> = α<sup>-1</sup> * (h - t * u) mod (p -1) = ({inverted} * ({h} - {t} *{' '}
+										{solutionPowA.result})) mod {p - 1} = {s}
 									</Typography>
 								</Box>
-								
+
 								<Box p={2} align='center'>
-									<Typography variant="body1" component="p">Podpis: <b>(u, s)</b> = <b>({u}, {s})</b></Typography>
+									<Typography variant='body1' component='p'>
+										Podpis: <b>(u, s)</b> ={' '}
+										<b>
+											({u}, {s})
+										</b>
+									</Typography>
 								</Box>
 							</Grid>
 						</Box>
