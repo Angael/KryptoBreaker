@@ -12,8 +12,9 @@ import FastPowerTable from 'diffie-hellman/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
 function ElGamalSzyfrowanie() {
-	const [g, setG] = useNumberInput(2);
-	const [p, setP] = useNumberInput(1619);
+	const [p, setP] = useNumberInput(2);
+	const [alpha, setAlpha] = useNumberInput(1619);
+	const [beta, setBeta] = useNumberInput(937);
 	const [t, setT] = useNumberInput(937);
 
 	const solutionPowA = useMemo(() => getFastPowerMod(p, g, t), [p, g, t]);
@@ -33,25 +34,34 @@ function ElGamalSzyfrowanie() {
 								Wyznacz klucze asymetryczne Alicji dla jej wartości prywatnej <b>t={t}</b>.
 							</Box>
 						</Grid>
-						<Grid item xs={4}>
+						<Grid item xs={3}>
+							<Box p={2}>
+								<TextField label='p' onChange={setP} value={p} type='number' />
+							</Box>
+						</Grid>
+						<Grid item xs={3}>
 							<Box p={2}>
 								<TextField
-									label='g \\'
-									onChange={setG}
-									value={g}
+									label='α'
+									onChange={setAlpha}
+									value={alpha}
 									type='number'
 									helperText='Generator'
 								/>
 							</Box>
 						</Grid>
-
-						<Grid item xs={4}>
+						<Grid item xs={3}>
 							<Box p={2}>
-								<TextField label='p' onChange={setP} value={p} type='number' helperText='p?' />
+								<TextField
+									label='β'
+									onChange={setBeta}
+									value={beta}
+									type='number'
+									helperText='Wygenerowana liczba'
+								/>
 							</Box>
 						</Grid>
-
-						<Grid item xs={4}>
+						<Grid item xs={3}>
 							<Box p={2}>
 								<TextField
 									label='t'

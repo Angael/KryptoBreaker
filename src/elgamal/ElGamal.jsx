@@ -28,14 +28,15 @@ function ElGamal() {
 								<Typography variant='h3'>Kryptosystem El Gamala</Typography>
 							</Box>
 							<Box p={2}>
-								Alicja chce wygenerować klucze asymetryczne ElGamala. W tym celu przyjęła wartość <b>p={p}</b> oraz generator <b>g={g}</b>.<br />
+								Alicja chce wygenerować klucze asymetryczne ElGamala. W tym celu przyjęła wartość{' '}
+								<b>p={p}</b> oraz generator <b>g={g}</b>.<br />
 								Wyznacz klucze asymetryczne Alicji dla jej wartości prywatnej <b>t={t}</b>.
 							</Box>
 						</Grid>
 						<Grid item xs={4}>
 							<Box p={2}>
 								<TextField
-									label='g \\'
+									label='g albo α'
 									onChange={setG}
 									value={g}
 									type='number'
@@ -46,13 +47,7 @@ function ElGamal() {
 
 						<Grid item xs={4}>
 							<Box p={2}>
-								<TextField
-									label='p'
-									onChange={setP}
-									value={p}
-									type='number'
-									helperText='p?'
-								/>
+								<TextField label='p' onChange={setP} value={p} type='number' helperText='p?' />
 							</Box>
 						</Grid>
 
