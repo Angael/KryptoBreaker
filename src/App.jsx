@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import './App.css';
 import Container from '@material-ui/core/Container';
@@ -38,39 +38,9 @@ import ElGamalPodpis from './elgamal/ElGamalPodpis';
 import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
 
 import GitHubIcon from '@material-ui/icons/GitHub';
+import componentList from './componentList';
 
-export const helpers = {
-	odwrotnosc: { key: 'odwrotnosc', name: 'Odwrotność multiplikatywna' },
-	potegaMod: { key: 'potegaMod', name: 'Potęgowanie modularne' },
-	mod: { key: 'mod', name: 'Modulo' },
-};
-
-export const methods = {
-	cezar: { key: 'cezar', name: 'Cezar' },
-	afiniczny: { key: 'afiniczny', name: 'Afiniczny' },
-	vigener: { key: 'vigener', name: 'Vigener' },
-	hill: { key: 'hill', name: 'Hill' },
-	diffieHellman: { key: 'diffieHellman', name: 'Diffie Hellman', divider: true },
-
-	rsaKlucze: { key: 'rsaKlucze', name: 'RSA | Klucze' },
-	rsaSzyfrowanie: { key: 'rsaSzyfrowanie', name: 'RSA | Szyfrowanie' },
-	rsaDeszyfrowanie: { key: 'rsaDeszyfrowanie', name: 'RSA | Deszyfrowanie' },
-	rsaPodpis: { key: 'rsaPodpis', name: 'RSA | Podpis' },
-	rsaWeryfikacjaPodpisu: {
-		key: 'rsaWeryfikacjaPodpisu',
-		name: 'RSA | Weryfikacja podpisu',
-		divider: true,
-	},
-	elGamalKlucze: { key: 'elGamal keys', name: 'El Gamal | Klucze' },
-	elGamalSzyfrowanie: { key: 'elGamal szfr', name: 'El Gamal | Szyfrowanie' },
-	elGamalDeszyfrowanie: { key: 'elGamal deszfr', name: 'El Gamal | Deszyfrowanie' },
-	elGamalPodpis: { key: 'elGamal sign', name: 'El Gamal | Podpis' },
-	elGamalWeryfikacjaPodpisu: {
-		key: 'elGamal veryfsign',
-		name: 'El Gamal | Weryfikacja podpisu',
-		divider: true,
-	},
-};
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 const drawerWidth = 240;
 
@@ -90,24 +60,25 @@ const useStyles = makeStyles((theme) => ({
 	drawerPaper: {
 		width: drawerWidth,
 	},
-	// necessary for content to be below app bar
 	toolbar: theme.mixins.toolbar,
 	content: {
 		flexGrow: 1,
 		backgroundColor: 'whitesmoke',
-		// backgroundColor: 'oldlace',
 		padding: theme.spacing(3),
 	},
 }));
 
 function App() {
-	const [method, setMethod] = useLocalStorage('method', methods.diffieHellman.key);
-	const [title, setTitle] = useLocalStorage('title', methods.diffieHellman.name);
+	// Category and component indexes in componentList.js
+	const [indexes, setIndexes] = useLocalStorage('method', [0, 0]);
+
+	const selectedCategory = componentList[indexes[0]];
+	const selectedMethod = selectedCategory.methods[indexes[1]] || {};
+
 	const classes = useStyles();
 
-	const handleChange = (key, name) => {
-		setMethod(key);
-		setTitle(name);
+	const handleChange = (categoryIndex, componentIndex) => {
+		setIndexes([categoryIndex, componentIndex]);
 	};
 
 	return (
@@ -128,23 +99,29 @@ function App() {
 						<Typography variant='h5'>KryptoBreaker</Typography>
 					</ListItem>
 					<Divider />
-					<ListItem disabled>Helpers</ListItem>
-					{Object.values(helpers).map(({ key, name, divider }) => (
-						<>
-							<ListItem button key={key} onClick={() => handleChange(key, name)}>
-								<ListItemText primary={name} />
+
+					{componentList.map((category, i) => (
+						<Box py={0} key={i}>
+							<ListItem disabled>
+								<Box display='flex' align='center'>
+									<ArrowForwardIosIcon />
+									<Typography variant='button'>{category.categoryName}</Typography>
+								</Box>
 							</ListItem>
-							{divider && <Divider />}
-						</>
-					))}
-					<Divider />
-					{Object.values(methods).map(({ key, name, divider }) => (
-						<>
-							<ListItem button key={key} onClick={() => handleChange(key, name)}>
-								<ListItemText primary={name} />
-							</ListItem>
-							{divider && <Divider />}
-						</>
+
+							{category.methods.map((c, j) => (
+								<ListItem
+									button
+									key={j}
+									onClick={() => handleChange(i, j)}
+									selected={i == indexes[0] && j == indexes[1]}
+								>
+									<ListItemText primary={c.name} />
+								</ListItem>
+							))}
+
+							<Divider />
+						</Box>
 					))}
 					<ListItem component='a' href='https://github.com/Angael/KryptoBreaker' target='_blank'>
 						<ListItemIcon>
@@ -153,40 +130,17 @@ function App() {
 						<ListItemText primary='Github repository' secondary='source code' />
 					</ListItem>
 				</List>
-				<Divider />
 			</Drawer>
 
 			<Paper className={classes.content} elevation={0}>
 				<Container maxWidth='md'>
-					<Box my={4}>
-						<Typography variant='h2'>{title}</Typography>
+					<Box mb={4}>
+						<Typography variant='h5'>{selectedCategory.categoryName}</Typography>
+						<hr />
+						<Typography variant='h2'>{selectedMethod.name}</Typography>
 					</Box>
 
-					<Box my={4}>{method === helpers.odwrotnosc.key && <Odwrotnosc />}</Box>
-					<Box my={4}>{method === helpers.potegaMod.key && <PotegaMod />}</Box>
-					<Box my={4}>{method === helpers.mod.key && <Mod />}</Box>
-
-					<Box my={4}>{method === methods.cezar.key && <Cezar />}</Box>
-					<Box my={4}>{method === methods.afiniczny.key && <Afiniczny />}</Box>
-					<Box my={4}>{method === methods.vigener.key && <Vigener />}</Box>
-					<Box my={4}>{method === methods.hill.key && <Hill />}</Box>
-					<Box my={4}>{method === methods.diffieHellman.key && <DiffieHellman />}</Box>
-					<Box my={4}>{method === methods.rsaKlucze.key && <RSAKlucze />}</Box>
-					<Box my={4}>{method === methods.rsaSzyfrowanie.key && <RSASzyfrowanie />}</Box>
-					<Box my={4}>{method === methods.rsaDeszyfrowanie.key && <RSADeszyfrowanie />}</Box>
-					<Box my={4}>{method === methods.rsaPodpis.key && <RSAPodpis />}</Box>
-					<Box my={4}>
-						{method === methods.rsaWeryfikacjaPodpisu.key && <RSAPodpisWeryfikacja />}
-					</Box>
-					<Box my={4}>{method === methods.elGamalKlucze.key && <ElGamal />}</Box>
-					<Box my={4}>{method === methods.elGamalSzyfrowanie.key && <ElGamalSzyfrowanie />}</Box>
-					<Box my={4}>
-						{method === methods.elGamalDeszyfrowanie.key && <ElGamalDeszyfrowanie />}
-					</Box>
-					<Box my={4}>{method === methods.elGamalPodpis.key && <ElGamalPodpis />}</Box>
-					<Box my={4}>
-						{method === methods.elGamalWeryfikacjaPodpisu.key && <ElGamalPodpisWeryfikacja />}
-					</Box>
+					<Box my={4}>{selectedMethod.component}</Box>
 				</Container>
 			</Paper>
 		</div>
