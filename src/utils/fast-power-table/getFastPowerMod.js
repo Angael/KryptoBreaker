@@ -3,11 +3,11 @@ import { dec2bin } from 'utils/numHelpers';
 
 /**
  *
+ * @param {number} number - Liczba podnoszona do potęgi, ta po lewej
+ * @param {number} power - potęga
  * @param {number} modulo - Modulo
- * @param {number} generator - Liczba generator, ta po lewej
- * @param {number} power potęga
  */
-const getFastPowerMod = (modulo, generator, power) => {
+const getFastPowerMod = (number, power, modulo) => {
 	// np 011011101
 	const binaryString = dec2bin(power);
 	const reversedBinaryArray = binaryString.split('').reverse();
@@ -20,9 +20,9 @@ const getFastPowerMod = (modulo, generator, power) => {
 	steps.push({
 		i: 0,
 		x: 1,
-		a: generator,
+		a: number,
 		t: Number(reversedBinaryArray[0]),
-		helperTextA: 'initial value is g = ' + generator,
+		helperTextA: 'initial value is g = ' + number,
 		helperTextX: 'initial value is always 1 ',
 	});
 

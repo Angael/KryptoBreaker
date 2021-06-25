@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { mod, modInverse } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 import OdwrotnoscTable from 'odwrotnosc/OdwrotnoscTable';
 
@@ -19,11 +19,11 @@ function ElGamalPodpis() {
 	const [h, setH] = useNumberInput(357);
 	const [r, setR] = useNumberInput(515);
 
-	const solutionPowBeta = useMemo(() => getFastPowerMod(p, alpha, t), [p, alpha, t]);
+	const solutionPowBeta = useMemo(() => getFastPowerMod(alpha, t, p), [p, alpha, t]);
 	const beta = solutionPowBeta.result;
 
 	const inverted = modInverse(r, p - 1);
-	const solutionPowA = useMemo(() => getFastPowerMod(p, alpha, r), [p, alpha, r]);
+	const solutionPowA = useMemo(() => getFastPowerMod(alpha, r, p), [p, alpha, r]);
 
 	const u = solutionPowA.result;
 	const s = mod(inverted * (h - t * u), p - 1);
@@ -109,7 +109,7 @@ function ElGamalPodpis() {
 								</Grid>
 							</Grid>
 							<Box p={2} pb={2} textAlign='center'>
-								<DisplayFormula p={p} g={alpha} power={r} variant={'h4'} />
+								<DisplayFormula number={alpha} modulo={p} power={r} variant={'h4'} />
 							</Box>
 							<Grid container justify='center'>
 								<Grid item xs={6}>
@@ -129,8 +129,8 @@ function ElGamalPodpis() {
 									</Box>
 									<Typography component='p'>
 										<b>u</b> = 
-										<DisplayFormula g={'α'} power={'r'} p={'p'} variant={'body1'} /> = 
-										<DisplayFormula g={alpha} power={r} p={p} variant={'body1'} /> = {u}
+										<DisplayFormula number={'α'} modulo={'p'} power={'r'} variant={'body1'} /> = 
+										<DisplayFormula number={alpha} power={r} modulo={p} variant={'body1'} /> = {u}
 									</Typography>
 									<Typography component='p'>
 										<b>s</b> = α<sup>-1</sup> * (h - t * u) mod (p -1) = ({inverted} * ({h} - {t} *{' '}

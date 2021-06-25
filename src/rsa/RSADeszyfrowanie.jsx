@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { isPrime, modInverse } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
 function RSADeszyfrowanie() {
@@ -19,7 +19,7 @@ function RSADeszyfrowanie() {
 	const [n, setN] = useNumberInput(1739);
 
 	// y^d mod n
-	const solutionPow = useMemo(() => getFastPowerMod(n, y, d), [n, y, d]);
+	const solutionPow = useMemo(() => getFastPowerMod(y, d, n), [n, y, d]);
 
 	return (
 		<>
@@ -87,12 +87,9 @@ function RSADeszyfrowanie() {
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
 								<Typography variant='h3'>Deszyfrowanie:</Typography>
-								x = wiadomość = <DisplayFormula
-									g={'y'}
-									power={'d'}
-									p={'n'}
-									variant={'body1'}
-								/> = <DisplayFormula g={y} power={d} p={n} variant={'body1'} /> ={' '}
+								x = wiadomość ={' '}
+								<DisplayFormula number={'y'} power={'d'} modulo={'n'} variant={'body1'} /> ={' '}
+								<DisplayFormula number={y} power={d} number={n} variant={'body1'} /> ={' '}
 								{solutionPow.result}
 							</Box>
 							<Box p={2} align='center'>

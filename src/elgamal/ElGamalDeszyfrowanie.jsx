@@ -5,11 +5,11 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import KluczeDisplay from './KluczeDisplay';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import { mod } from 'utils/numHelpers';
-import FastPowerTable from './../diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 
 function ElGamalDeszyfrowanie() {
 	const [p, setP] = useNumberInput(1619);
@@ -18,13 +18,13 @@ function ElGamalDeszyfrowanie() {
 	const [y1, setY1] = useNumberInput(130);
 	const [y2, setY2] = useNumberInput(414);
 
-	const solutionPowA = useMemo(() => getFastPowerMod(p, alpha, t), [p, alpha, t]);
+	const solutionPowA = useMemo(() => getFastPowerMod(alpha, t, p), [p, alpha, t]);
 
 	const beta = solutionPowA.result;
 
 	const power = p - 1 - t;
 	const error = power <= 0 || power % 1 !== 0;
-	const solutionPowX = useMemo(() => getFastPowerMod(p, y1, power), [p, y1, power]);
+	const solutionPowX = useMemo(() => getFastPowerMod(y1, power, p), [p, y1, power]);
 
 	const x = mod(y2 * solutionPowX.result, p);
 
@@ -142,7 +142,7 @@ function ElGamalDeszyfrowanie() {
 								<Typography variant='h4' gutterBottom>
 									Liczenie x (wiadomości)
 								</Typography>
-								{y2} * <DisplayFormula g={y1} power={power} p={p} />
+								{y2} * <DisplayFormula number={y1} modulo={p} power={power} />
 								<FastPowerTable stepsObj={solutionPowX} pow={power} />{' '}
 								<Box p={2}>
 									x = {y2} * {solutionPowX.result} mod {p}

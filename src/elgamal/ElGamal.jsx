@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { isPrime } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
 function ElGamal() {
@@ -16,7 +16,7 @@ function ElGamal() {
 	const [p, setP] = useNumberInput(1619);
 	const [t, setT] = useNumberInput(937);
 
-	const solutionPowA = useMemo(() => getFastPowerMod(p, g, t), [p, g, t]);
+	const solutionPowA = useMemo(() => getFastPowerMod(g, t, p), [p, g, t]);
 
 	return (
 		<>
@@ -61,7 +61,7 @@ function ElGamal() {
 						</Grid>
 					</Grid>
 					<Box p={2} pb={2} textAlign='center'>
-						<DisplayFormula p={p} g={g} power={t} variant={'h4'} />
+						<DisplayFormula number={g} modulo={p} power={t} variant={'h4'} />
 					</Box>
 					<Grid container justify='center'>
 						<Grid item xs={6}>

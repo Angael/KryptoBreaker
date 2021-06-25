@@ -5,11 +5,11 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import KluczeDisplay from './KluczeDisplay';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import { mod } from 'utils/numHelpers';
-import FastPowerTable from './../diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 
 function ElGamalSzyfrowanie() {
 	const [p, setP] = useNumberInput(1619);
@@ -18,12 +18,12 @@ function ElGamalSzyfrowanie() {
 	const [x, setX] = useNumberInput(20);
 	const [r, setR] = useNumberInput(320);
 
-	const solutionPowA = useMemo(() => getFastPowerMod(p, alpha, t), [p, alpha, t]);
+	const solutionPowA = useMemo(() => getFastPowerMod(alpha, t, p), [p, alpha, t]);
 
 	const beta = solutionPowA.result;
 
-	const solutionPowY1 = useMemo(() => getFastPowerMod(p, alpha, r), [p, alpha, r]);
-	const solutionPowY2 = useMemo(() => getFastPowerMod(p, beta, r), [p, beta, r]);
+	const solutionPowY1 = useMemo(() => getFastPowerMod(alpha, r, p), [p, alpha, r]);
+	const solutionPowY2 = useMemo(() => getFastPowerMod(beta, r, p), [p, beta, r]);
 	const y1 = solutionPowY1.result;
 	const y2 = mod(x * solutionPowY2.result, p);
 
@@ -130,7 +130,7 @@ function ElGamalSzyfrowanie() {
 								<Typography variant='h4' gutterBottom>
 									Liczenie y<sub>1</sub>
 								</Typography>
-								<DisplayFormula g={alpha} power={r} p={p} />
+								<DisplayFormula number={alpha} power={r} modulo={p} />
 								<FastPowerTable stepsObj={solutionPowY1} pow={r} />{' '}
 								<Box p={2}>
 									y<sub>1</sub>= {y1}
@@ -142,7 +142,7 @@ function ElGamalSzyfrowanie() {
 								<Typography variant='h4' gutterBottom>
 									Liczenie y<sub>2</sub>
 								</Typography>
-								{x} * <DisplayFormula g={alpha} power={r} p={p} />
+								{x} * <DisplayFormula number={alpha} power={r} modulo={p} />
 								<FastPowerTable stepsObj={solutionPowY2} pow={r} />
 								<Box p={2}>
 									y<sub>2</sub> = {x} * {solutionPowY2.result} mod {p} = {y2}

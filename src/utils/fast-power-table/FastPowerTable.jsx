@@ -11,7 +11,7 @@ import {
 	Tooltip,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import BinaryExplanator from './BinaryExplanator';
+import BinaryExplanator from 'utils/fast-power-table/BinaryExplanator';
 
 const answerCss = css`
 	background: #97ffa7;

@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { mod, modInverse } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 import OdwrotnoscTable from 'odwrotnosc/OdwrotnoscTable';
 
@@ -22,9 +22,9 @@ function ElGamalPodpisWeryfikacja() {
 	const [u, setU] = useNumberInput(1310);
 	const [s, setS] = useNumberInput(1579);
 
-	const solutionPowF = useMemo(() => getFastPowerMod(p, alpha, h), [p, alpha, h]);
-	const solutionPowLeft = useMemo(() => getFastPowerMod(p, beta, u), [p, beta, u]);
-	const solutionPowRight = useMemo(() => getFastPowerMod(p, u, s), [p, u, s]);
+	const solutionPowF = useMemo(() => getFastPowerMod(alpha, h, p), [p, alpha, h]);
+	const solutionPowLeft = useMemo(() => getFastPowerMod(beta, u, p), [p, beta, u]);
+	const solutionPowRight = useMemo(() => getFastPowerMod(u, s, p), [p, u, s]);
 
 	const g = solutionPowF.result;
 	const f = mod(solutionPowLeft.result * solutionPowRight.result, p);
@@ -125,10 +125,10 @@ function ElGamalPodpisWeryfikacja() {
 									<Box p={2} align='center'>
 										<Typography variant='h3'>Weryfikacja podpisu:</Typography>
 										<Typography variant='body1' component='p'>
-											f = <DisplayFormula g={'α'} power={'h'} p={'p'} variant={'body1'} /> ={' '}
-											{solutionPowF.result}
+											f = <DisplayFormula number={'α'} power={'h'} modulo={'p'} variant={'body1'} />{' '}
+											= {solutionPowF.result}
 										</Typography>
-										<DisplayFormula p={p} g={alpha} power={h} variant={'h5'} />
+										<DisplayFormula number={alpha} power={h} modulo={p} variant={'h5'} />
 									</Box>
 								</Grid>
 							</Box>
@@ -145,8 +145,8 @@ function ElGamalPodpisWeryfikacja() {
 
 								<Typography variant='body1' component='p'>
 									g = β<sup>u'</sup> * u'<sup>s'</sup> mod p = 
-									<DisplayFormula g={'β'} power={"u'"} p={'p'} variant={'body1'} /> * 
-									<DisplayFormula g={"u'"} power={"s'"} p={'p'} variant={'body1'} />
+									<DisplayFormula number={'β'} power={"u'"} modulo={'p'} variant={'body1'} /> * 
+									<DisplayFormula number={"u'"} power={"s'"} modulo={'p'} variant={'body1'} />
 								</Typography>
 							</Box>
 
