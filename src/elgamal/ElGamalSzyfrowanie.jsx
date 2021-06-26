@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Typography, Box, Divider } from '@material-ui/core';
+import { Typography, Box, Divider, useMediaQuery } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -10,6 +10,7 @@ import KluczeDisplay from './KluczeDisplay';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
 import { mod } from 'utils/numHelpers';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
+import { useTheme } from '@material-ui/core/styles';
 
 function ElGamalSzyfrowanie() {
 	const [p, setP] = useNumberInput(1619);
@@ -26,6 +27,9 @@ function ElGamalSzyfrowanie() {
 	const solutionPowY2 = useMemo(() => getFastPowerMod(beta, r, p), [p, beta, r]);
 	const y1 = solutionPowY1.result;
 	const y2 = mod(x * solutionPowY2.result, p);
+
+	const theme = useTheme();
+	const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
 
 	return (
 		<>
@@ -114,7 +118,7 @@ function ElGamalSzyfrowanie() {
 							<Box m={2} p={2} display='inline-block'>
 								<Paper variant='outlined'>
 									<Box m={2}>
-										<Typography variant='h4' align='center'>
+										<Typography variant={isPhone ? 'body1' : 'h4'} align='center'>
 											C = (y<sub>1</sub>, y<sub>2</sub>) = E
 											<sub>
 												k<sub>1</sub>

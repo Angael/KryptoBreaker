@@ -133,7 +133,7 @@ function ElGamalPodpisWeryfikacja() {
 								</Grid>
 							</Box>
 							<Grid container justify='center'>
-								<Grid item xs={6}>
+								<Grid item xs={12} sm={8} md={6}>
 									<FastPowerTable stepsObj={solutionPowF} pow={p} />
 								</Grid>
 							</Grid>

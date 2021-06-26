@@ -86,8 +86,7 @@ function RSADeszyfrowanie() {
 
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
-								<Typography variant='h3'>Deszyfrowanie:</Typography>
-								x = wiadomość ={' '}
+								<Typography variant='h3'>Deszyfrowanie:</Typography>x = wiadomość ={' '}
 								<DisplayFormula number={'y'} power={'d'} modulo={'n'} variant={'body1'} /> ={' '}
 								<DisplayFormula number={y} power={d} number={n} variant={'body1'} /> ={' '}
 								{solutionPow.result}
@@ -98,7 +97,7 @@ function RSADeszyfrowanie() {
 						</Grid>
 
 						<Grid container justify='center'>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={8} md={6}>
 								<FastPowerTable stepsObj={solutionPow} pow={d} />
 							</Grid>
 						</Grid>

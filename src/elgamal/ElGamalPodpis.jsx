@@ -112,33 +112,35 @@ function ElGamalPodpis() {
 								<DisplayFormula number={alpha} modulo={p} power={r} variant={'h4'} />
 							</Box>
 							<Grid container justify='center'>
-								<Grid item xs={6}>
+								<Grid item xs={12} sm={8} md={6}>
 									<FastPowerTable stepsObj={solutionPowA} pow={p} />
 								</Grid>
 							</Grid>
 
 							<Grid item xs={12} justify='center'>
-								<Box p={2}>
+								<Box py={2}>
 									<Box p={2}>
 										<Typography variant='h3' align='center' m={2}>
 											Generowanie podpisu:
 										</Typography>
 									</Box>
-									<Box p={2} align='center'>
+									<Box py={2} align='center'>
 										<OdwrotnoscTable a={r} b={p - 1} />
 									</Box>
-									<Typography component='p'>
-										<b>u</b> = 
-										<DisplayFormula number={'α'} modulo={'p'} power={'r'} variant={'body1'} /> = 
-										<DisplayFormula number={alpha} power={r} modulo={p} variant={'body1'} /> = {u}
-									</Typography>
-									<Typography component='p'>
-										<b>s</b> = α<sup>-1</sup> * (h - t * u) mod (p -1) = ({inverted} * ({h} - {t} *{' '}
-										{solutionPowA.result})) mod {p - 1} = {s}
-									</Typography>
+									<Box p={2}>
+										<Typography component='p'>
+											<b>u</b> = 
+											<DisplayFormula number={'α'} modulo={'p'} power={'r'} variant={'body1'} /> = 
+											<DisplayFormula number={alpha} power={r} modulo={p} variant={'body1'} /> = {u}
+										</Typography>
+										<Typography component='p'>
+											<b>s</b> = α<sup>-1</sup> * (h - t * u) mod (p -1) = ({inverted} * ({h} - {t}{' '}
+											* {solutionPowA.result})) mod {p - 1} = {s}
+										</Typography>
+									</Box>
 								</Box>
 
-								<Box p={2} align='center'>
+								<Box p={2} pt={0} align='center'>
 									<Typography variant='body1' component='p'>
 										Podpis: <b>(u, s)</b> ={' '}
 										<b>

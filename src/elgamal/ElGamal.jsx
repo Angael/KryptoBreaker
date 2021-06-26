@@ -64,7 +64,7 @@ function ElGamal() {
 						<DisplayFormula number={g} modulo={p} power={t} variant={'h4'} />
 					</Box>
 					<Grid container justify='center'>
-						<Grid item xs={6}>
+						<Grid item xs={12} sm={8} md={6}>
 							<FastPowerTable stepsObj={solutionPowA} pow={p} />
 						</Grid>
 					</Grid>

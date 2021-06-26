@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 		position: (isPhone) => (isPhone ? 'fixed' : 'initial'),
 		width: drawerWidth,
 		flexShrink: 0,
-		zIndex: 1,
+		zIndex: (isPhone) => (isPhone ? 1 : 0),
 	},
 	drawerPaper: {
 		width: drawerWidth,
@@ -75,13 +75,6 @@ export const PersistentDrawer = ({ isOpen, onClose, onMethodSelect, selectedMeth
 						<ChevronLeftIcon />
 					</IconButton>
 				</div>
-				<Divider />
-				<List>
-					<ListItem>
-						<Typography variant='h5'>KryptoBreaker</Typography>
-					</ListItem>
-					<Divider />
-				</List>
 				{componentList.map((category, i) => (
 					<React.Fragment key={i}>
 						<List>

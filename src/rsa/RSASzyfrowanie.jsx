@@ -101,7 +101,7 @@ function RSASzyfrowanie() {
 						</Grid>
 
 						<Grid container justify='center'>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={8} md={6}>
 								<FastPowerTable stepsObj={solutionPow} pow={e} />
 							</Grid>
 						</Grid>

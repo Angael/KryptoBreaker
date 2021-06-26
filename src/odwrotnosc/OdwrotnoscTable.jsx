@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 
 import { mod } from '../utils/numHelpers';
-import { useTheme, makeStyles } from '@material-ui/core/styles';
+import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
 
 const cellCss = css`
 	background: #f0e98b;
@@ -21,6 +21,23 @@ const cellCss = css`
 const noSelect = css`
 	user-select: none;
 `;
+
+const TableRowHeader = withStyles((theme) => ({
+	root: {
+		backgroundColor: theme.palette.primary.light,
+		'& th': {
+			color: theme.palette.primary.contrastText,
+		},
+	},
+}))(TableRow);
+
+const TableRowColored = withStyles((theme) => ({
+	root: {
+		'&:nth-of-type(odd)': {
+			backgroundColor: theme.palette.action.hover,
+		},
+	},
+}))(TableRow);
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -70,7 +87,7 @@ function OdwrotnoscTable({ a, b }) {
 				>
 					<Table>
 						<TableHead>
-							<TableRow>
+							<TableRowHeader>
 								<TableCell align='center'>i</TableCell>
 								<TableCell align='center'>
 									u<sub>i</sub>
@@ -96,7 +113,7 @@ function OdwrotnoscTable({ a, b }) {
 								<TableCell align='center'>
 									r<sub>i</sub>
 								</TableCell>
-							</TableRow>
+							</TableRowHeader>
 						</TableHead>
 						<TableBody>
 							{values.map((el, index) => {
@@ -104,7 +121,7 @@ function OdwrotnoscTable({ a, b }) {
 								const isLast = values.length - 1 === index;
 
 								return (
-									<TableRow>
+									<TableRowColored>
 										<TableCell align='center'>{index}</TableCell>
 										<TableCell align='center'>{v}</TableCell>
 										<TableCell align='center'>{vprim}</TableCell>
@@ -116,7 +133,7 @@ function OdwrotnoscTable({ a, b }) {
 										<TableCell align='center'>{b}</TableCell>
 										<TableCell align='center'>{q}</TableCell>
 										<TableCell align='center'>{r}</TableCell>
-									</TableRow>
+									</TableRowColored>
 								);
 							})}
 						</TableBody>

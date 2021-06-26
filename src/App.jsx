@@ -31,24 +31,16 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 		paddingTop: '5rem',
 		padding: theme.spacing(0),
-		// transition: theme.transitions.create('margin', {
-		// 	easing: theme.transitions.easing.sharp,
-		// 	duration: theme.transitions.duration.leavingScreen,
-		// }),
 		marginLeft: (isPhone) => (isPhone ? 0 : -drawerWidth),
 	},
 	contentShift: {
-		// transition: theme.transitions.create('margin', {
-		// 	easing: theme.transitions.easing.easeOut,
-		// 	duration: theme.transitions.duration.enteringScreen,
-		// }),
-		marginLeft: (isPhone) => 0, // If this isnt a function, then marginLeft in content:{} wins in priority lol
+		marginLeft: () => 0, // If this isnt a function, then marginLeft in content:{} wins in priority lol
 	},
 }));
 
 function App() {
 	// Category and component indexes in componentList.js
-	const [indexes, setIndexes] = useLocalStorage('method', [0, 0]);
+	const [indexes, setIndexes] = useLocalStorage('indexes', [0, 0]);
 	const [drawerOpen, setDrawerOpen] = useLocalStorage('drawerOpen', true);
 
 	const selectedCategory = componentList[indexes[0]];
