@@ -64,10 +64,10 @@ const matrixFromString = (word, matrixWidth) => {
 	}
 };
 
-const getArrayFromMatrix = (matrix) => matrix.data.map((row) => Array.from(row));
+const getArrayFromMatrix = (matrix) => matrix?.data.map((row) => Array.from(row));
 
 const matrixArrayToString = (rows) =>
-	rows.map((row) => row.map((v) => getLetter(v)).join('')).join('');
+	rows?.map((row) => row.map((v) => getLetter(v)).join('')).join('');
 
 function Hill() {
 	const [word, setWord] = useState('telewizor');

@@ -38,7 +38,7 @@ function Matrix({ rows, changeValue, error, helperText }) {
 			>
 				<table>
 					<tbody>
-						{rows.map((row, i) => (
+						{rows?.map((row, i) => (
 							<tr key={i}>
 								{row.map((field, j) => (
 									<td className={tdCss} key={j}>
