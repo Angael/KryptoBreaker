@@ -17,6 +17,7 @@ import ElGamalSzyfrowanie from './elgamal/ElGamalSzyfrowanie';
 import ElGamalDeszyfrowanie from './elgamal/ElGamalDeszyfrowanie';
 import ElGamalPodpis from './elgamal/ElGamalPodpis';
 import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
+import CheatSheet from './cheat-sheet/CheatSheet';
 
 const componentList = [
 	{
@@ -25,6 +26,7 @@ const componentList = [
 			{ component: <Odwrotnosc />, name: 'Odwrotność multiplikatywna' },
 			{ component: <PotegaMod />, name: 'Potęgowanie modularne' },
 			{ component: <Mod />, name: 'Modulo' },
+			{ component: <CheatSheet />, name: 'Litery na numery' },
 		],
 	},
 	{
