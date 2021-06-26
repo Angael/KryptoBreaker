@@ -11,7 +11,7 @@ import {
 	Tooltip,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import BinaryExplanator from './BinaryExplanator';
+import BinaryExplanator from 'utils/fast-power-table/BinaryExplanator';
 
 const answerCss = css`
 	background: #97ffa7;
@@ -34,6 +34,23 @@ const TableCellHoverable = withStyles({
 	},
 })(TableCell);
 
+const TableRowColored = withStyles((theme) => ({
+	root: {
+		'&:nth-of-type(odd)': {
+			backgroundColor: theme.palette.action.hover,
+		},
+	},
+}))(TableRow);
+
+const TableRowHeader = withStyles((theme) => ({
+	root: {
+		backgroundColor: theme.palette.primary.light,
+		'& th': {
+			color: theme.palette.primary.contrastText,
+		},
+	},
+}))(TableRow);
+
 function FastPowerTable({ stepsObj, pow }) {
 	const [hoveringXRow, setHoveringXRow] = useState(null);
 	const onStartHover = (i) => () => {
@@ -49,7 +66,7 @@ function FastPowerTable({ stepsObj, pow }) {
 			<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
 				<Table>
 					<TableHead>
-						<TableRow>
+						<TableRowHeader>
 							<TableCell align='center'>i</TableCell>
 							<TableCell align='center'>
 								x<sub>i</sub>
@@ -60,7 +77,7 @@ function FastPowerTable({ stepsObj, pow }) {
 							<TableCell align='center'>
 								t<sub>i</sub>
 							</TableCell>
-						</TableRow>
+						</TableRowHeader>
 					</TableHead>
 					<TableBody>
 						{stepsObj.steps.map(({ i, x, a, t, helperTextA, helperTextX }) => {
@@ -70,7 +87,7 @@ function FastPowerTable({ stepsObj, pow }) {
 							const xCss = isLast ? answerCss : shouldBeHighlighted ? calculationNumbersCss : '';
 							const aCss = shouldBeHighlighted && !!t ? calculationNumbersCss : '';
 							return (
-								<TableRow key={i}>
+								<TableRowColored key={i}>
 									<TableCell align='center'>{i}</TableCell>
 									<Tooltip title={helperTextX}>
 										<TableCellHoverable
@@ -90,7 +107,7 @@ function FastPowerTable({ stepsObj, pow }) {
 										</Tooltip>
 									)}
 									{!isLast && <TableCell align='center'>{t}</TableCell>}
-								</TableRow>
+								</TableRowColored>
 							);
 						})}
 					</TableBody>

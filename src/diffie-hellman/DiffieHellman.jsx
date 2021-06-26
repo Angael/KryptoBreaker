@@ -5,9 +5,9 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import DisplayFormula from './DisplayFormula';
 import useNumberInput from './useNumberInput';
-import getFastPowerMod from './getFastPowerMod';
-import FastPowerTable from './FastPowerTable';
-import BinaryExplanator from './BinaryExplanator';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
+import BinaryExplanator from '../utils/fast-power-table/BinaryExplanator';
 import { isPrime } from 'utils/numHelpers';
 
 function DiffieHellman() {
@@ -18,15 +18,15 @@ function DiffieHellman() {
 
 	const pIsPrime = useMemo(() => isPrime(p), [p]);
 
-	const solutionPowA = useMemo(() => getFastPowerMod(p, g, a), [p, g, a]);
-	const solutionPowB = useMemo(() => getFastPowerMod(p, g, b), [p, g, b]);
+	const solutionPowA = useMemo(() => getFastPowerMod(g, a, p), [p, g, a]);
+	const solutionPowB = useMemo(() => getFastPowerMod(g, b, p), [p, g, b]);
 
-	const solutionPowAMaster = useMemo(() => getFastPowerMod(p, solutionPowA.result, b), [
+	const solutionPowAMaster = useMemo(() => getFastPowerMod(solutionPowA.result, b, p), [
 		p,
 		solutionPowA.result,
 		b,
 	]);
-	const solutionPowBMaster = useMemo(() => getFastPowerMod(p, solutionPowB.result, a), [
+	const solutionPowBMaster = useMemo(() => getFastPowerMod(solutionPowB.result, a, p), [
 		p,
 		solutionPowB.result,
 		b,
@@ -90,11 +90,11 @@ function DiffieHellman() {
 					<Grid container>
 						<Grid item xs={6}>
 							<Typography variant='h5'>Person 1 calculates:</Typography>
-							<DisplayFormula p={p} g={g} power={a} />
+							<DisplayFormula number={g} modulo={p} power={a} />
 						</Grid>
 						<Grid item xs={6}>
 							<Typography variant='h5'>Person 2 calculates:</Typography>
-							<DisplayFormula p={p} g={g} power={b} />
+							<DisplayFormula number={g} modulo={p} power={b} />
 						</Grid>
 					</Grid>
 				</Box>
@@ -130,11 +130,11 @@ function DiffieHellman() {
 					<Grid container>
 						<Grid item xs={6}>
 							<Typography variant='h5'>Person 1 calculates:</Typography>
-							<DisplayFormula p={p} g={solutionPowB.result} power={a} />
+							<DisplayFormula number={solutionPowB.result} modulo={p} power={a} />
 						</Grid>
 						<Grid item xs={6}>
 							<Typography variant='h5'>Person 2 calculates:</Typography>
-							<DisplayFormula p={p} g={solutionPowA.result} power={b} />
+							<DisplayFormula number={solutionPowA.result} modulo={p} power={b} />
 						</Grid>
 					</Grid>
 				</Box>

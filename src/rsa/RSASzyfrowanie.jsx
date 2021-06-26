@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { isPrime, modInverse } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
 function RSASzyfrowanie() {
@@ -19,7 +19,7 @@ function RSASzyfrowanie() {
 	const [n, setN] = useNumberInput(1739);
 
 	// x^n mod e
-	const solutionPow = useMemo(() => getFastPowerMod(n, message, e), [n, message, e]);
+	const solutionPow = useMemo(() => getFastPowerMod(message, e, n), [n, message, e]);
 
 	return (
 		<>
@@ -87,8 +87,12 @@ function RSASzyfrowanie() {
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
 								<Typography variant='h3'>Szyfrowanie:</Typography>
-								y = c =<DisplayFormula g={'x'} power={'e'} p={'n'} variant={'body1'} /> ={' '}
-								<DisplayFormula g={message} power={e} p={n} variant={'body1'} /> ={' '}
+								y = c =<DisplayFormula
+									number={'x'}
+									power={'e'}
+									modulo={'n'}
+									variant={'body1'}
+								/> = <DisplayFormula number={message} power={e} modulo={n} variant={'body1'} /> ={' '}
 								{solutionPow.result}
 							</Box>
 							<Box p={2} align='center'>
@@ -97,7 +101,7 @@ function RSASzyfrowanie() {
 						</Grid>
 
 						<Grid container justify='center'>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={8} md={6}>
 								<FastPowerTable stepsObj={solutionPow} pow={e} />
 							</Grid>
 						</Grid>

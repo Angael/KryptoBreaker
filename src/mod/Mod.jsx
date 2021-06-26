@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { isPrime, mod } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 
 function Mod() {
 	const [num, setNum] = useNumberInput(2);
@@ -34,7 +34,7 @@ function Mod() {
 						</Grid>
 					</Grid>
 					<Box p={2} pb={2} textAlign='center'>
-						<DisplayFormula p={modulo} g={num} power={''} variant={'h4'} />
+						<DisplayFormula number={num} power={''} modulo={modulo} variant={'h4'} />
 						<Typography variant={'h4'} display='inline'>
 							{' '}
 							= {result}

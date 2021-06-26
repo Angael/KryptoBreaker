@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { isPrime, modInverse } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 import OdwrotnoscTable from 'odwrotnosc/OdwrotnoscTable';
 
@@ -74,7 +74,7 @@ function RSAKlucze() {
 							</Box>
 							<hr />
 							<Box p={2}>
-								d = <DisplayFormula p={phi} g={e} power={-1} variant={'body1'} /> = {d}
+								d = <DisplayFormula number={e} power={-1} modulo={phi} variant={'body1'} /> = {d}
 								<OdwrotnoscTable a={e} b={phi} />
 							</Box>
 						</Grid>

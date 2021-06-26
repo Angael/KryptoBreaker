@@ -1,10 +1,10 @@
 import { Typography, Box } from '@material-ui/core';
 
-function DisplayFormula({ p, g, power, variant = 'body1' }) {
+function DisplayFormula({ number, power, modulo, variant = 'body1' }) {
 	return (
 		<Box textAlign='center' display='inline'>
 			<Typography variant={variant} component='span'>
-				{g} <sup>{power}</sup> mod {p}
+				{number} <sup>{power}</sup> mod {modulo}
 			</Typography>
 		</Box>
 	);

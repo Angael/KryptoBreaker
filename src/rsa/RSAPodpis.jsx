@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import { isPrime, modInverse } from 'utils/numHelpers';
 
 import useNumberInput from 'diffie-hellman/useNumberInput';
-import getFastPowerMod from 'diffie-hellman/getFastPowerMod';
+import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'diffie-hellman/DisplayFormula';
-import FastPowerTable from 'diffie-hellman/FastPowerTable';
+import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
 
 function RSAPodpis() {
@@ -19,7 +19,7 @@ function RSAPodpis() {
 	const [n, setN] = useNumberInput(1739);
 
 	// x^n mod e
-	const solutionPow = useMemo(() => getFastPowerMod(n, x, d), [n, x, d]);
+	const solutionPow = useMemo(() => getFastPowerMod(x, d, n), [n, x, d]);
 
 	return (
 		<>
@@ -87,8 +87,10 @@ function RSAPodpis() {
 						<Grid item xs={12} justify='center'>
 							<Box p={2} align='center'>
 								<Typography variant='h3'>Generowanie podpisu:</Typography>
-								podpis s = <DisplayFormula g={'h'} power={'d'} p={'n'} variant={'body1'} /> ={' '}
-								<DisplayFormula g={x} power={d} p={n} variant={'body1'} /> = {solutionPow.result}
+								podpis s ={' '}
+								<DisplayFormula number={'h'} power={'d'} modulo={'n'} variant={'body1'} /> ={' '}
+								<DisplayFormula number={x} power={d} number={n} variant={'body1'} /> ={' '}
+								{solutionPow.result}
 							</Box>
 							<Box p={2} align='center'>
 								Podpis s = {solutionPow.result}
@@ -96,7 +98,7 @@ function RSAPodpis() {
 						</Grid>
 
 						<Grid container justify='center'>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={8} md={6}>
 								<FastPowerTable stepsObj={solutionPow} pow={d} />
 							</Grid>
 						</Grid>
