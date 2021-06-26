@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import {
+	Typography,
+	Box,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+	useMediaQuery,
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode } from 'utils/numHelpers';
 
@@ -10,8 +18,20 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		maxWidth: 'calc(100vw - 66px)',
+	},
+}));
 
 function KryptoTable({ startStr = '', endStr = '', middleNumbersArr, isEncryption = true }) {
+	const theme = useTheme();
+	const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const classes = useStyles(isPhone);
+
 	const startRow = (
 		<TableRow>
 			<TableCell component='th' scope='row'>
@@ -78,7 +98,10 @@ function KryptoTable({ startStr = '', endStr = '', middleNumbersArr, isEncryptio
 	);
 
 	return (
-		<TableContainer component={(props) => <Paper variant='outlined' {...props} />}>
+		<TableContainer
+			classes={classes}
+			component={(props) => <Paper variant='outlined' {...props} />}
+		>
 			<Table>
 				<TableBody>
 					{startRow}

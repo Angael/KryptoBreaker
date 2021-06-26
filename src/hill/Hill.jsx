@@ -19,6 +19,7 @@ import LineForLetter from 'utils/line-for-letter/LineForLetter';
 import SolutionPerChar from './SolutionPerChar';
 import MatrixInput from './Matrix';
 import useMatrixState from 'hill/useMatrixState';
+import Slider from '@material-ui/core/Slider';
 
 import { getInvertedMatrix, modMatrix, getZeroesMatrix, isKeyMatrixInvertable } from './hillCipher';
 var Matrix = require('node-matrices');
@@ -86,7 +87,7 @@ function Hill() {
 
 	const changeWord = (event) => setWord(event.target.value);
 	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
-	const handleResize = (e) => resize(e.target.value);
+	const handleResize = (e, v) => resize(v);
 
 	const [showResultAfterMod, setShowResultAfterMod] = useState(true);
 	const toggleShowResultAfterMod = () => setShowResultAfterMod((v) => !v);
@@ -95,6 +96,18 @@ function Hill() {
 		<>
 			<Box my={4}>
 				<Paper elevation={3}>
+					<Box p={2}>
+						<Typography>
+							Enkrypcja Hilla polega na pomnożeniu macierzy słowa przez macierz klucza.
+						</Typography>
+						<Typography>
+							Dekrypcja Hilla polega na pomnożeniu macierzy słowa przez macierz <b>odwróconego</b>{' '}
+							klucza.
+						</Typography>
+						<Typography gutterBottom>
+							Jeśli masz zrobić dekrypcje, i posiadasz <b>odwrócony</b> klucz to ustaw na enkrypcję
+						</Typography>
+					</Box>
 					<Box p={2}>
 						<Grid container>
 							<Grid item xs={6}>
@@ -115,11 +128,19 @@ function Hill() {
 						<Grid container>
 							<Grid item xs={6}></Grid>
 							<Grid item xs={6}>
-								<TextField
-									label='Size of key matrix'
-									type='number'
+								<Typography id='input-slider' gutterBottom>
+									Matrix size
+								</Typography>
+								<Slider
 									value={size}
 									onChange={handleResize}
+									getAriaValueText={(text) => text}
+									aria-labelledby='discrete-slider'
+									valueLabelDisplay='auto'
+									step={1}
+									marks
+									min={2}
+									max={9}
 								/>
 							</Grid>
 						</Grid>

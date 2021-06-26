@@ -7,6 +7,7 @@ import {
 	Select,
 	MenuItem,
 	Card,
+	useMediaQuery,
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode } from 'utils/numHelpers';
@@ -20,16 +21,31 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		flexDirection: (isPhone) => (isPhone ? 'column' : 'row'),
+	},
+	arrow: {
+		transform: (isPhone) => (isPhone ? 'rotate(90deg)' : 'inherit'),
+	},
+}));
 
 function WordAndSolution({ startStr = '', endStr = '' }) {
+	const theme = useTheme();
+	const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const classes = useStyles(isPhone);
+
 	const boxCenterProps = { display: 'flex', justifyContent: 'space-around', alignItems: 'center' };
 	return (
 		<Card variant='outlined'>
-			<Box p={2} {...boxCenterProps}>
+			<Box p={2} {...boxCenterProps} className={classes.root}>
 				<Box flex={9} {...boxCenterProps}>
 					<Typography variant='h5'>{startStr}</Typography>
 				</Box>
-				<Box flex={1} {...boxCenterProps}>
+				<Box flex={1} {...boxCenterProps} className={classes.arrow}>
 					<ArrowForwardIcon />
 				</Box>
 				<Box flex={9} {...boxCenterProps}>

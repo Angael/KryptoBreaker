@@ -1,148 +1,101 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import './App.css';
 import Container from '@material-ui/core/Container';
-import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-
-import Cezar from './cezar/Cezar';
-import Vigener from './vigener/Vigener';
-import Afiniczny from './afiniczny/Afiniczny';
-import Hill from './hill/Hill';
-import DiffieHellman from './diffie-hellman/DiffieHellman';
-import Odwrotnosc from './odwrotnosc/Odwrotnosc';
-import PotegaMod from './potega-mod/PotegaMod';
-import RSAKlucze from './rsa/RSAKlucze';
-import RSASzyfrowanie from 'rsa/RSASzyfrowanie';
-import RSADeszyfrowanie from 'rsa/RSADeszyfrowanie';
-import RSAPodpis from './rsa/RSAPodpis';
-import RSAPodpisWeryfikacja from './rsa/RSAPodpisWeryfikacja';
-import ElGamal from './elgamal/ElGamal';
-import Mod from './mod/Mod';
+import {
+	Typography,
+	Box,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+	useMediaQuery,
+} from '@material-ui/core';
 
 import useLocalStorage from 'utils/useLocalStorage';
-import ElGamalSzyfrowanie from './elgamal/ElGamalSzyfrowanie';
-import ElGamalDeszyfrowanie from './elgamal/ElGamalDeszyfrowanie';
-import ElGamalPodpis from './elgamal/ElGamalPodpis';
-import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
 
-import GitHubIcon from '@material-ui/icons/GitHub';
 import componentList from './componentList';
 
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { PersistentDrawer } from 'nav/PersistentDrawer';
+import { NavigationBar } from './nav/NavigationBar';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex',
-		backgroundColor: theme.palette.background.paper,
 	},
-	appBar: {
-		width: `calc(100% - ${drawerWidth}px)`,
-		marginLeft: drawerWidth,
-	},
-	drawer: {
-		width: drawerWidth,
-		flexShrink: 0,
-	},
-	drawerPaper: {
-		width: drawerWidth,
-	},
-	toolbar: theme.mixins.toolbar,
 	content: {
 		flexGrow: 1,
-		backgroundColor: 'whitesmoke',
-		padding: theme.spacing(3),
+		paddingTop: '5rem',
+		padding: theme.spacing(0),
+		// transition: theme.transitions.create('margin', {
+		// 	easing: theme.transitions.easing.sharp,
+		// 	duration: theme.transitions.duration.leavingScreen,
+		// }),
+		marginLeft: (isPhone) => (isPhone ? 0 : -drawerWidth),
+	},
+	contentShift: {
+		// transition: theme.transitions.create('margin', {
+		// 	easing: theme.transitions.easing.easeOut,
+		// 	duration: theme.transitions.duration.enteringScreen,
+		// }),
+		marginLeft: (isPhone) => 0, // If this isnt a function, then marginLeft in content:{} wins in priority lol
 	},
 }));
 
 function App() {
 	// Category and component indexes in componentList.js
 	const [indexes, setIndexes] = useLocalStorage('method', [0, 0]);
+	const [drawerOpen, setDrawerOpen] = useLocalStorage('drawerOpen', true);
 
 	const selectedCategory = componentList[indexes[0]];
 	const selectedMethod = selectedCategory.methods[indexes[1]] || {};
 
-	const classes = useStyles();
+	const openDrawer = (e) => {
+		e.stopPropagation();
+		setDrawerOpen(true);
+	};
 
-	const handleChange = (categoryIndex, componentIndex) => {
+	const onMethodSelect = (categoryIndex, componentIndex) => {
 		setIndexes([categoryIndex, componentIndex]);
 	};
 
+	const theme = useTheme();
+	const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+
+	const classes = useStyles(isPhone);
+
+	const catVariant = isPhone ? 'body1' : 'h5';
+	const methodVariant = isPhone ? 'h5' : 'h4';
+
 	return (
 		<div className={classes.root}>
-			<Drawer
-				className={classes.drawer}
-				variant='permanent'
-				PaperProps={{
-					elevation: 3,
-				}}
-				classes={{
-					paper: classes.drawerPaper,
-				}}
-				anchor='left'
+			<NavigationBar drawerOpen={drawerOpen} openDrawer={openDrawer} />
+			<PersistentDrawer
+				isOpen={drawerOpen}
+				onClose={() => setDrawerOpen(false)}
+				onMethodSelect={onMethodSelect}
+				selectedMethod={indexes}
+			/>
+
+			<div
+				className={clsx(classes.content, {
+					[classes.contentShift]: drawerOpen,
+				})}
 			>
-				<List>
-					<ListItem>
-						<Typography variant='h5'>KryptoBreaker</Typography>
-					</ListItem>
-					<Divider />
-
-					{componentList.map((category, i) => (
-						<Box py={0} key={i}>
-							<ListItem disabled>
-								<Box display='flex' align='center'>
-									<ArrowForwardIosIcon />
-									<Typography variant='button'>{category.categoryName}</Typography>
-								</Box>
-							</ListItem>
-
-							{category.methods.map((c, j) => (
-								<ListItem
-									button
-									key={j}
-									onClick={() => handleChange(i, j)}
-									selected={i == indexes[0] && j == indexes[1]}
-								>
-									<ListItemText primary={c.name} />
-								</ListItem>
-							))}
-
-							<Divider />
-						</Box>
-					))}
-					<ListItem component='a' href='https://github.com/Angael/KryptoBreaker' target='_blank'>
-						<ListItemIcon>
-							<GitHubIcon />
-						</ListItemIcon>
-						<ListItemText primary='Github repository' secondary='source code' />
-					</ListItem>
-				</List>
-			</Drawer>
-
-			<Paper className={classes.content} elevation={0}>
 				<Container maxWidth='md'>
 					<Box mb={4}>
-						<Typography variant='h5'>{selectedCategory.categoryName}</Typography>
+						<Typography variant={catVariant}>{selectedCategory.categoryName}</Typography>
 						<hr />
-						<Typography variant='h2'>{selectedMethod.name}</Typography>
+						<Typography variant={methodVariant}>{selectedMethod.name}</Typography>
 					</Box>
 
 					<Box my={4}>{selectedMethod.component}</Box>
 				</Container>
-			</Paper>
+			</div>
 		</div>
 	);
 }
