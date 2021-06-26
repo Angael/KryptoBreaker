@@ -12,9 +12,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-
+import LocalCafeIcon from '@material-ui/icons/LocalCafe';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { useMediaQuery, ClickAwayListener } from '@material-ui/core';
 
@@ -105,6 +103,13 @@ export const PersistentDrawer = ({ isOpen, onClose, onMethodSelect, selectedMeth
 					</React.Fragment>
 				))}
 				<List>
+					<ListItem component='a' href='https://www.paypal.me/krzysztofwidacki' target='_blank'>
+						<ListItemIcon>
+							<LocalCafeIcon />
+						</ListItemIcon>
+						<ListItemText primary='Kup mi kawę' secondary='PayPal ' />
+					</ListItem>
+
 					<ListItem component='a' href='https://github.com/Angael/KryptoBreaker' target='_blank'>
 						<ListItemIcon>
 							<GitHubIcon />
