@@ -65,6 +65,9 @@ function OdwrotnoscTable({ a, b }) {
 			rows.push({ u, uprim, v, vprim, a, b, q, r });
 
 			i++;
+			if (isNaN(r)) {
+				break;
+			}
 		}
 
 		return [rows, u];

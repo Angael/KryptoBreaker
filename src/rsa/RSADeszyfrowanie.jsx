@@ -75,7 +75,7 @@ function RSADeszyfrowanie() {
 						<Grid item xs={12}>
 							<Box p={2}>
 								<TextField
-									label='x'
+									label='y'
 									onChange={setY}
 									value={y}
 									type='number'

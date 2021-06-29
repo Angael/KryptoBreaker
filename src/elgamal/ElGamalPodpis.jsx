@@ -53,7 +53,14 @@ function ElGamalPodpis() {
 								</Grid>
 								<Grid item xs={3}>
 									<Box p={2}>
-										<TextField label='p' onChange={setP} value={p} type='number' />
+										<TextField
+											label='p'
+											onChange={setP}
+											value={p}
+											type='number'
+											error={p <= 1}
+											helperText={p <= 1 ? 'p mniejsze od 1 nie da dobrego wyniku' : ''}
+										/>
 									</Box>
 								</Grid>
 								<Grid item xs={3}>
@@ -131,10 +138,11 @@ function ElGamalPodpis() {
 										<Typography component='p'>
 											<b>u</b> = 
 											<DisplayFormula number={'α'} modulo={'p'} power={'r'} variant={'body1'} /> = 
-											<DisplayFormula number={alpha} power={r} modulo={p} variant={'body1'} /> = {u}
+											<DisplayFormula number={alpha} power={r} modulo={p} variant={'body1'} /> = 
+											{u}
 										</Typography>
 										<Typography component='p'>
-											<b>s</b> = α<sup>-1</sup> * (h - t * u) mod (p -1) = ({inverted} * ({h} - {t}{' '}
+											<b>s</b> = r<sup>-1</sup> * (h - t * u) mod (p -1) = ({inverted} * ({h} - {t}{' '}
 											* {solutionPowA.result})) mod {p - 1} = {s}
 										</Typography>
 									</Box>

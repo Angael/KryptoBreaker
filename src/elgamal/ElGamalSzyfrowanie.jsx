@@ -146,7 +146,7 @@ function ElGamalSzyfrowanie() {
 								<Typography variant='h4' gutterBottom>
 									Liczenie y<sub>2</sub>
 								</Typography>
-								{x} * <DisplayFormula number={alpha} power={r} modulo={p} />
+								{x} * <DisplayFormula number={beta} power={r} modulo={p} />
 								<FastPowerTable stepsObj={solutionPowY2} pow={r} />
 								<Box p={2}>
 									y<sub>2</sub> = {x} * {solutionPowY2.result} mod {p} = {y2}
