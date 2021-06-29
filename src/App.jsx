@@ -12,6 +12,7 @@ import {
 	Select,
 	MenuItem,
 	useMediaQuery,
+	Breadcrumbs,
 } from '@material-ui/core';
 
 import useLocalStorage from 'utils/useLocalStorage';
@@ -80,9 +81,14 @@ function App() {
 			>
 				<Container maxWidth='md'>
 					<Box mb={4}>
-						<Typography variant={catVariant}>{selectedCategory.categoryName}</Typography>
-						<hr />
-						<Typography variant={methodVariant}>{selectedMethod.name}</Typography>
+						<Breadcrumbs aria-label='breadcrumb'>
+							<Typography variant={methodVariant} color='textSecondary'>
+								{selectedCategory.categoryName}
+							</Typography>
+							<Typography variant={methodVariant} color='textPrimary'>
+								{selectedMethod.name}
+							</Typography>
+						</Breadcrumbs>
 					</Box>
 
 					<Box my={4}>{selectedMethod.component}</Box>

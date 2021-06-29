@@ -26,6 +26,7 @@ export const modMatrix = (matrix) => {
 	return newMatrix;
 };
 
+// This wasnt enough to determine if key is ok
 export const isKeyMatrixInvertable = (keyMatrix) => {
 	const det = keyMatrix.determinant();
 	const detModuloed = mod(det, 26);
@@ -50,4 +51,13 @@ export const getInvertedMatrix = (keyMatrix) => {
 	const result = modMatrix(adjugate.scale(inverse));
 
 	return result;
+};
+
+function arraysEqual(a, b) {
+	return JSON.stringify(a) === JSON.stringify(b);
+}
+
+export const willKeyWork = (keyMatrix) => {
+	const doubleInvertedKey = getInvertedMatrix(getInvertedMatrix(keyMatrix));
+	return arraysEqual(keyMatrix.data, doubleInvertedKey.data);
 };

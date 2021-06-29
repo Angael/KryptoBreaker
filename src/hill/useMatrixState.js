@@ -3,8 +3,9 @@ import clamp from 'clamp';
 
 const defaultMatrix = (size) => Array(size).fill(Array(size).fill(0));
 
-const useMatrixState = (initSize = 2) => {
-	const [rows, setRows] = useState(defaultMatrix(initSize));
+const useMatrixState = (defaultMatrixArr) => {
+	const _defaultMatrix = defaultMatrixArr || defaultMatrix(3);
+	const [rows, setRows] = useState(_defaultMatrix);
 	const size = rows.length;
 
 	const setValue = (value, rowNum, columnNum) =>

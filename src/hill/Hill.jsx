@@ -9,6 +9,7 @@ import {
 	Switch,
 	FormControlLabel,
 } from '@material-ui/core';
+import { css } from '@emotion/css';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode } from 'utils/numHelpers';
 import KryptoTable from 'utils/KryptoTable';
@@ -21,7 +22,10 @@ import MatrixInput from './Matrix';
 import useMatrixState from 'hill/useMatrixState';
 import Slider from '@material-ui/core/Slider';
 
-import { getInvertedMatrix, modMatrix, getZeroesMatrix, isKeyMatrixInvertable } from './hillCipher';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+
+import { getInvertedMatrix, modMatrix, getZeroesMatrix, willKeyWork } from './hillCipher';
 var Matrix = require('node-matrices');
 
 const hillEncrypt = (wordMatrix, keyMatrix, isEncrypt) => {
@@ -69,15 +73,48 @@ const getArrayFromMatrix = (matrix) => matrix?.data.map((row) => Array.from(row)
 const matrixArrayToString = (rows) =>
 	rows?.map((row) => row.map((v) => getLetter(v)).join('')).join('');
 
+const methods = {
+	encrypt: 'encrypt',
+	decryptWithInverted: 'decrypt-with-inverted',
+	decrypt: 'decrypt',
+};
+
+const multiplySignCss = css`
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translate(50%, -50%) scale(0.5);
+`;
+
+const equalsSignCss = css`
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translate(50%, -50%) scale(2.5);
+`;
+
 function Hill() {
 	const [word, setWord] = useState('telewizor');
-	const { rows, setValue, size, resize } = useMatrixState(3);
-	const [isEncrypt, setIsEncrypt] = useState(true);
+	const { rows, setValue, size, resize } = useMatrixState([
+		[9, 3, 4],
+		[7, 2, 1],
+		[6, 5, 8],
+		// [25, 24, 17],
+		// [14, 24, 3],
+		// [5, 19, 5],
+	]);
+	const [method, setMethod] = useState(methods.encrypt);
+
+	// Generalnie isEncrypt wskazuje ze po prostu mnozymy dwie macieze
+	const isDecryptWithInverted = method === methods.decryptWithInverted;
+	const isDecryptWithoutInverted = method === methods.decrypt;
+	const isAnyDecrypt = method !== methods.encrypt;
+	const isEncrypt = method === methods.encrypt || isDecryptWithInverted;
 
 	const wordMatrix = useMemo(() => matrixFromString(word, size), [word, size]);
 	const keyMatrix = useMemo(() => new Matrix(rows), [rows]);
 
-	const isKeyMatrixOk = isKeyMatrixInvertable(keyMatrix);
+	const isKeyMatrixOk = willKeyWork(keyMatrix);
 
 	const { resultMatrix, resultMatrixBeforeMod } = useMemo(
 		() => hillEncrypt(wordMatrix, keyMatrix, isEncrypt),
@@ -86,26 +123,25 @@ function Hill() {
 	const result = matrixArrayToString(getArrayFromMatrix(resultMatrix));
 
 	const changeWord = (event) => setWord(event.target.value);
-	const changeIsEncryption = (event) => setIsEncrypt(event.target.value);
+	const changeMethod = (event) => setMethod(event.target.value);
 	const handleResize = (e, v) => resize(v);
 
 	const [showResultAfterMod, setShowResultAfterMod] = useState(true);
 	const toggleShowResultAfterMod = () => setShowResultAfterMod((v) => !v);
+
+	const invertedKeyMatrix = isDecryptWithoutInverted && getInvertedMatrix(keyMatrix);
 
 	return (
 		<>
 			<Box my={4}>
 				<Paper elevation={3}>
 					<Box p={2}>
-						<Typography>
+						<Typography gutterBottom>
 							Enkrypcja Hilla polega na pomnożeniu macierzy słowa przez macierz klucza.
 						</Typography>
-						<Typography>
+						<Typography gutterBottom>
 							Dekrypcja Hilla polega na pomnożeniu macierzy słowa przez macierz <b>odwróconego</b>{' '}
 							klucza.
-						</Typography>
-						<Typography gutterBottom>
-							Jeśli masz zrobić dekrypcje, i posiadasz <b>odwrócony</b> klucz to ustaw na enkrypcję
 						</Typography>
 					</Box>
 					<Box p={2}>
@@ -116,9 +152,12 @@ function Hill() {
 							<Grid item xs={6}>
 								<FormControl>
 									<InputLabel>Which way</InputLabel>
-									<Select value={isEncrypt} onChange={changeIsEncryption}>
-										<MenuItem value={true}>Encrypt</MenuItem>
-										<MenuItem value={false}>Decrypt</MenuItem>
+									<Select value={method} onChange={changeMethod}>
+										<MenuItem value={'encrypt'}>Encrypt</MenuItem>
+										<MenuItem value={'decrypt-with-inverted'}>
+											Decrypt (I have inverted key)
+										</MenuItem>
+										<MenuItem value={'decrypt'}>Decrypt</MenuItem>
 									</Select>
 								</FormControl>
 							</Grid>
@@ -140,40 +179,72 @@ function Hill() {
 									step={1}
 									marks
 									min={2}
-									max={9}
+									max={7}
 								/>
 							</Grid>
 						</Grid>
 					</Box>
 					<Box p={2}>
 						<Grid container>
-							<Grid item xs={6}>
-								<Typography variant='h4'>Word:</Typography>
+							<Grid item xs={6} align='center'>
+								<Typography variant='h4'>{isAnyDecrypt ? 'Encrypted word' : 'Word'}:</Typography>
 								<MatrixInput rows={getArrayFromMatrix(wordMatrix)} />
 							</Grid>
-							<Grid item xs={6}>
-								<Typography variant='h4'>Key:</Typography>
+							<Grid item xs={6} align='center'>
+								<Typography variant='h4'>
+									{isDecryptWithInverted ? 'Inverted key:' : 'Key:'}
+								</Typography>
 								<MatrixInput
 									rows={rows}
 									changeValue={setValue}
 									error={!isKeyMatrixOk}
-									helperText={!isKeyMatrixOk ? 'This key matrix can not be inverted' : ''}
+									helperText={
+										!isKeyMatrixOk ? 'Inverting this matrix twice returns different matrix' : ''
+									}
 								/>
 							</Grid>
-							{!isEncrypt && (
+							{isDecryptWithoutInverted && (
 								<>
 									<Grid item xs={6}></Grid>
-									<Grid item xs={6}>
+									<Grid item xs={6} align='center'>
 										<Typography variant='h4'>Inverted Key:</Typography>
-										<MatrixInput rows={getArrayFromMatrix(getInvertedMatrix(keyMatrix))} />
+										<MatrixInput rows={getArrayFromMatrix(invertedKeyMatrix)} />
 									</Grid>
 								</>
 							)}
 						</Grid>
+						<Box p={2} align='center'>
+							<Typography variant='h3'>Calculation:</Typography>
+						</Box>
 						<Grid container>
-							<Grid item xs={6}>
-								<Grid item xs={6}></Grid>
-								<Typography variant='h4'>Multiplication result:</Typography>
+							<Grid item xs={4} align='center'>
+								<Typography variant='body1'>{isAnyDecrypt ? 'Encrypted word' : 'Word'}:</Typography>
+								<div style={{ position: 'relative' }}>
+									<MatrixInput rows={getArrayFromMatrix(wordMatrix)} />{' '}
+									<FiberManualRecordIcon className={multiplySignCss} />
+								</div>
+							</Grid>
+							<Grid item xs={4} align='center'>
+								<Typography variant='body1'>{isAnyDecrypt ? 'Inverted key' : 'Key'}</Typography>
+								<div style={{ position: 'relative' }}>
+									<MatrixInput
+										rows={
+											isDecryptWithoutInverted
+												? getArrayFromMatrix(invertedKeyMatrix)
+												: getArrayFromMatrix(keyMatrix)
+										}
+									/>
+									<div className={equalsSignCss}>=</div>
+								</div>
+							</Grid>
+							<Grid item xs={4} align='center'>
+								<Typography variant='body1'>{isAnyDecrypt ? 'Word' : 'Encrypted Word'}:</Typography>
+
+								<MatrixInput
+									rows={getArrayFromMatrix(
+										showResultAfterMod ? resultMatrix : resultMatrixBeforeMod
+									)}
+								/>
 								<FormControlLabel
 									control={
 										<Switch
@@ -183,11 +254,6 @@ function Hill() {
 										/>
 									}
 									label='After modulo'
-								/>
-								<MatrixInput
-									rows={getArrayFromMatrix(
-										showResultAfterMod ? resultMatrix : resultMatrixBeforeMod
-									)}
 								/>
 							</Grid>
 						</Grid>
