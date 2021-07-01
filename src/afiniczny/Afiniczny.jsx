@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import { getLetter, getCode, modInverse, mod } from 'utils/numHelpers';
@@ -42,58 +41,48 @@ function Afiniczny() {
 
 	return (
 		<>
-			<Box my={4}>
-				<Paper elevation={3}>
-					<Grid container>
-						<Grid item xs={6}>
-							<Box p={2}>
-								<TextField label='word' onChange={changeWord} value={word} />
-							</Box>
-						</Grid>
-						<Grid item xs={6}>
-							<Box p={2}>
-								<FormControl>
-									<InputLabel>Which way</InputLabel>
-									<Select value={isEncrypt} onChange={changeIsEncryption}>
-										<MenuItem value={true}>Encrypt</MenuItem>
-										<MenuItem value={false}>Decrypt</MenuItem>
-									</Select>
-								</FormControl>
-							</Box>
-						</Grid>
-					</Grid>
+			<Grid container>
+				<Grid item xs={6}>
 					<Box p={2}>
-						<TextField
-							label='keys'
-							placeholder={'3,7'}
-							type='text'
-							onChange={changeKey}
-							value={keys}
-						/>
+						<TextField label='word' onChange={changeWord} value={word} />
 					</Box>
+				</Grid>
+				<Grid item xs={6}>
 					<Box p={2}>
-						<Typography variant='h4'>Solution:</Typography>
-						<WordAndSolution startStr={word} endStr={result} />
+						<FormControl>
+							<InputLabel>Which way</InputLabel>
+							<Select value={isEncrypt} onChange={changeIsEncryption}>
+								<MenuItem value={true}>Encrypt</MenuItem>
+								<MenuItem value={false}>Decrypt</MenuItem>
+							</Select>
+						</FormControl>
 					</Box>
-					<Box p={2}>
-						<Typography variant='h4'>Table:</Typography>
-						<KryptoTable startStr={word} endStr={result} isEncryption={isEncrypt} />
-					</Box>
-					{!isEncrypt && (
-						<Box p={2}>
-							<Typography variant='h4'>Klucz odwrócony:</Typography>
-							<AfinicznyKluczLiczenie a={a} />
-						</Box>
-					)}
+				</Grid>
+			</Grid>
+			<Box p={2}>
+				<TextField label='keys' placeholder={'3,7'} type='text' onChange={changeKey} value={keys} />
+			</Box>
+			<Box p={2}>
+				<Typography variant='h4'>Solution:</Typography>
+				<WordAndSolution startStr={word} endStr={result} />
+			</Box>
+			<Box p={2}>
+				<Typography variant='h4'>Table:</Typography>
+				<KryptoTable startStr={word} endStr={result} isEncryption={isEncrypt} />
+			</Box>
+			{!isEncrypt && (
+				<Box p={2}>
+					<Typography variant='h4'>Klucz odwrócony:</Typography>
+					<AfinicznyKluczLiczenie a={a} />
+				</Box>
+			)}
 
-					<Box p={2}>
-						<Typography variant='h4'>Letter by letter:</Typography>
+			<Box p={2}>
+				<Typography variant='h4'>Letter by letter:</Typography>
 
-						{word.split('').map((c, i) => (
-							<SolutionPerChar key={c + i} letter={c} a={a} b={b} isEncryption={isEncrypt} />
-						))}
-					</Box>
-				</Paper>
+				{word.split('').map((c, i) => (
+					<SolutionPerChar key={c + i} letter={c} a={a} b={b} isEncryption={isEncrypt} />
+				))}
 			</Box>
 		</>
 	);

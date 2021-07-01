@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
+import React, { Suspense } from 'react';
 import clsx from 'clsx';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import './App.css';
 import Container from '@material-ui/core/Container';
-import {
-	Typography,
-	Box,
-	FormControl,
-	InputLabel,
-	Select,
-	MenuItem,
-	useMediaQuery,
-	Breadcrumbs,
-} from '@material-ui/core';
+import { Typography, Box, useMediaQuery, Breadcrumbs, Paper } from '@material-ui/core';
 
 import useLocalStorage from 'utils/useLocalStorage';
 
@@ -61,7 +52,6 @@ function App() {
 
 	const classes = useStyles(isPhone);
 
-	const catVariant = isPhone ? 'body1' : 'h5';
 	const methodVariant = isPhone ? 'h5' : 'h4';
 
 	return (
@@ -91,7 +81,11 @@ function App() {
 						</Breadcrumbs>
 					</Box>
 
-					<Box my={4}>{selectedMethod.component}</Box>
+					<Box my={4}>
+						<Paper elevation={3}>
+							<Suspense fallback={<Box p={4}>Loading...</Box>}>{selectedMethod.component}</Suspense>
+						</Paper>
+					</Box>
 				</Container>
 			</div>
 		</div>

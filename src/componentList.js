@@ -1,7 +1,8 @@
+import React from 'react';
+
 import Cezar from './cezar/Cezar';
 import Vigener from './vigener/Vigener';
 import Afiniczny from './afiniczny/Afiniczny';
-import Hill from './hill/Hill';
 import DiffieHellman from './diffie-hellman/DiffieHellman';
 import Odwrotnosc from './odwrotnosc/Odwrotnosc';
 import PotegaMod from './potega-mod/PotegaMod';
@@ -18,6 +19,7 @@ import ElGamalDeszyfrowanie from './elgamal/ElGamalDeszyfrowanie';
 import ElGamalPodpis from './elgamal/ElGamalPodpis';
 import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
 import CheatSheet from './cheat-sheet/CheatSheet';
+const Hill = React.lazy(() => import('./hill/Hill'));
 
 const componentList = [
 	{

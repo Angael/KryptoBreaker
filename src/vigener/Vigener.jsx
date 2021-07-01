@@ -3,7 +3,6 @@ import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@mat
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode, mod } from 'utils/numHelpers';
 import KryptoTable from '../utils/KryptoTable';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import WordAndSolution from 'utils/WordAndSolution';
 import SolutionPerChar from './SolutionPerChar';
@@ -44,57 +43,53 @@ function Vigener() {
 
 	return (
 		<>
-			<Box my={4}>
-				<Paper elevation={3}>
-					<Grid container>
-						<Grid item xs={6}>
-							<Box p={2}>
-								<TextField label='word' onChange={changeWord} value={word} />
-							</Box>
-						</Grid>
-						<Grid item xs={6}>
-							<Box p={2}>
-								<FormControl>
-									<InputLabel>Which way</InputLabel>
-									<Select value={isEncrypt} onChange={changeIsEncryption}>
-										<MenuItem value={true}>Encrypt</MenuItem>
-										<MenuItem value={false}>Decrypt</MenuItem>
-									</Select>
-								</FormControl>
-							</Box>
-						</Grid>
-					</Grid>
+			<Grid container>
+				<Grid item xs={6}>
 					<Box p={2}>
-						<TextField label='key' type='text' onChange={changeKey} value={key} />
+						<TextField label='word' onChange={changeWord} value={word} />
 					</Box>
+				</Grid>
+				<Grid item xs={6}>
 					<Box p={2}>
-						<Typography variant='h4'>Solution:</Typography>
-						<WordAndSolution startStr={word} endStr={result || ''} />
+						<FormControl>
+							<InputLabel>Which way</InputLabel>
+							<Select value={isEncrypt} onChange={changeIsEncryption}>
+								<MenuItem value={true}>Encrypt</MenuItem>
+								<MenuItem value={false}>Decrypt</MenuItem>
+							</Select>
+						</FormControl>
 					</Box>
-					<Box p={2}>
-						<Typography variant='h4'>Table:</Typography>
-						<KryptoTable
-							startStr={word}
-							endStr={result}
-							middleNumbersArr={middleTableRow}
+				</Grid>
+			</Grid>
+			<Box p={2}>
+				<TextField label='key' type='text' onChange={changeKey} value={key} />
+			</Box>
+			<Box p={2}>
+				<Typography variant='h4'>Solution:</Typography>
+				<WordAndSolution startStr={word} endStr={result || ''} />
+			</Box>
+			<Box p={2}>
+				<Typography variant='h4'>Table:</Typography>
+				<KryptoTable
+					startStr={word}
+					endStr={result}
+					middleNumbersArr={middleTableRow}
+					isEncryption={isEncrypt}
+				/>
+			</Box>
+			{key && (
+				<Box p={2}>
+					<Typography variant='h4'>Letter by letter:</Typography>
+					{word.split('').map((c, i) => (
+						<SolutionPerChar
+							key={c + i}
+							letter={c}
+							keyValue={key[i % key.length]}
 							isEncryption={isEncrypt}
 						/>
-					</Box>
-					{key && (
-						<Box p={2}>
-							<Typography variant='h4'>Letter by letter:</Typography>
-							{word.split('').map((c, i) => (
-								<SolutionPerChar
-									key={c + i}
-									letter={c}
-									keyValue={key[i % key.length]}
-									isEncryption={isEncrypt}
-								/>
-							))}
-						</Box>
-					)}
-				</Paper>
-			</Box>
+					))}
+				</Box>
+			)}
 		</>
 	);
 }

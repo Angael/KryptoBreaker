@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Typography, Box, Divider, useMediaQuery } from '@material-ui/core';
+import { Typography, Box, useMediaQuery } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -33,136 +33,120 @@ function ElGamalSzyfrowanie() {
 
 	return (
 		<>
-			<Box my={4}>
-				<Paper elevation={3}>
-					<Grid container>
-						<Grid item xs={12}>
-							<Grid item xs={12}>
-								<KluczeDisplay p={p} g={alpha} beta={beta} t={t} />
-							</Grid>
-						</Grid>
-
-						<Grid item xs={3}>
-							<Box p={2}>
-								<TextField
-									label='α'
-									onChange={setAlpha}
-									value={alpha}
-									type='number'
-									helperText='Generator'
-								/>
-							</Box>
-						</Grid>
-						<Grid item xs={3}>
-							<Box p={2}>
-								<TextField label='p' onChange={setP} value={p} type='number' />
-							</Box>
-						</Grid>
-						<Grid item xs={3}>
-							<Box p={2}>
-								<TextField
-									label='β'
-									disabled
-									value={solutionPowA.result}
-									type='number'
-									helperText='Wygenerowana liczba'
-								/>
-							</Box>
-						</Grid>
-						<Grid item xs={3}>
-							<Box p={2}>
-								<TextField
-									label='t'
-									onChange={setT}
-									value={t}
-									type='number'
-									helperText='Wylosowana wartość pierwsza'
-								/>
-							</Box>
-						</Grid>
-						<Grid item xs={12} align='center'>
-							<Box p={2}>
-								<Typography variant='h4'>Opis zadania:</Typography>
-								<Typography>
-									Bob chce wysłać do Alicji wiadomość której wartość liczbowa wynosi x={x}.
-								</Typography>
-								<Typography>
-									Oblicz wartość tekstu zaszyfrowanego y, wiedząc, że do zaszyfrowania wybrany
-									został randomizer r={r}
-								</Typography>
-							</Box>
-						</Grid>
-						<Grid item xs={6} align='right'>
-							<Box p={2}>
-								<TextField
-									label='x'
-									onChange={setX}
-									value={x}
-									type='number'
-									helperText='Wiadomość'
-								/>
-							</Box>
-						</Grid>
-						<Grid item xs={6} align='left'>
-							<Box p={2}>
-								<TextField
-									label='r'
-									onChange={setR}
-									value={r}
-									type='number'
-									helperText='Randomizer'
-								/>
-							</Box>
-						</Grid>
-						<Grid item xs={12} align='center'>
-							<Box m={2} p={2} display='inline-block'>
-								<Paper variant='outlined'>
-									<Box m={2}>
-										<Typography variant={isPhone ? 'body1' : 'h4'} align='center'>
-											C = (y<sub>1</sub>, y<sub>2</sub>) = E
-											<sub>
-												k<sub>1</sub>
-											</sub>
-											(r,x) = (α<sup>r</sup> mod p, x * β<sup>r</sup> mod p)
-										</Typography>
-									</Box>
-								</Paper>
-							</Box>
-						</Grid>
-						<Grid item xs={6}>
-							<Box p={2} align='center'>
-								<Typography variant='h4' gutterBottom>
-									Liczenie y<sub>1</sub>
-								</Typography>
-								<DisplayFormula number={alpha} power={r} modulo={p} />
-								<FastPowerTable stepsObj={solutionPowY1} pow={r} />{' '}
-								<Box p={2}>
-									y<sub>1</sub>= {y1}
-								</Box>
-							</Box>
-						</Grid>
-						<Grid item xs={6}>
-							<Box p={2} align='center'>
-								<Typography variant='h4' gutterBottom>
-									Liczenie y<sub>2</sub>
-								</Typography>
-								{x} * <DisplayFormula number={beta} power={r} modulo={p} />
-								<FastPowerTable stepsObj={solutionPowY2} pow={r} />
-								<Box p={2}>
-									y<sub>2</sub> = {x} * {solutionPowY2.result} mod {p} = {y2}
-								</Box>
-							</Box>
-						</Grid>
-						<Grid item xs={12}>
-							<Box p={2}>
-								<Typography variant='h4' gutterBottom align='center'>
-									Wynik = (y<sub>1</sub>, y<sub>2</sub>) = ({y1}, {y2})
-								</Typography>
-							</Box>
-						</Grid>
+			<Grid container>
+				<Grid item xs={12}>
+					<Grid item xs={12}>
+						<KluczeDisplay p={p} g={alpha} beta={beta} t={t} />
 					</Grid>
-				</Paper>
-			</Box>
+				</Grid>
+
+				<Grid item xs={3}>
+					<Box p={2}>
+						<TextField
+							label='α'
+							onChange={setAlpha}
+							value={alpha}
+							type='number'
+							helperText='Generator'
+						/>
+					</Box>
+				</Grid>
+				<Grid item xs={3}>
+					<Box p={2}>
+						<TextField label='p' onChange={setP} value={p} type='number' />
+					</Box>
+				</Grid>
+				<Grid item xs={3}>
+					<Box p={2}>
+						<TextField
+							label='β'
+							disabled
+							value={solutionPowA.result}
+							type='number'
+							helperText='Wygenerowana liczba'
+						/>
+					</Box>
+				</Grid>
+				<Grid item xs={3}>
+					<Box p={2}>
+						<TextField
+							label='t'
+							onChange={setT}
+							value={t}
+							type='number'
+							helperText='Wylosowana wartość pierwsza'
+						/>
+					</Box>
+				</Grid>
+				<Grid item xs={12} align='center'>
+					<Box p={2}>
+						<Typography variant='h4'>Opis zadania:</Typography>
+						<Typography>
+							Bob chce wysłać do Alicji wiadomość której wartość liczbowa wynosi x={x}.
+						</Typography>
+						<Typography>
+							Oblicz wartość tekstu zaszyfrowanego y, wiedząc, że do zaszyfrowania wybrany został
+							randomizer r={r}
+						</Typography>
+					</Box>
+				</Grid>
+				<Grid item xs={6} align='right'>
+					<Box p={2}>
+						<TextField label='x' onChange={setX} value={x} type='number' helperText='Wiadomość' />
+					</Box>
+				</Grid>
+				<Grid item xs={6} align='left'>
+					<Box p={2}>
+						<TextField label='r' onChange={setR} value={r} type='number' helperText='Randomizer' />
+					</Box>
+				</Grid>
+				<Grid item xs={12} align='center'>
+					<Box m={2} p={2} display='inline-block'>
+						<Paper variant='outlined'>
+							<Box m={2}>
+								<Typography variant={isPhone ? 'body1' : 'h4'} align='center'>
+									C = (y<sub>1</sub>, y<sub>2</sub>) = E
+									<sub>
+										k<sub>1</sub>
+									</sub>
+									(r,x) = (α<sup>r</sup> mod p, x * β<sup>r</sup> mod p)
+								</Typography>
+							</Box>
+						</Paper>
+					</Box>
+				</Grid>
+				<Grid item xs={6}>
+					<Box p={2} align='center'>
+						<Typography variant='h4' gutterBottom>
+							Liczenie y<sub>1</sub>
+						</Typography>
+						<DisplayFormula number={alpha} power={r} modulo={p} />
+						<FastPowerTable stepsObj={solutionPowY1} pow={r} />{' '}
+						<Box p={2}>
+							y<sub>1</sub>= {y1}
+						</Box>
+					</Box>
+				</Grid>
+				<Grid item xs={6}>
+					<Box p={2} align='center'>
+						<Typography variant='h4' gutterBottom>
+							Liczenie y<sub>2</sub>
+						</Typography>
+						{x} * <DisplayFormula number={beta} power={r} modulo={p} />
+						<FastPowerTable stepsObj={solutionPowY2} pow={r} />
+						<Box p={2}>
+							y<sub>2</sub> = {x} * {solutionPowY2.result} mod {p} = {y2}
+						</Box>
+					</Box>
+				</Grid>
+				<Grid item xs={12}>
+					<Box p={2}>
+						<Typography variant='h4' gutterBottom align='center'>
+							Wynik = (y<sub>1</sub>, y<sub>2</sub>) = ({y1}, {y2})
+						</Typography>
+					</Box>
+				</Grid>
+			</Grid>
 		</>
 	);
 }
