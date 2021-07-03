@@ -78,7 +78,7 @@ function RSADeszyfrowanie() {
 					<Box p={2} align='center'>
 						<Typography variant='h3'>Deszyfrowanie:</Typography>x = wiadomość ={' '}
 						<DisplayFormula number={'y'} power={'d'} modulo={'n'} variant={'body1'} /> ={' '}
-						<DisplayFormula number={y} power={d} number={n} variant={'body1'} /> ={' '}
+						<DisplayFormula number={y} power={d} modulo={n} variant={'body1'} /> ={' '}
 						{solutionPow.result}
 					</Box>
 					<Box p={2} align='center'>
