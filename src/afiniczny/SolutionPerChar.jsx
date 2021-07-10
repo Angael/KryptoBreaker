@@ -10,14 +10,14 @@ import { methods } from 'App';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import LineForLetter from 'utils/line-for-letter/LineForLetter';
 
-function SolutionPerChar({ letter, a, b, isEncryption: isEncr }) {
-	const letterCode = getCode(letter);
+function SolutionPerChar({ letter, a, b, isEncryption: isEncr, p = 26 }) {
+	const letterCode = isNaN(letter) ? getCode(letter) : letter;
 
 	let code;
 	let invertedA = NaN;
 	let calculationJsx;
 	if (!isEncr) {
-		invertedA = modInverse(a, 26);
+		invertedA = modInverse(a, p);
 		code = invertedA * (letterCode - b);
 		calculationJsx = (
 			<>
@@ -33,15 +33,17 @@ function SolutionPerChar({ letter, a, b, isEncryption: isEncr }) {
 		);
 	}
 
-	const afterMod = mod(code, 26);
+	const afterMod = mod(code, p);
+
+	const resultLetter = isNaN(letter) ? getLetter(afterMod) : null;
 
 	return (
-		<LineForLetter letter={letter} resultLetter={getLetter(afterMod)}>
+		<LineForLetter letter={letter} resultLetter={resultLetter}>
 			{isEncr ? 'y' : 'x'} = {isEncr ? 'e' : 'd'}
 			<sub>
 				({a},{b})
 			</sub>
-			({letterCode}) = ({calculationJsx}) mod 26 = {code} mod 26 = {afterMod}
+			({letterCode}) = ({calculationJsx}) mod {p} = {code} mod {p} = {afterMod}
 		</LineForLetter>
 	);
 }

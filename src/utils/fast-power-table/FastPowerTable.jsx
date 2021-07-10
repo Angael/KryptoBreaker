@@ -60,8 +60,6 @@ function FastPowerTable({ stepsObj, pow }) {
 		setHoveringXRow(null);
 	};
 
-	console.log({ hoveringXRow });
-
 	return (
 		<>
 			<BinaryExplanator num={pow} />
