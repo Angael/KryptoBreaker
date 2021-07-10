@@ -84,6 +84,13 @@ function OdwrotnoscTable({ a, b }) {
 	return (
 		b != 0 && (
 			<>
+				<Box my={2}>
+					<Typography variant='h5'>
+						{a}
+						<sup>-1</sup> mod {b}
+					</Typography>
+				</Box>
+
 				<TableContainer
 					classes={classes}
 					component={(props) => <Paper variant='outlined' {...props} />}
@@ -143,12 +150,12 @@ function OdwrotnoscTable({ a, b }) {
 					</Table>
 				</TableContainer>
 				<Box py={1}>
-					<Typography variant='body1'>
-						a<sup>-1</sup> = {inverted} mod {b} = {mod(inverted, b)}
+					<Typography variant='h4'>
+						{inverted} mod {b} = <u>{mod(inverted, b)}</u>
 					</Typography>
 				</Box>
 				<Box>
-					<Typography variant='body1'>
+					<Typography variant='caption'>
 						<span className={noSelect}>Sprawdzenie: </span>
 						{a} * {mod(inverted, b)} mod {b} = {mod(a * mod(inverted, b), b)}
 					</Typography>

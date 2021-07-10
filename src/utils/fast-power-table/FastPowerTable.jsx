@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { css } from '@emotion/css';
 import {
@@ -59,6 +59,8 @@ function FastPowerTable({ stepsObj, pow }) {
 	const onEndHover = (i) => () => {
 		setHoveringXRow(null);
 	};
+
+	console.log({ hoveringXRow });
 
 	return (
 		<>

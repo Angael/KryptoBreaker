@@ -112,7 +112,7 @@ function RSAPodpisWeryfikacja() {
 
 				<Grid container justify='center'>
 					<Grid item xs={12} sm={8} md={6}>
-						<FastPowerTable stepsObj={solutionPow} pow={d} />
+						<FastPowerTable stepsObj={solutionPow} pow={e} />
 					</Grid>
 				</Grid>
 			</Grid>
