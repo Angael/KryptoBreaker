@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/KryptoBreaker/static/css/main.4c804999.chunk.css",
-    "main.js": "/KryptoBreaker/static/js/main.b693463b.chunk.js",
-    "main.js.map": "/KryptoBreaker/static/js/main.b693463b.chunk.js.map",
+    "main.js": "/KryptoBreaker/static/js/main.d45962c2.chunk.js",
+    "main.js.map": "/KryptoBreaker/static/js/main.d45962c2.chunk.js.map",
     "runtime-main.js": "/KryptoBreaker/static/js/runtime-main.d29768ec.js",
     "runtime-main.js.map": "/KryptoBreaker/static/js/runtime-main.d29768ec.js.map",
     "static/js/2.33fb9100.chunk.js": "/KryptoBreaker/static/js/2.33fb9100.chunk.js",
@@ -20,6 +20,6 @@
     "static/js/runtime-main.d29768ec.js",
     "static/js/2.33fb9100.chunk.js",
     "static/css/main.4c804999.chunk.css",
-    "static/js/main.b693463b.chunk.js"
+    "static/js/main.d45962c2.chunk.js"
   ]
 }
