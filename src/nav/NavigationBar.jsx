@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 export const NavigationBar = ({ drawerOpen, openDrawer }) => {
 	const classes = useStyles();
 
-	const [explanationOpen, setExplanationOpen] = useState(true);
+	const [explanationOpen, setExplanationOpen] = useState(false);
 
 	return (
 		<AppBar
