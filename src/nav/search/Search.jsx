@@ -3,7 +3,8 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { componentListFuzzySearchHayStack } from 'componentList';
-import FuzzySearch from 'fuzzy-search';
+import Fuse from 'fuse.js';
+
 import { cx } from '@emotion/css';
 import { Box, ClickAwayListener, Typography } from '@material-ui/core';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -117,9 +118,17 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const searcher = new FuzzySearch(componentListFuzzySearchHayStack, ['name', 'inputs', 'category'], {
-	caseSensitive: false,
-});
+const options = {
+	includeScore: true,
+	// includeMatches: true,
+	// Search in `author` and in `tags` array
+	keys: ['category', 'name', 'inputs'],
+};
+const fuse = new Fuse(componentListFuzzySearchHayStack, options);
+
+// const searcher = new FuzzySearch(componentListFuzzySearchHayStack, ['name', 'inputs', 'category'], {
+// 	caseSensitive: false,
+// });
 
 const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
 	const classes = useStyles();
@@ -132,7 +141,12 @@ const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
 		setSearchOpen(true);
 	};
 
-	const results = value.trim() ? searcher.search(value) : [];
+	const results = value.trim()
+		? fuse.search(value.trim()).filter((result) => {
+				return result.score < 0.3;
+		  })
+		: [];
+	// const results = value.trim() ? searcher.search(value) : [];
 
 	const onInputFocus = (e) => {
 		e.target.setSelectionRange(0, value.length);
@@ -192,11 +206,11 @@ const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
 								<ButtonBase
 									className={classes.btn}
 									style={{ whiteSpace: 'nowrap' }}
-									onClick={() => onSearchOptionClick(result.indexes)}
+									onClick={() => onSearchOptionClick(result.item.indexes)}
 								>
 									<Box px={2} py={1}>
-										<Typography variant='body1'>{result.name}</Typography>
-										<Typography variant='body2'>{result.category}</Typography>
+										<Typography variant='body1'>{result.item.name}</Typography>
+										<Typography variant='body2'>{result.item.category}</Typography>
 									</Box>
 								</ButtonBase>
 							);
