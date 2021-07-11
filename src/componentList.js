@@ -21,20 +21,34 @@ import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
 import CheatSheet from './cheat-sheet/CheatSheet';
 const Hill = React.lazy(() => import('./hill/Hill'));
 
+const modulo = ['liczba', 'modulo', 'm', 'p', 'n'];
+
 const componentList = [
 	{
 		categoryName: 'Helpers',
 		methods: [
-			{ component: <Odwrotnosc />, name: 'Odwrotność multiplikatywna' },
-			{ component: <PotegaMod />, name: 'Potęgowanie modularne' },
+			{
+				component: <Odwrotnosc />,
+				name: 'Odwrotność multiplikatywna',
+				inputs: [...modulo],
+			},
+			{
+				component: <PotegaMod />,
+				name: 'Potęgowanie modularne',
+				inputs: [...modulo, 'g', 'potęga', 'power'],
+			},
 			{ component: <Mod />, name: 'Modulo' },
-			{ component: <CheatSheet />, name: 'Litery na numery' },
+			{
+				component: <CheatSheet />,
+				name: 'Litery na numery',
+				inputs: [],
+			},
 		],
 	},
 	{
 		categoryName: 'Ogólne',
 		methods: [
-			{ component: <Cezar />, name: 'Cezar' },
+			{ component: <Cezar />, name: 'Cezar', inputs: ['cesar', 'klucz', 'key'] },
 			{ component: <Afiniczny />, name: 'Afiniczny' },
 			{ component: <Vigener />, name: 'Vigener' },
 			{ component: <Hill />, name: 'Hill' },
@@ -63,4 +77,16 @@ const componentList = [
 	},
 ];
 
+export let componentListFuzzySearchHayStack = [];
+
+componentList.forEach((category) => {
+	const modules = category.methods.map((method) => {
+		return { ...method, category: category.categoryName };
+	});
+	componentListFuzzySearchHayStack.push(...modules);
+});
+
 export default componentList;
+
+window.componentList = componentList;
+window.componentListFuzzySearchHayStack = componentListFuzzySearchHayStack;

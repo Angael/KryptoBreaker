@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Button, Tooltip } from '@material-ui/core';
+import { Button, Tooltip, Hidden } from '@material-ui/core';
 import KeyExplanation from './key-explanation/KeyExplanation';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
+
+import Search from './search/Search';
 
 const drawerWidth = 240;
 
@@ -47,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 export const NavigationBar = ({ drawerOpen, openDrawer }) => {
 	const classes = useStyles();
 
+	const [searchOpen, setSearchOpen] = useState(false);
 	const [explanationOpen, setExplanationOpen] = useState(false);
 
 	return (
@@ -66,9 +70,13 @@ export const NavigationBar = ({ drawerOpen, openDrawer }) => {
 				>
 					<MenuIcon />
 				</IconButton>
-				<Typography variant='h6' noWrap>
-					KryptoBreaker
-				</Typography>
+				<Hidden xsDown>
+					<Typography variant='h6' noWrap>
+						KryptoBreaker
+					</Typography>
+				</Hidden>
+
+				<Search searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
 				<div className={classes.rightButton}>
 					<Tooltip title='Kiedy używać jaki klucz'>
 						<IconButton
