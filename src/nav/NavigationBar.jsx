@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export const NavigationBar = ({ drawerOpen, openDrawer }) => {
+export const NavigationBar = ({ drawerOpen, openDrawer, setIndexes }) => {
 	const classes = useStyles();
 
 	const [searchOpen, setSearchOpen] = useState(false);
@@ -76,7 +76,7 @@ export const NavigationBar = ({ drawerOpen, openDrawer }) => {
 					</Typography>
 				</Hidden>
 
-				<Search searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
+				<Search searchOpen={searchOpen} setSearchOpen={setSearchOpen} setIndexes={setIndexes} />
 				<div className={classes.rightButton}>
 					<Tooltip title='Kiedy używać jaki klucz'>
 						<IconButton

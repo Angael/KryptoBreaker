@@ -56,7 +56,7 @@ function App() {
 
 	return (
 		<div className={classes.root}>
-			<NavigationBar drawerOpen={drawerOpen} openDrawer={openDrawer} />
+			<NavigationBar drawerOpen={drawerOpen} openDrawer={openDrawer} setIndexes={setIndexes} />
 			<PersistentDrawer
 				isOpen={drawerOpen}
 				onClose={() => setDrawerOpen(false)}

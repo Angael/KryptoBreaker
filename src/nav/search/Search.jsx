@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
@@ -50,11 +50,15 @@ const useStyles = makeStyles((theme) => ({
 		[theme.breakpoints.up('md')]: {
 			width: '20ch',
 		},
+		'&::selection': {
+			color: alpha('#fff', 1),
+			background: alpha('#fff', 0.25),
+		},
 	},
 	resultsContainer: {
 		display: 'block',
 		position: 'absolute',
-		top: '100%',
+		top: 'calc(100% + 2px)',
 		left: 0,
 		minWidth: '100%',
 		width: '400px',
@@ -94,9 +98,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 	hide: {
 		opacity: '0 !important',
-		height: '1px !important',
+		height: '0px !important',
 		transition: '0.2s',
 		width: '100% !important',
+		background: 'transparent',
 		// display: 'none !important',
 	},
 	btn: {
@@ -116,9 +121,10 @@ const searcher = new FuzzySearch(componentListFuzzySearchHayStack, ['name', 'inp
 	caseSensitive: false,
 });
 
-const Search = ({ searchOpen, setSearchOpen }) => {
+const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
 	const classes = useStyles();
 	const [value, setValue] = useState('rsa');
+	const [height, setHeight] = useState(300);
 	const resultsRef = useRef();
 
 	const onChangeVal = (e) => {
@@ -128,23 +134,28 @@ const Search = ({ searchOpen, setSearchOpen }) => {
 
 	const results = value.trim() ? searcher.search(value) : [];
 
-	const onInputFocus = (params) => {};
+	const onInputFocus = (e) => {
+		e.target.setSelectionRange(0, value.length);
+	};
+
+	const onSearchOptionClick = (indexes) => {
+		setIndexes(indexes);
+		setSearchOpen(false);
+	};
 	// console.log(results);
 
-	let height = 200;
-	if (resultsRef.current) {
-		console.group('ref');
-		const children = Array.from(resultsRef.current.children);
-		height = 0;
-		children.forEach((child) => {
-			height += child.clientHeight;
-			console.log('child.clientHeight', child.clientHeight);
-		});
+	useLayoutEffect(() => {
+		if (resultsRef.current) {
+			const children = Array.from(resultsRef.current.children);
+			let _height = 0;
+			children.forEach((child) => {
+				_height += child.clientHeight;
+			});
+			setHeight(_height);
+		}
+	}, [results]);
 
-		// console.log(resultsRef.current);
-		console.log('height', height);
-		console.groupEnd('ref');
-	}
+	console.log(results);
 
 	return (
 		<ClickAwayListener onClickAway={() => setSearchOpen(false)}>
@@ -169,16 +180,20 @@ const Search = ({ searchOpen, setSearchOpen }) => {
 				>
 					<Box ref={resultsRef}>
 						{results.length === 0 && (
-							<ButtonBase className={classes.btn}>
+							<ButtonBase className={classes.btn} style={{ whiteSpace: 'nowrap' }}>
 								<Box px={2} py={1}>
-									<Typography variant='body1'>Wpisz nazwę lub zmienne</Typography>
+									<Typography variant='body1'>Wpisz nazwę metody lub zmienne</Typography>
 									<Typography variant='body2'></Typography>
 								</Box>
 							</ButtonBase>
 						)}
 						{results.map((result) => {
 							return (
-								<ButtonBase className={classes.btn}>
+								<ButtonBase
+									className={classes.btn}
+									style={{ whiteSpace: 'nowrap' }}
+									onClick={() => onSearchOptionClick(result.indexes)}
+								>
 									<Box px={2} py={1}>
 										<Typography variant='body1'>{result.name}</Typography>
 										<Typography variant='body2'>{result.category}</Typography>
