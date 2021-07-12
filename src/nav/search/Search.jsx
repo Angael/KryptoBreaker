@@ -122,7 +122,7 @@ const options = {
 	includeScore: true,
 	// includeMatches: true,
 	// Search in `author` and in `tags` array
-	keys: ['category', 'name', 'inputs'],
+	keys: ['category', 'name', 'keywords'],
 };
 const fuse = new Fuse(componentListFuzzySearchHayStack, options);
 
