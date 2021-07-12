@@ -82,9 +82,7 @@ function App() {
 					</Box>
 
 					<Box my={4}>
-						<Paper elevation={3}>
-							<Suspense fallback={<Box p={4}>Loading...</Box>}>{selectedMethod.component}</Suspense>
-						</Paper>
+						<Suspense fallback={<Box p={4}>Loading...</Box>}>{selectedMethod.component}</Suspense>
 					</Box>
 				</Container>
 			</div>

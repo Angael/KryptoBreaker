@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import {
+	Typography,
+	Box,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+	Paper,
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode } from 'utils/numHelpers';
 import KryptoTable from 'utils/KryptoTable';
@@ -29,27 +37,30 @@ function Cezar() {
 
 	return (
 		<>
-			<Grid container>
-				<Grid item xs={6}>
-					<Box p={2}>
-						<TextField label='word' onChange={changeWord} value={word} />
-					</Box>
+			<Paper elevation={3}>
+				<Grid container>
+					<Grid item xs={6}>
+						<Box p={2}>
+							<TextField label='word' onChange={changeWord} value={word} />
+						</Box>
+					</Grid>
+					<Grid item xs={6}>
+						<Box p={2}>
+							<FormControl>
+								<InputLabel>Which way</InputLabel>
+								<Select value={isEncrypt} onChange={changeIsEncryption}>
+									<MenuItem value={true}>Encrypt</MenuItem>
+									<MenuItem value={false}>Decrypt</MenuItem>
+								</Select>
+							</FormControl>
+						</Box>
+					</Grid>
 				</Grid>
-				<Grid item xs={6}>
-					<Box p={2}>
-						<FormControl>
-							<InputLabel>Which way</InputLabel>
-							<Select value={isEncrypt} onChange={changeIsEncryption}>
-								<MenuItem value={true}>Encrypt</MenuItem>
-								<MenuItem value={false}>Decrypt</MenuItem>
-							</Select>
-						</FormControl>
-					</Box>
-				</Grid>
-			</Grid>
-			<Box p={2}>
-				<TextField label='key' type='number' onChange={changeKey} value={key} />
-			</Box>
+				<Box p={2}>
+					<TextField label='key' type='number' onChange={changeKey} value={key} />
+				</Box>
+			</Paper>
+
 			<Box p={2}>
 				<Typography variant='h4'>Solution:</Typography>
 				<WordAndSolution startStr={word} endStr={result || ''} />
