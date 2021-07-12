@@ -4,8 +4,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { mod } from 'utils/numHelpers';
 
-import useNumberInput from 'diffie-hellman/useNumberInput';
-import DisplayFormula from 'diffie-hellman/DisplayFormula';
+import useNumberInput from 'pages/diffie-hellman/useNumberInput';
+import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 
 function Mod() {
 	const [num, setNum] = useNumberInput(2);

@@ -11,7 +11,7 @@ import {
 	Tooltip,
 } from '@material-ui/core';
 
-import { mod } from '../utils/numHelpers';
+import { mod } from '../../utils/numHelpers';
 import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
 
 const cellCss = css`

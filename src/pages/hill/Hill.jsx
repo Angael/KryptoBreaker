@@ -16,7 +16,7 @@ import KryptoTable from 'utils/KryptoTable';
 import Grid from '@material-ui/core/Grid';
 import WordAndSolution from 'utils/WordAndSolution';
 import MatrixInput from './Matrix';
-import useMatrixState from 'hill/useMatrixState';
+import useMatrixState from 'pages/hill/useMatrixState';
 import Slider from '@material-ui/core/Slider';
 
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';

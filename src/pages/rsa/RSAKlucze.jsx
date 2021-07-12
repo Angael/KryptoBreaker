@@ -3,10 +3,10 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { modInverse } from 'utils/numHelpers';
 
-import useNumberInput from 'diffie-hellman/useNumberInput';
-import DisplayFormula from 'diffie-hellman/DisplayFormula';
+import useNumberInput from 'pages/diffie-hellman/useNumberInput';
+import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 import KluczeDisplay from './KluczeDisplay';
-import OdwrotnoscTable from 'odwrotnosc/OdwrotnoscTable';
+import OdwrotnoscTable from 'pages/odwrotnosc/OdwrotnoscTable';
 
 function RSAKlucze() {
 	const [p, setP] = useNumberInput(37);

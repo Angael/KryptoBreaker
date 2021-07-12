@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { getLetter, getCode, mod } from 'utils/numHelpers';
-import KryptoTable from '../utils/KryptoTable';
+import KryptoTable from '../../utils/KryptoTable';
 import Grid from '@material-ui/core/Grid';
 import WordAndSolution from 'utils/WordAndSolution';
 import SolutionPerChar from './SolutionPerChar';

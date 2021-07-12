@@ -4,30 +4,29 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import useNumberInput from 'diffie-hellman/useNumberInput';
+import useNumberInput from 'pages/diffie-hellman/useNumberInput';
 import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import KluczeDisplay from './KluczeDisplay';
-import DisplayFormula from 'diffie-hellman/DisplayFormula';
+import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 import { mod } from 'utils/numHelpers';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import { useTheme } from '@material-ui/core/styles';
 
-function ElGamalDeszyfrowanie() {
+function ElGamalSzyfrowanie() {
 	const [p, setP] = useNumberInput(1619);
 	const [alpha, setAlpha] = useNumberInput(2);
 	const [t, setT] = useNumberInput(937);
-	const [y1, setY1] = useNumberInput(130);
-	const [y2, setY2] = useNumberInput(414);
+	const [x, setX] = useNumberInput(20);
+	const [r, setR] = useNumberInput(320);
 
 	const solutionPowA = useMemo(() => getFastPowerMod(alpha, t, p), [p, alpha, t]);
 
 	const beta = solutionPowA.result;
 
-	const power = p - 1 - t;
-	const error = power <= 0 || power % 1 !== 0;
-	const solutionPowX = useMemo(() => getFastPowerMod(y1, power, p), [p, y1, power]);
-
-	const x = mod(y2 * solutionPowX.result, p);
+	const solutionPowY1 = useMemo(() => getFastPowerMod(alpha, r, p), [p, alpha, r]);
+	const solutionPowY2 = useMemo(() => getFastPowerMod(beta, r, p), [p, beta, r]);
+	const y1 = solutionPowY1.result;
+	const y2 = mod(x * solutionPowY2.result, p);
 
 	const theme = useTheme();
 	const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
@@ -83,78 +82,67 @@ function ElGamalDeszyfrowanie() {
 					<Box p={2}>
 						<Typography variant='h4'>Opis zadania:</Typography>
 						<Typography>
-							Alicja otrzymała od Boba szyfrogram Y=({y1}, {y2})
+							Bob chce wysłać do Alicji wiadomość której wartość liczbowa wynosi x={x}.
 						</Typography>
-						<Typography> Obliczyć przez Alicję wartość tekstu jawnego x.</Typography>
+						<Typography>
+							Oblicz wartość tekstu zaszyfrowanego y, wiedząc, że do zaszyfrowania wybrany został
+							randomizer r={r}
+						</Typography>
 					</Box>
 				</Grid>
 				<Grid item xs={6} align='right'>
 					<Box p={2}>
-						<TextField
-							label={
-								<>
-									y<sub>1</sub>
-								</>
-							}
-							onChange={setY1}
-							value={y1}
-							type='number'
-						/>
+						<TextField label='x' onChange={setX} value={x} type='number' helperText='Wiadomość' />
 					</Box>
 				</Grid>
 				<Grid item xs={6} align='left'>
 					<Box p={2}>
-						<TextField
-							label={
-								<>
-									y<sub>2</sub>
-								</>
-							}
-							onChange={setY2}
-							value={y2}
-							type='number'
-						/>
+						<TextField label='r' onChange={setR} value={r} type='number' helperText='Randomizer' />
 					</Box>
 				</Grid>
 				<Grid item xs={12} align='center'>
-					<Box m={1} pt={2} display='inline-block'>
+					<Box m={2} p={2} display='inline-block'>
 						<Paper variant='outlined'>
 							<Box m={2}>
 								<Typography variant={isPhone ? 'body1' : 'h4'} align='center'>
-									X = P = y<sub>2</sub>* y<sub>1</sub>
-									<sup>p - 1 - t</sup> mod p
-								</Typography>
-							</Box>
-						</Paper>
-					</Box>
-					<Box m={1} pb={2} display='inline-block'>
-						<Paper variant='outlined'>
-							<Box m={2}>
-								<Typography variant={isPhone ? 'body1' : 'h4'} align='center'>
-									X = P = {y2} * {y1}
-									<sup>{p - 1 - t}</sup> mod {p}
+									C = (y<sub>1</sub>, y<sub>2</sub>) = E
+									<sub>
+										k<sub>1</sub>
+									</sub>
+									(r,x) = (α<sup>r</sup> mod p, x * β<sup>r</sup> mod p)
 								</Typography>
 							</Box>
 						</Paper>
 					</Box>
 				</Grid>
-				<Grid item xs={0} sm={2} md={3}></Grid>
-				<Grid item xs={12} sm={8} md={6} align='center'>
-					<Box py={2} align='center'>
+				<Grid item xs={6}>
+					<Box p={2} align='center'>
 						<Typography variant='h4' gutterBottom>
-							Liczenie x (wiadomości)
+							Liczenie y<sub>1</sub>
 						</Typography>
-						{y2} * <DisplayFormula number={y1} modulo={p} power={power} />
-						<FastPowerTable stepsObj={solutionPowX} pow={power} />{' '}
+						<DisplayFormula number={alpha} power={r} modulo={p} />
+						<FastPowerTable stepsObj={solutionPowY1} pow={r} />{' '}
 						<Box p={2}>
-							x = {y2} * {solutionPowX.result} mod {p}
+							y<sub>1</sub>= {y1}
+						</Box>
+					</Box>
+				</Grid>
+				<Grid item xs={6}>
+					<Box p={2} align='center'>
+						<Typography variant='h4' gutterBottom>
+							Liczenie y<sub>2</sub>
+						</Typography>
+						{x} * <DisplayFormula number={beta} power={r} modulo={p} />
+						<FastPowerTable stepsObj={solutionPowY2} pow={r} />
+						<Box p={2}>
+							y<sub>2</sub> = {x} * {solutionPowY2.result} mod {p} = {y2}
 						</Box>
 					</Box>
 				</Grid>
 				<Grid item xs={12}>
 					<Box p={2}>
 						<Typography variant='h4' gutterBottom align='center'>
-							X = {x}
+							Wynik = (y<sub>1</sub>, y<sub>2</sub>) = ({y1}, {y2})
 						</Typography>
 					</Box>
 				</Grid>
@@ -163,4 +151,4 @@ function ElGamalDeszyfrowanie() {
 	);
 }
 
-export default ElGamalDeszyfrowanie;
+export default ElGamalSzyfrowanie;

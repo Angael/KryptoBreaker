@@ -1,25 +1,25 @@
 import React from 'react';
 
-import Cezar from './cezar/Cezar';
-import Vigener from './vigener/Vigener';
-import Afiniczny from './afiniczny/Afiniczny';
-import DiffieHellman from './diffie-hellman/DiffieHellman';
-import Odwrotnosc from './odwrotnosc/Odwrotnosc';
-import PotegaMod from './potega-mod/PotegaMod';
-import RSAKlucze from './rsa/RSAKlucze';
-import RSASzyfrowanie from 'rsa/RSASzyfrowanie';
-import RSADeszyfrowanie from 'rsa/RSADeszyfrowanie';
-import RSAPodpis from './rsa/RSAPodpis';
-import RSAPodpisWeryfikacja from './rsa/RSAPodpisWeryfikacja';
-import ElGamal from './elgamal/ElGamal';
-import Mod from './mod/Mod';
+import Cezar from './pages/cezar/Cezar';
+import Vigener from './pages/vigener/Vigener';
+import Afiniczny from './pages/afiniczny/Afiniczny';
+import DiffieHellman from './pages/diffie-hellman/DiffieHellman';
+import Odwrotnosc from './pages/odwrotnosc/Odwrotnosc';
+import PotegaMod from './pages/potega-mod/PotegaMod';
+import RSAKlucze from './pages/rsa/RSAKlucze';
+import RSASzyfrowanie from 'pages/rsa/RSASzyfrowanie';
+import RSADeszyfrowanie from 'pages/rsa/RSADeszyfrowanie';
+import RSAPodpis from './pages/rsa/RSAPodpis';
+import RSAPodpisWeryfikacja from './pages/rsa/RSAPodpisWeryfikacja';
+import ElGamal from './pages/elgamal/ElGamal';
+import Mod from './pages/mod/Mod';
 
-import ElGamalSzyfrowanie from './elgamal/ElGamalSzyfrowanie';
-import ElGamalDeszyfrowanie from './elgamal/ElGamalDeszyfrowanie';
-import ElGamalPodpis from './elgamal/ElGamalPodpis';
-import ElGamalPodpisWeryfikacja from './elgamal/ElGamalPodpisWeryfikacja';
-import CheatSheet from './cheat-sheet/CheatSheet';
-const Hill = React.lazy(() => import('./hill/Hill'));
+import ElGamalSzyfrowanie from './pages/elgamal/ElGamalSzyfrowanie';
+import ElGamalDeszyfrowanie from './pages/elgamal/ElGamalDeszyfrowanie';
+import ElGamalPodpis from './pages/elgamal/ElGamalPodpis';
+import ElGamalPodpisWeryfikacja from './pages/elgamal/ElGamalPodpisWeryfikacja';
+import CheatSheet from './pages/cheat-sheet/CheatSheet';
+const Hill = React.lazy(() => import('./pages/hill/Hill'));
 
 const g = ['g', 'generator'];
 const p = ['p', 'grupa multiplikatywna'];
