@@ -1,33 +1,33 @@
-import React, { Suspense } from "react";
-import clsx from "clsx";
+import React, { Suspense } from 'react';
+import clsx from 'clsx';
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import "./App.css";
-import Container from "@material-ui/core/Container";
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import './App.css';
+import Container from '@material-ui/core/Container';
 import {
     Typography,
     Box,
     useMediaQuery,
     Breadcrumbs,
     Paper,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import useLocalStorage from "utils/useLocalStorage";
+import useLocalStorage from 'utils/useLocalStorage';
 
-import componentList from "./componentList";
+import componentList from './componentList';
 
-import { PersistentDrawer } from "nav/PersistentDrawer";
-import { NavigationBar } from "./nav/NavigationBar";
+import { PersistentDrawer } from 'nav/PersistentDrawer';
+import { NavigationBar } from './nav/NavigationBar';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: "flex",
+        display: 'flex',
     },
     content: {
         flexGrow: 1,
-        paddingTop: "5rem",
+        paddingTop: '5rem',
         padding: theme.spacing(0),
         marginLeft: (isPhone) => (isPhone ? 0 : -drawerWidth),
     },
@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
     // Category and component indexes in componentList.js
-    const [indexes, setIndexes] = useLocalStorage("indexes", [0, 0]);
-    const [drawerOpen, setDrawerOpen] = useLocalStorage("drawerOpen", true);
+    const [indexes, setIndexes] = useLocalStorage('indexes', [0, 0]);
+    const [drawerOpen, setDrawerOpen] = useLocalStorage('drawerOpen', true);
 
     const selectedCategory = componentList[indexes[0]];
     const selectedMethod = selectedCategory.methods[indexes[1]] || {};
@@ -54,13 +54,13 @@ function App() {
     };
 
     const theme = useTheme();
-    const isPhone = useMediaQuery(theme.breakpoints.down("sm"));
+    const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
 
     const classes = useStyles(isPhone);
 
-    const methodVariant = isPhone ? "h5" : "h4";
+    const methodVariant = isPhone ? 'h5' : 'h4';
 
-    console.log("<App/>", "app rerender");
+    // console.log("<App/>", "app rerender");
 
     return (
         <div className={classes.root}>
@@ -81,18 +81,18 @@ function App() {
                     [classes.contentShift]: drawerOpen,
                 })}
             >
-                <Container maxWidth="md">
+                <Container maxWidth='md'>
                     <Box mb={4}>
-                        <Breadcrumbs aria-label="breadcrumb">
+                        <Breadcrumbs aria-label='breadcrumb'>
                             <Typography
                                 variant={methodVariant}
-                                color="textSecondary"
+                                color='textSecondary'
                             >
                                 {selectedCategory.categoryName}
                             </Typography>
                             <Typography
                                 variant={methodVariant}
-                                color="textPrimary"
+                                color='textPrimary'
                             >
                                 {selectedMethod.name}
                             </Typography>

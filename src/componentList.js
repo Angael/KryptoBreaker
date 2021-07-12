@@ -25,8 +25,8 @@ const g = ['g', 'generator'];
 const p = ['p', 'grupa multiplikatywna'];
 const word = ['słowo', 'wiadomość'];
 const encrDecr = [
-	['enkrypcja', 'dekrypcja'],
-	['szyfrowanie', 'deszyfrowanie'],
+    ['enkrypcja', 'dekrypcja'],
+    ['szyfrowanie', 'deszyfrowanie'],
 ];
 const wiadomość = ['x', 'wiadomość'];
 const skrot = ['x', 'h', 'wiadomość', 'skrót'];
@@ -38,114 +38,126 @@ const rsaKeys = ['n', 'e', 'd'];
 const elGamalKeys = [alfa, p, beta, 't'];
 
 const componentList = [
-	{
-		categoryName: 'Helpers',
-		methods: [
-			{
-				component: <Odwrotnosc />,
-				name: 'Odwrotność multiplikatywna',
-				keywords: ['modulo'],
-			},
-			{
-				component: <PotegaMod />,
-				name: 'Potęgowanie modularne',
-				keywords: [g, 'potęga', 'power'],
-			},
-			{ component: <Mod />, name: 'Modulo', keywords: ['modulo'] },
-			{
-				component: <CheatSheet />,
-				name: 'Litery na numery',
-				keywords: [],
-			},
-		],
-	},
-	{
-		categoryName: 'Ogólne',
-		methods: [
-			{
-				component: <Cezar />,
-				name: 'Cezar',
-				keywords: [word, 'klucz', encrDecr],
-			},
-			{
-				component: <Afiniczny />,
-				name: 'Afiniczny',
-				keywords: [word, 'klucz', encrDecr],
-			},
-			{
-				component: <Vigener />,
-				name: 'Vigener',
-				keywords: [word, 'klucz', encrDecr],
-			},
-			{
-				component: <Hill />,
-				name: 'Hill',
-				keywords: [word, 'klucz - macierz', encrDecr],
-			},
-			{ component: <DiffieHellman />, name: 'Diffie Hellman', keywords: [g, p, 'a', 'b'] },
-		],
-	},
-	{
-		categoryName: 'RSA',
-		methods: [
-			{ component: <RSAKlucze />, name: 'Klucze', keywords: [p, 'q', 'e'] },
-			{
-				component: <RSASzyfrowanie />,
-				name: 'Szyfrowanie',
-				keywords: [rsaKeys, wiadomość],
-			},
-			{
-				component: <RSADeszyfrowanie />,
-				name: 'Deszyfrowanie',
-				keywords: [rsaKeys, 'y - szyfrogram'],
-			},
-			{ component: <RSAPodpis />, name: 'Podpis', keywords: ['n', 'e', 'd', skrot] },
-			{
-				component: <RSAPodpisWeryfikacja />,
-				name: 'Weryfikacja podpisu',
-				keywords: [rsaKeys, skrot, podpis],
-			},
-		],
-	},
-	{
-		categoryName: 'El Gamal',
-		methods: [
-			{
-				component: <ElGamal />,
-				name: 'Klucze',
-				keywords: [[g, 'α', 'alpha', 'alfa'], p, 't'],
-			},
-			{
-				component: <ElGamalSzyfrowanie />,
-				name: 'Szyfrowanie',
-				keywords: [elGamalKeys, skrot, ['r', 'randomizer']],
-			},
-			{
-				component: <ElGamalDeszyfrowanie />,
-				name: 'Deszyfrowanie',
-				keywords: [elGamalKeys, ['y1', 'y'], ['y2', 'y']],
-			},
-			{
-				component: <ElGamalPodpis />,
-				name: 'Podpis',
-				keywords: [elGamalKeys, skrot, ['r', 'randomizer']],
-			},
-			{
-				component: <ElGamalPodpisWeryfikacja />,
-				name: 'Weryfikacja podpisu',
-				keywords: [elGamalKeys, skrot, ['u', "u'"], ['s', "s'"]],
-			},
-		],
-	},
+    {
+        categoryName: 'Helpers',
+        methods: [
+            {
+                component: <Odwrotnosc />,
+                name: 'Odwrotność multiplikatywna',
+                keywords: ['modulo'],
+            },
+            {
+                component: <PotegaMod />,
+                name: 'Potęgowanie modularne',
+                keywords: [g, 'potęga', 'power'],
+            },
+            { component: <Mod />, name: 'Modulo', keywords: ['modulo'] },
+            {
+                component: <CheatSheet />,
+                name: 'Litery na numery',
+                keywords: [],
+            },
+        ],
+    },
+    {
+        categoryName: 'General',
+        methods: [
+            {
+                component: <Cezar />,
+                name: 'Cesar',
+                keywords: [word, 'klucz', encrDecr],
+            },
+            {
+                component: <Afiniczny />,
+                name: 'Affine',
+                keywords: [word, 'klucz', encrDecr],
+            },
+            {
+                component: <Vigener />,
+                name: 'Vigenère',
+                keywords: [word, 'klucz', encrDecr],
+            },
+            {
+                component: <Hill />,
+                name: 'Hill',
+                keywords: [word, 'klucz - macierz', encrDecr],
+            },
+            {
+                component: <DiffieHellman />,
+                name: 'Diffie Hellman',
+                keywords: [g, p, 'a', 'b'],
+            },
+        ],
+    },
+    {
+        categoryName: 'RSA',
+        methods: [
+            {
+                component: <RSAKlucze />,
+                name: 'Klucze',
+                keywords: [p, 'q', 'e'],
+            },
+            {
+                component: <RSASzyfrowanie />,
+                name: 'Szyfrowanie',
+                keywords: [rsaKeys, wiadomość],
+            },
+            {
+                component: <RSADeszyfrowanie />,
+                name: 'Deszyfrowanie',
+                keywords: [rsaKeys, 'y - szyfrogram'],
+            },
+            {
+                component: <RSAPodpis />,
+                name: 'Podpis',
+                keywords: ['n', 'e', 'd', skrot],
+            },
+            {
+                component: <RSAPodpisWeryfikacja />,
+                name: 'Weryfikacja podpisu',
+                keywords: [rsaKeys, skrot, podpis],
+            },
+        ],
+    },
+    {
+        categoryName: 'El Gamal',
+        methods: [
+            {
+                component: <ElGamal />,
+                name: 'Klucze',
+                keywords: [[g, 'α', 'alpha', 'alfa'], p, 't'],
+            },
+            {
+                component: <ElGamalSzyfrowanie />,
+                name: 'Szyfrowanie',
+                keywords: [elGamalKeys, skrot, ['r', 'randomizer']],
+            },
+            {
+                component: <ElGamalDeszyfrowanie />,
+                name: 'Deszyfrowanie',
+                keywords: [elGamalKeys, ['y1', 'y'], ['y2', 'y']],
+            },
+            {
+                component: <ElGamalPodpis />,
+                name: 'Podpis',
+                keywords: [elGamalKeys, skrot, ['r', 'randomizer']],
+            },
+            {
+                component: <ElGamalPodpisWeryfikacja />,
+                name: 'Weryfikacja podpisu',
+                keywords: [elGamalKeys, skrot, ['u', "u'"], ['s', "s'"]],
+            },
+        ],
+    },
 ];
 
 export let componentListFuzzySearchHayStack = [];
 
 componentList.forEach((category, i) => {
-	const modules = category.methods.map((method, j) => {
-		return { ...method, category: category.categoryName, indexes: [i, j] };
-	});
-	componentListFuzzySearchHayStack.push(...modules);
+    const modules = category.methods.map((method, j) => {
+        return { ...method, category: category.categoryName, indexes: [i, j] };
+    });
+    componentListFuzzySearchHayStack.push(...modules);
 });
 
 export default componentList;

@@ -52,7 +52,6 @@ function Afiniczny() {
 
     const [a = NaN, b = NaN] = keys.replace(/\s/, '').split(',').map(Number);
     const keyErr = isNaN(a) || isNaN(b) ? 'Enter keys! Format: x,y' : '';
-    console.log({ a, b });
 
     let result;
     if (isWord) {
