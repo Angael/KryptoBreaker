@@ -60,7 +60,7 @@ const componentList = [
         ],
     },
     {
-        categoryName: 'General',
+        categoryName: 'Ciphers',
         methods: [
             {
                 component: <Cezar />,
@@ -82,6 +82,11 @@ const componentList = [
                 name: 'Hill',
                 keywords: [word, 'klucz - macierz', encrDecr],
             },
+        ],
+    },
+    {
+        categoryName: 'Key generation',
+        methods: [
             {
                 component: <DiffieHellman />,
                 name: 'Diffie Hellman',

@@ -132,7 +132,7 @@ const fuse = new Fuse(componentListFuzzySearchHayStack, options);
 
 const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
     const classes = useStyles();
-    const [value, setValue] = useState('rsa');
+    const [value, setValue] = useState('');
     const [height, setHeight] = useState(300);
     const resultsRef = useRef();
 
@@ -155,6 +155,7 @@ const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
     const onSearchOptionClick = (indexes) => {
         setIndexes(indexes);
         setSearchOpen(false);
+        setValue('');
     };
     // console.log(results);
 
