@@ -1,11 +1,13 @@
-import React from "react";
-import { Box, Paper, Typography } from "@material-ui/core";
+import React from 'react';
+import { Box, Paper, Typography } from '@material-ui/core';
 
-function PaperTitle({ title, children }) {
+function PaperTitle({ title, children, variant = 'h2', elevation = 2 }) {
     return (
-        <Box>
-            <Typography variant="h2">{title}</Typography>
-            <Paper>{children}</Paper>
+        <Box my={5}>
+            <Typography variant={variant}>{title}</Typography>
+            <Paper elevation={elevation} variant='outlined'>
+                <Box p={0}>{children}</Box>
+            </Paper>
         </Box>
     );
 }
