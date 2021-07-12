@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
@@ -169,11 +169,32 @@ const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
 		}
 	}, [results]);
 
+	const onKey = (e) => {
+		console.log(e.key);
+		if (e.key === 'Enter') {
+			console.log('enter press here! ');
+		}
+	};
+
 	console.log(results);
+
+	const onEsc = (e) => {
+		if (e.keyCode === 27) {
+			setSearchOpen(false);
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('keydown', onEsc, false);
+
+		return () => {
+			document.removeEventListener('keydown', onEsc, false);
+		};
+	}, []);
 
 	return (
 		<ClickAwayListener onClickAway={() => setSearchOpen(false)}>
-			<div className={classes.search} onFocus={() => setSearchOpen(true)}>
+			<div className={classes.search} onFocus={() => setSearchOpen(true)} onKeyPress={onKey}>
 				<div className={classes.searchIcon}>
 					<SearchIcon />
 				</div>
