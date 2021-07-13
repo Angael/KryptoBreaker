@@ -85,7 +85,7 @@ const componentList = [
         ],
     },
     {
-        categoryName: 'Key generation',
+        categoryName: 'Key exchange',
         methods: [
             {
                 component: <DiffieHellman />,
@@ -99,27 +99,27 @@ const componentList = [
         methods: [
             {
                 component: <RSAKlucze />,
-                name: 'Klucze',
+                name: 'Keys generation',
                 keywords: [p, 'q', 'e'],
             },
             {
                 component: <RSASzyfrowanie />,
-                name: 'Szyfrowanie',
+                name: 'Encryption',
                 keywords: [rsaKeys, wiadomość],
             },
             {
                 component: <RSADeszyfrowanie />,
-                name: 'Deszyfrowanie',
+                name: 'Decryption',
                 keywords: [rsaKeys, 'y - szyfrogram'],
             },
             {
                 component: <RSAPodpis />,
-                name: 'Podpis',
+                name: 'Sign',
                 keywords: ['n', 'e', 'd', skrot],
             },
             {
                 component: <RSAPodpisWeryfikacja />,
-                name: 'Weryfikacja podpisu',
+                name: 'Sign verification',
                 keywords: [rsaKeys, skrot, podpis],
             },
         ],

@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { mod } from 'utils/numHelpers';
 
-import useNumberInput from 'pages/diffie-hellman/useNumberInput';
+import useNumberInput from 'utils/useNumberInput';
 import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';

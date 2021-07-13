@@ -16,7 +16,7 @@ import KryptoTable from 'utils/KryptoTable';
 import WordAndSolution from 'utils/WordAndSolution';
 import SolutionPerChar from './SolutionPerChar';
 import AfinicznyKluczLiczenie from './AfinicznyKluczLiczenie';
-import useNumberInput from 'pages/diffie-hellman/useNumberInput';
+import useNumberInput from 'utils/useNumberInput';
 import PaperTitle from '../../styled/PaperTitle';
 
 const affineNumber = (number, [a, b], isEncode, p) => {

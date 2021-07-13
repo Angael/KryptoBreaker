@@ -3,11 +3,11 @@ import { Typography, Box } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import DisplayFormula from './DisplayFormula';
-import useNumberInput from './useNumberInput';
+import useNumberInput from 'utils/useNumberInput';
 import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import { isPrime } from 'utils/numHelpers';
-import PaperTitle from '../../styled/PaperTitle';
+import PaperTitle from 'styled/PaperTitle';
 
 function DiffieHellman() {
     const [p, setP] = useNumberInput(1019);

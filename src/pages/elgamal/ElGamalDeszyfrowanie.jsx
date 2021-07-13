@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import useNumberInput from 'pages/diffie-hellman/useNumberInput';
+import useNumberInput from 'utils/useNumberInput';
 import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import KluczeDisplay from './KluczeDisplay';
 import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';

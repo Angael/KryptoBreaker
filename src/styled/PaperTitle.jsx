@@ -1,10 +1,23 @@
 import React from 'react';
-import { Box, Paper, Typography } from '@material-ui/core';
+import {
+    Box,
+    Paper,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@material-ui/core';
 
-function PaperTitle({ title, children, variant = 'h2', elevation = 2, p = 0 }) {
+function PaperTitle({ title, children, elevation = 2, p = 0 }) {
+    const theme = useTheme();
+    const smallerText = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const variant = smallerText ? 'h4' : 'h2';
+
     return (
-        <Box my={5}>
-            <Typography variant={variant}>{title}</Typography>
+        <Box my={5} component='section'>
+            <header>
+                <Typography variant={variant}>{title}</Typography>
+            </header>
             <Paper elevation={elevation} variant='outlined'>
                 <Box p={p}>{children}</Box>
             </Paper>
