@@ -27,7 +27,6 @@ function RsaKeyInputs({ e, setE, d, setD, n, setN }) {
                             onChange={setE}
                             value={e}
                             type='number'
-                            helperText='Pierwsza wartość klucza 1 - publicznego'
                         />
                     </Box>
                 </Grid>
@@ -41,7 +40,6 @@ function RsaKeyInputs({ e, setE, d, setD, n, setN }) {
                             onChange={setN}
                             value={n}
                             type='number'
-                            helperText='Druga wartość obu kluczy'
                         />
                     </Box>
                 </Grid>
@@ -55,7 +53,6 @@ function RsaKeyInputs({ e, setE, d, setD, n, setN }) {
                             onChange={setD}
                             value={d}
                             type='number'
-                            helperText='Pierwsza wartość klucza 2 - prywatnego'
                         />
                     </Box>
                 </Grid>

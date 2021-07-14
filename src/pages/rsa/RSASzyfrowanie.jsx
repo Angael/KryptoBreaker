@@ -59,8 +59,7 @@ function RSASzyfrowanie() {
                         power={e}
                         modulo={n}
                         variant={'body1'}
-                    />{' '}
-                    = {solutionPow.result}
+                    />
                 </Box>
             </PaperTitle>
 

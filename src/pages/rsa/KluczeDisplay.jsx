@@ -10,10 +10,10 @@ const KluczeDisplay = ({ e, d, n, showPaper = false }) => {
 
     const content = (
         <>
-            <Typography variant={variant}>
+            <Typography variant={variant} style={{ fontWeight: 300 }}>
                 k<sub>1</sub> = (e, n) = ({e}, {n}) - Public
             </Typography>
-            <Typography variant={variant}>
+            <Typography variant={variant} style={{ fontWeight: 300 }}>
                 k<sub>2</sub> = (d, n) = ({d}, {n}) - Private
             </Typography>
         </>
