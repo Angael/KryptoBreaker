@@ -54,7 +54,7 @@ const componentList = [
             { component: <Mod />, name: 'Modulo', keywords: ['modulo'] },
             {
                 component: <CheatSheet />,
-                name: 'Litery na numery',
+                name: 'Letters to numbers',
                 keywords: [],
             },
         ],
@@ -114,12 +114,12 @@ const componentList = [
             },
             {
                 component: <RSAPodpis />,
-                name: 'Sign',
+                name: 'Signature',
                 keywords: ['n', 'e', 'd', skrot],
             },
             {
                 component: <RSAPodpisWeryfikacja />,
-                name: 'Sign verification',
+                name: 'Signature verification',
                 keywords: [rsaKeys, skrot, podpis],
             },
         ],
@@ -129,27 +129,27 @@ const componentList = [
         methods: [
             {
                 component: <ElGamal />,
-                name: 'Klucze',
+                name: 'Keys generation',
                 keywords: [[g, 'α', 'alpha', 'alfa'], p, 't'],
             },
             {
                 component: <ElGamalSzyfrowanie />,
-                name: 'Szyfrowanie',
+                name: 'Encryption',
                 keywords: [elGamalKeys, skrot, ['r', 'randomizer']],
             },
             {
                 component: <ElGamalDeszyfrowanie />,
-                name: 'Deszyfrowanie',
+                name: 'Decryption',
                 keywords: [elGamalKeys, ['y1', 'y'], ['y2', 'y']],
             },
             {
                 component: <ElGamalPodpis />,
-                name: 'Podpis',
+                name: 'Signature',
                 keywords: [elGamalKeys, skrot, ['r', 'randomizer']],
             },
             {
                 component: <ElGamalPodpisWeryfikacja />,
-                name: 'Weryfikacja podpisu',
+                name: 'Signature verification',
                 keywords: [elGamalKeys, skrot, ['u', "u'"], ['s', "s'"]],
             },
         ],
