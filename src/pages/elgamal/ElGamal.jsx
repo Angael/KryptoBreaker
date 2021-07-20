@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
@@ -8,6 +8,7 @@ import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
+import PaperTitle from 'styled/PaperTitle';
 
 function ElGamal() {
     const [g, setG] = useNumberInput(2);
@@ -18,69 +19,92 @@ function ElGamal() {
 
     return (
         <>
-            <Grid container>
-                <Grid item xs={12}>
-                    <Box p={2}>
-                        Alicja chce wygenerować klucze asymetryczne ElGamala. W
-                        tym celu przyjęła wartość <b>p={p}</b> oraz generator{' '}
-                        <b>g={g}</b>.<br />
-                        Wyznacz klucze asymetryczne Alicji dla jej wartości
-                        prywatnej <b>t={t}</b>.
-                    </Box>
-                </Grid>
-                <Grid item xs={4}>
-                    <Box p={2}>
-                        <TextField
-                            label='g albo α'
-                            onChange={setG}
-                            value={g}
-                            type='number'
-                            helperText='Generator'
-                        />
-                    </Box>
-                </Grid>
+            <PaperTitle title='Inputs'>
+                <Grid container>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label='g or α'
+                                onChange={setG}
+                                value={g}
+                                type='number'
+                                helperText='Generator'
+                            />
+                        </Box>
+                    </Grid>
 
-                <Grid item xs={4}>
-                    <Box p={2}>
-                        <TextField
-                            label='p'
-                            onChange={setP}
-                            value={p}
-                            type='number'
-                            helperText='p?'
-                        />
-                    </Box>
-                </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label='p'
+                                onChange={setP}
+                                value={p}
+                                type='number'
+                                helperText='Modulo number'
+                            />
+                        </Box>
+                    </Grid>
 
-                <Grid item xs={4}>
-                    <Box p={2}>
-                        <TextField
-                            label='t'
-                            onChange={setT}
-                            value={t}
-                            type='number'
-                            helperText='Wylosowana wartość pierwsza'
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label='t'
+                                onChange={setT}
+                                value={t}
+                                type='number'
+                                helperText='Random private variable'
+                            />
+                        </Box>
+                    </Grid>
+                </Grid>
+            </PaperTitle>
+            <PaperTitle title='Equation' p={2}>
+                <Box
+                    display='flex'
+                    alignContent='center'
+                    justifyContent='center'
+                >
+                    <Typography variant={'h4'}>
+                        {'β = '}
+                        <DisplayFormula
+                            number={'α'}
+                            modulo={'p'}
+                            power={'t'}
+                            variant={'h4'}
                         />
-                    </Box>
+                        {' = '}
+                        <DisplayFormula
+                            number={g}
+                            modulo={p}
+                            power={t}
+                            variant={'h4'}
+                        />
+                    </Typography>
+                </Box>
+            </PaperTitle>
+            <PaperTitle title='Calculation'>
+                <Grid container justify='center'>
+                    <Grid item xs={12} sm={8} md={6}>
+                        <Box p={2}>
+                            <FastPowerTable stepsObj={solutionPowA} />
+                        </Box>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Box p={2} pb={2} textAlign='center'>
-                <DisplayFormula
-                    number={g}
-                    modulo={p}
-                    power={t}
-                    variant={'h4'}
-                />
-            </Box>
-            <Grid container justify='center'>
-                <Grid item xs={12} sm={8} md={6}>
-                    <FastPowerTable stepsObj={solutionPowA} />
-                </Grid>
-            </Grid>
+            </PaperTitle>
 
-            <Grid item xs={12}>
-                <KluczeDisplay p={p} g={g} beta={solutionPowA.result} t={t} />
-            </Grid>
+            <KluczeDisplay
+                p={p}
+                alpha={g}
+                beta={solutionPowA.result}
+                t={t}
+                showPaper
+            />
         </>
     );
 }
