@@ -94,42 +94,52 @@ function ElGamalSzyfrowanie() {
                 </Box>
             </PaperTitle>
 
-            <Grid container>
-                <Grid item xs={6}>
-                    <Box p={2} align='center'>
-                        <Typography variant='h4' gutterBottom>
-                            Liczenie y<sub>1</sub>
-                        </Typography>
-                        <DisplayFormula number={alpha} power={r} modulo={p} />
-                        <FastPowerTable stepsObj={solutionPowY1} />{' '}
-                        <Box p={2}>
-                            y<sub>1</sub>= {y1}
+            <PaperTitle title={'Calculation'}>
+                <Grid container>
+                    <Grid item xs={6}>
+                        <Box p={2} align='center'>
+                            <Typography variant='h4' gutterBottom>
+                                y<sub>1</sub>
+                            </Typography>
+                            <DisplayFormula
+                                number={alpha}
+                                power={r}
+                                modulo={p}
+                            />
+                            <FastPowerTable stepsObj={solutionPowY1} />{' '}
+                            <Box p={2}>
+                                y<sub>1</sub>= {y1}
+                            </Box>
                         </Box>
-                    </Box>
-                </Grid>
-                <Grid item xs={6}>
-                    <Box p={2} align='center'>
-                        <Typography variant='h4' gutterBottom>
-                            Liczenie y<sub>2</sub>
-                        </Typography>
-                        {x} *{' '}
-                        <DisplayFormula number={beta} power={r} modulo={p} />
-                        <FastPowerTable stepsObj={solutionPowY2} />
-                        <Box p={2}>
-                            y<sub>2</sub> = {x} * {solutionPowY2.result} mod {p}{' '}
-                            = {y2}
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Box p={2} align='center'>
+                            <Typography variant='h4' gutterBottom>
+                                y<sub>2</sub>
+                            </Typography>
+                            {x} *{' '}
+                            <DisplayFormula
+                                number={beta}
+                                power={r}
+                                modulo={p}
+                            />
+                            <FastPowerTable stepsObj={solutionPowY2} />
+                            <Box p={2}>
+                                y<sub>2</sub> = {x} * {solutionPowY2.result} mod{' '}
+                                {p} = {y2}
+                            </Box>
                         </Box>
-                    </Box>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <Box p={2}>
-                        <Typography variant='h4' gutterBottom align='center'>
-                            Wynik = (y<sub>1</sub>, y<sub>2</sub>) = ({y1}, {y2}
-                            )
-                        </Typography>
-                    </Box>
-                </Grid>
-            </Grid>
+            </PaperTitle>
+
+            <PaperTitle title={'Solution'}>
+                <Box p={2}>
+                    <Typography variant='h4' gutterBottom align='center'>
+                        (y<sub>1</sub>, y<sub>2</sub>) = ({y1}, {y2})
+                    </Typography>
+                </Box>
+            </PaperTitle>
         </>
     );
 }
