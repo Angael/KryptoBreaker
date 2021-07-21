@@ -11,11 +11,15 @@ import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 import { mod } from 'utils/numHelpers';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import { useTheme } from '@material-ui/core/styles';
+import ElGamalKeyInputs, {
+    useElgamalKeysInputs,
+} from 'pages/elgamal/ElGamalKeyInputs';
+import PaperTitle from 'styled/PaperTitle';
 
 function ElGamalDeszyfrowanie() {
-    const [p, setP] = useNumberInput(1619);
-    const [alpha, setAlpha] = useNumberInput(2);
-    const [t, setT] = useNumberInput(937);
+    const rsaInputs = useElgamalKeysInputs();
+    const { p, alpha, t } = rsaInputs;
+
     const [y1, setY1] = useNumberInput(130);
     const [y2, setY2] = useNumberInput(414);
 
@@ -40,146 +44,92 @@ function ElGamalDeszyfrowanie() {
 
     return (
         <>
-            <Grid container>
-                <Grid item xs={12}>
-                    <Grid item xs={12}>
-                        <KluczeDisplay p={p} g={alpha} beta={beta} t={t} />
+            <ElGamalKeyInputs {...rsaInputs} />
+
+            <PaperTitle title='Inputs'>
+                <Grid container>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label={
+                                    <>
+                                        y<sub>1</sub>
+                                    </>
+                                }
+                                onChange={setY1}
+                                value={y1}
+                                type='number'
+                                helperText='Encrypted message'
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label={
+                                    <>
+                                        y<sub>2</sub>
+                                    </>
+                                }
+                                onChange={setY2}
+                                value={y2}
+                                type='number'
+                                helperText='Encrypted message'
+                            />
+                        </Box>
                     </Grid>
                 </Grid>
+            </PaperTitle>
 
-                <Grid item xs={3}>
-                    <Box p={2}>
-                        <TextField
-                            label='α'
-                            onChange={setAlpha}
-                            value={alpha}
-                            type='number'
-                            helperText='Generator'
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={3}>
-                    <Box p={2}>
-                        <TextField
-                            label='p'
-                            onChange={setP}
-                            value={p}
-                            type='number'
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={3}>
-                    <Box p={2}>
-                        <TextField
-                            label='β'
-                            disabled
-                            value={solutionPowA.result}
-                            type='number'
-                            helperText='Wygenerowana liczba'
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={3}>
-                    <Box p={2}>
-                        <TextField
-                            label='t'
-                            onChange={setT}
-                            value={t}
-                            type='number'
-                            helperText='Wylosowana wartość pierwsza'
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={12} align='center'>
-                    <Box p={2}>
-                        <Typography variant='h4'>Opis zadania:</Typography>
-                        <Typography>
-                            Alicja otrzymała od Boba szyfrogram Y=({y1}, {y2})
-                        </Typography>
-                        <Typography>
-                            {' '}
-                            Obliczyć przez Alicję wartość tekstu jawnego x.
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={6} align='right'>
-                    <Box p={2}>
-                        <TextField
-                            label={
-                                <>
-                                    y<sub>1</sub>
-                                </>
-                            }
-                            onChange={setY1}
-                            value={y1}
-                            type='number'
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={6} align='left'>
-                    <Box p={2}>
-                        <TextField
-                            label={
-                                <>
-                                    y<sub>2</sub>
-                                </>
-                            }
-                            onChange={setY2}
-                            value={y2}
-                            type='number'
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={12} align='center'>
-                    <Box m={1} pt={2} display='inline-block'>
-                        <Paper variant='outlined'>
-                            <Box m={2}>
-                                <Typography
-                                    variant={isPhone ? 'body1' : 'h4'}
-                                    align='center'
-                                >
-                                    X = P = y<sub>2</sub>* y<sub>1</sub>
-                                    <sup>p - 1 - t</sup> mod p
-                                </Typography>
+            <PaperTitle title={'Equation'}>
+                <Box m={2}>
+                    <Typography
+                        variant={isPhone ? 'body1' : 'h4'}
+                        align='center'
+                    >
+                        X = P = y<sub>2</sub>* y<sub>1</sub>
+                        <sup>p - 1 - t</sup> mod p
+                    </Typography>
+                </Box>
+                <Box m={2}>
+                    <Typography
+                        variant={isPhone ? 'body1' : 'h4'}
+                        align='center'
+                    >
+                        X = P = {y2} * {y1}
+                        <sup>{p - 1 - t}</sup> mod {p}
+                    </Typography>
+                </Box>
+            </PaperTitle>
+
+            <PaperTitle title={'Calculation'}>
+                <Grid container justify={'center'}>
+                    <Grid item xs={12} sm={8} md={6} align='center'>
+                        <Box py={2} align='center'>
+                            {y2} *{' '}
+                            <DisplayFormula
+                                number={y1}
+                                modulo={p}
+                                power={power}
+                            />
+                            <FastPowerTable stepsObj={solutionPowX} />{' '}
+                            <Box p={2}>
+                                x = {y2} * {solutionPowX.result} mod {p} = {x}
                             </Box>
-                        </Paper>
-                    </Box>
-                    <Box m={1} pb={2} display='inline-block'>
-                        <Paper variant='outlined'>
-                            <Box m={2}>
-                                <Typography
-                                    variant={isPhone ? 'body1' : 'h4'}
-                                    align='center'
-                                >
-                                    X = P = {y2} * {y1}
-                                    <sup>{p - 1 - t}</sup> mod {p}
-                                </Typography>
-                            </Box>
-                        </Paper>
-                    </Box>
-                </Grid>
-                <Grid item xs={0} sm={2} md={3}></Grid>
-                <Grid item xs={12} sm={8} md={6} align='center'>
-                    <Box py={2} align='center'>
-                        <Typography variant='h4' gutterBottom>
-                            Liczenie x (wiadomości)
-                        </Typography>
-                        {y2} *{' '}
-                        <DisplayFormula number={y1} modulo={p} power={power} />
-                        <FastPowerTable stepsObj={solutionPowX} />{' '}
-                        <Box p={2}>
-                            x = {y2} * {solutionPowX.result} mod {p}
                         </Box>
-                    </Box>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <Box p={2}>
-                        <Typography variant='h4' gutterBottom align='center'>
-                            X = {x}
-                        </Typography>
-                    </Box>
-                </Grid>
-            </Grid>
+            </PaperTitle>
+
+            <PaperTitle title={'Solution'} p={2}>
+                <Typography variant='h4' align='center'>
+                    X = {x}
+                </Typography>
+            </PaperTitle>
         </>
     );
 }
