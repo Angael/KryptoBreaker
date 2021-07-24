@@ -96,7 +96,7 @@ function ElGamalSzyfrowanie() {
 
             <PaperTitle title={'Calculation'}>
                 <Grid container>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                         <Box p={2} align='center'>
                             <Typography variant='h4' gutterBottom>
                                 y<sub>1</sub>
@@ -112,7 +112,7 @@ function ElGamalSzyfrowanie() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                         <Box p={2} align='center'>
                             <Typography variant='h4' gutterBottom>
                                 y<sub>2</sub>
