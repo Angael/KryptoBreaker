@@ -12,10 +12,6 @@ export const useElgamalKeysInputs = () => {
     const [alpha, setAlpha] = useNumberInput(2);
     const [t, setT] = useNumberInput(937);
 
-    return { p, setP, alpha, setAlpha, t, setT };
-};
-
-function ElGamalKeyInputs({ p, setP, alpha, setAlpha, t, setT }) {
     const solutionPowA = useMemo(
         () => getFastPowerMod(alpha, t, p),
         [p, alpha, t]
@@ -23,6 +19,10 @@ function ElGamalKeyInputs({ p, setP, alpha, setAlpha, t, setT }) {
 
     const beta = solutionPowA.result;
 
+    return { p, setP, alpha, setAlpha, t, setT, beta };
+};
+
+function ElGamalKeyInputs({ p, setP, alpha, setAlpha, t, setT, beta }) {
     return (
         <PaperTitle title='Enter keys'>
             <Grid container>

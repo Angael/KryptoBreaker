@@ -9,12 +9,14 @@ import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
 import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
 import KluczeDisplay from './KluczeDisplay';
+import ElGamalKeyInputs, {
+    useElgamalKeysInputs,
+} from 'pages/elgamal/ElGamalKeyInputs';
 
 function ElGamalPodpisWeryfikacja() {
-    const [p, setP] = useNumberInput(1619);
-    const [alpha, setAlpha] = useNumberInput(2);
-    const [beta, setBeta] = useNumberInput(1454);
-    const [t, setT] = useNumberInput(937);
+    const rsaInputs = useElgamalKeysInputs();
+    const { p, alpha, beta, t } = rsaInputs;
+
     const [h, setH] = useNumberInput(357);
 
     const [u, setU] = useNumberInput(1310);
@@ -35,62 +37,11 @@ function ElGamalPodpisWeryfikacja() {
 
     return (
         <>
+            <ElGamalKeyInputs {...rsaInputs} />
+
             <Grid container>
                 <Box>
                     <Grid container>
-                        <Grid item xs={12}>
-                            <Grid item xs={12}>
-                                <KluczeDisplay
-                                    p={p}
-                                    g={alpha}
-                                    beta={beta}
-                                    t={t}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Box p={2}>
-                                <TextField
-                                    label='α'
-                                    onChange={setAlpha}
-                                    value={alpha}
-                                    type='number'
-                                    helperText='Generator'
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Box p={2}>
-                                <TextField
-                                    label='p'
-                                    onChange={setP}
-                                    value={p}
-                                    type='number'
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Box p={2}>
-                                <TextField
-                                    label='β'
-                                    disabled
-                                    value={beta}
-                                    type='number'
-                                    helperText='Wygenerowana liczba'
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Box p={2}>
-                                <TextField
-                                    label='t'
-                                    onChange={setT}
-                                    value={t}
-                                    type='number'
-                                    helperText='Wylosowana wartość pierwsza'
-                                />
-                            </Box>
-                        </Grid>
                         <Grid item xs={12}>
                             <Box p={2}>
                                 Bob otrzymał od Alicji wiadomość, której skrót

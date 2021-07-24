@@ -72,91 +72,64 @@ function ElGamalPodpis() {
             {/*</Box>*/}{' '}
             <PaperTitle title={'Equation'}>
                 <Grid container justify={'center'}>
-                    <Grid item xs={12} sm={8} md={6} align='center'>
+                    <Grid item xs={12} align='center'>
                         <Box p={2} pb={2} textAlign='center'>
                             <Typography variant={'h4'}>
-                                Sign: (u, s) = (,) = (
+                                Signature = (u, s)
                             </Typography>
+                            <Typography variant='h4'>
+                                u ={' '}
+                                <DisplayFormula
+                                    number={'α'}
+                                    modulo={'p'}
+                                    power={'r'}
+                                    variant={'h4'}
+                                />
+                            </Typography>
+                            <Typography variant={'h4'}>
+                                s = r<sup>-1</sup> * (h - t * u) mod (p -1)
+                            </Typography>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </PaperTitle>
+            <PaperTitle title={'Calculate "u"'}>
+                <Grid container justify={'center'}>
+                    <Grid item xs={12} sm={8} md={6} align='center'>
+                        <Box p={2} pb={2} textAlign='center'>
                             <DisplayFormula
                                 number={alpha}
                                 modulo={p}
                                 power={r}
                                 variant={'h4'}
                             />
-                            <Typography variant={'h4'}> , )</Typography>
+                        </Box>
+                        <FastPowerTable stepsObj={solutionPowA} />
+                        <Box p={2} textAlign='center'>
+                            u = {solutionPowA.result}
                         </Box>
                     </Grid>
                 </Grid>
             </PaperTitle>
-            <PaperTitle title={'Calculation'}>
-                <Grid container justify={'center'}>
-                    <Grid item xs={12} sm={8} md={6} align='center'></Grid>
-                </Grid>
-            </PaperTitle>
-            <Grid container>
-                <Box>
-                    <Box p={2} pb={2} textAlign='center'>
-                        <DisplayFormula
-                            number={alpha}
-                            modulo={p}
-                            power={r}
-                            variant={'h4'}
-                        />
+            <PaperTitle title={'Calculate "s"'}>
+                <Box py={2} align='center'>
+                    <OdwrotnoscTable a={r} b={p - 1} />
+                    <Box p={2}>
+                        <Typography>
+                            s = ({inverted} * ({h} - {t} * {solutionPowA.result}
+                            )) mod {p - 1} = {s}
+                        </Typography>
+                        <Typography>s = {s}</Typography>
                     </Box>
-                    <Grid container justify='center'>
-                        <Grid item xs={12} sm={8} md={6}>
-                            <FastPowerTable stepsObj={solutionPowA} />
-                        </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} justify='center'>
-                        <Box py={2}>
-                            <Box p={2}>
-                                <Typography variant='h3' align='center' m={2}>
-                                    Generowanie podpisu:
-                                </Typography>
-                            </Box>
-                            <Box py={2} align='center'>
-                                <OdwrotnoscTable a={r} b={p - 1} />
-                            </Box>
-                            <Box p={2}>
-                                <Typography component='p'>
-                                    <b>u</b> = 
-                                    <DisplayFormula
-                                        number={'α'}
-                                        modulo={'p'}
-                                        power={'r'}
-                                        variant={'body1'}
-                                    />{' '}
-                                    = 
-                                    <DisplayFormula
-                                        number={alpha}
-                                        power={r}
-                                        modulo={p}
-                                        variant={'body1'}
-                                    />{' '}
-                                    = 
-                                    {u}
-                                </Typography>
-                                <Typography component='p'>
-                                    <b>s</b> = r<sup>-1</sup> * (h - t * u) mod
-                                    (p -1) = ({inverted} * ({h} - {t} *{' '}
-                                    {solutionPowA.result})) mod {p - 1} = {s}
-                                </Typography>
-                            </Box>
-                        </Box>
-
-                        <Box p={2} pt={0} align='center'>
-                            <Typography variant='body1' component='p'>
-                                Podpis: <b>(u, s)</b> ={' '}
-                                <b>
-                                    ({u}, {s})
-                                </b>
-                            </Typography>
-                        </Box>
-                    </Grid>
                 </Box>
-            </Grid>
+            </PaperTitle>
+            <PaperTitle title={'Solution'}>
+                <Box p={2} align='center'>
+                    <Typography variant='body1' component='p'>
+                        Signature (u, s) = ({u}, {s})
+                    </Typography>
+                </Box>
+            </PaperTitle>
         </>
     );
 }
