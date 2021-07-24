@@ -12,6 +12,7 @@ import KluczeDisplay from './KluczeDisplay';
 import ElGamalKeyInputs, {
     useElgamalKeysInputs,
 } from 'pages/elgamal/ElGamalKeyInputs';
+import PaperTitle from 'styled/PaperTitle';
 
 function ElGamalPodpisWeryfikacja() {
     const rsaInputs = useElgamalKeysInputs();
@@ -39,82 +40,88 @@ function ElGamalPodpisWeryfikacja() {
         <>
             <ElGamalKeyInputs {...rsaInputs} />
 
+            <PaperTitle title='Inputs'>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Box p={2}>
+                            Bob otrzymał od Alicji wiadomość, której skrót
+                            wynosi h={h}, oraz podpis cyfrowy ELGamala (u, s) =
+                            ({u}, {s}). Zweryfikuj przez Boba otrzymany od
+                            Alicji podpis cyfrowy.
+                        </Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label="h'"
+                                onChange={setH}
+                                value={h}
+                                type='number'
+                                helperText='skrót wiadomości'
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label="u'"
+                                onChange={setU}
+                                value={u}
+                                type='number'
+                                helperText='pierwsza wartość z podpisu'
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant='outlined'
+                                label="s'"
+                                onChange={setS}
+                                value={s}
+                                type='number'
+                                helperText='druga wartość z podpisu'
+                            />
+                        </Box>
+                    </Grid>
+                </Grid>
+            </PaperTitle>
+
+            <PaperTitle title={'Equation'} p={2}>
+                <Typography variant='h4' align='center'>
+                    f ={' '}
+                    <DisplayFormula
+                        number={'α'}
+                        power={'h'}
+                        modulo={'p'}
+                        variant={'h4'}
+                    />
+                </Typography>
+            </PaperTitle>
+
+            <PaperTitle title={'Calculation'} p={2}>
+                <Grid container justify={'center'}>
+                    <Grid item xs={12} sm={8} md={6} align='center'>
+                        <Box p={2} pb={2} textAlign='center'>
+                            <DisplayFormula
+                                number={alpha}
+                                power={h}
+                                modulo={p}
+                                variant={'h5'}
+                            />
+                            <FastPowerTable stepsObj={solutionPowF} />
+                        </Box>
+                    </Grid>
+                </Grid>
+            </PaperTitle>
+
             <Grid container>
                 <Box>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <Box p={2}>
-                                Bob otrzymał od Alicji wiadomość, której skrót
-                                wynosi h={h}, oraz podpis cyfrowy ELGamala (u,
-                                s) = ({u}, {s}). Zweryfikuj przez Boba otrzymany
-                                od Alicji podpis cyfrowy.
-                            </Box>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Box p={2}>
-                                <TextField
-                                    label="h'"
-                                    onChange={setH}
-                                    value={h}
-                                    type='number'
-                                    helperText='skrót wiadomości'
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Box p={2}>
-                                <TextField
-                                    label="u'"
-                                    onChange={setU}
-                                    value={u}
-                                    type='number'
-                                    helperText='pierwsza wartość z podpisu'
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Box p={2}>
-                                <TextField
-                                    label="s'"
-                                    onChange={setS}
-                                    value={s}
-                                    type='number'
-                                    helperText='druga wartość z podpisu'
-                                />
-                            </Box>
-                        </Grid>
-                    </Grid>
-                    <Box p={2} pb={2} textAlign='center'>
-                        <Grid item xs={12} justify='center'>
-                            <Box p={2} align='center'>
-                                <Typography variant='h3'>
-                                    Weryfikacja podpisu:
-                                </Typography>
-                                <Typography variant='body1' component='p'>
-                                    f ={' '}
-                                    <DisplayFormula
-                                        number={'α'}
-                                        power={'h'}
-                                        modulo={'p'}
-                                        variant={'body1'}
-                                    />{' '}
-                                    = {solutionPowF.result}
-                                </Typography>
-                                <DisplayFormula
-                                    number={alpha}
-                                    power={h}
-                                    modulo={p}
-                                    variant={'h5'}
-                                />
-                            </Box>
-                        </Grid>
-                    </Box>
-                    <Grid container justify='center'>
-                        <Grid item xs={12} sm={8} md={6}>
-                            <FastPowerTable stepsObj={solutionPowF} />
-                        </Grid>
-                    </Grid>
-
                     <Box p={2} align='center'>
                         <Typography variant='body1' component='p'>
                             <b>
