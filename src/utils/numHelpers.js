@@ -33,7 +33,7 @@ export const modInverseAlgorithm = (given_a, given_b) => {
 
 // odwrotnosc modularna PROSTY SPOSOB, CZASAMI NIE DZIALA np. dla a=215 n=25
 export const modInverse = (a, m = 26) => {
-    return modInverseAlgorithm(a, m)[1];
+    return modInverseAlgorithm(a, m).result;
 };
 
 // OLD BAD PROSTY SPOSOB, CZASAMI NIE DZIALA np. dla a=215 n=25
