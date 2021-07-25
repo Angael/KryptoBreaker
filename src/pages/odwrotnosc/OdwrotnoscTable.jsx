@@ -11,7 +11,7 @@ import {
     Tooltip,
 } from '@material-ui/core';
 
-import { mod } from '../../utils/numHelpers';
+import { mod, modInverseAlgorithm } from '../../utils/numHelpers';
 import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles';
 
 const cellCss = css`
@@ -46,35 +46,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function OdwrotnoscTable({ a, b }) {
-    const getValues = (given_a, given_b) => {
-        const rows = [];
-
-        let i = 0;
-        let r, b, u, v;
-        while (r != 0) {
-            const prevRow = i === 0 ? null : rows[i - 1];
-            const a = prevRow ? prevRow['b'] : given_a;
-            b = prevRow ? prevRow['r'] : given_b;
-            u = prevRow ? prevRow['uprim'] - prevRow['q'] * prevRow['u'] : 0;
-            const uprim = prevRow ? prevRow['u'] : 1;
-            v = prevRow ? prevRow['vprim'] - prevRow['q'] * prevRow['v'] : 1;
-            const vprim = prevRow ? prevRow['v'] : 0;
-            const q = Math.floor(a / b);
-            r = mod(a, b);
-
-            rows.push({ u, uprim, v, vprim, a, b, q, r });
-
-            i++;
-            if (isNaN(r)) {
-                break;
-            }
-        }
-
-        return [rows, u];
-    };
-
-    const [values, inverted] = getValues(a, b);
-    values.shift(); // dont ask
+    // TODO: It would be nice if this was given by props, so its not calculated 2 times
+    const {
+        steps: values,
+        result,
+        resultBeforeMod,
+    } = modInverseAlgorithm(a, b);
 
     const theme = useTheme();
     const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
@@ -173,12 +150,12 @@ function OdwrotnoscTable({ a, b }) {
                 <Box py={1}>
                     <Typography variant='body1'>
                         {a}
-                        <sup>-1</sup> mod {b} = {inverted} mod {b} ={' '}
-                        {mod(inverted, b)}
+                        <sup>-1</sup> mod {b} = {resultBeforeMod} mod {b} ={' '}
+                        {result}
                     </Typography>
                     <Typography variant='h5'>
                         {a}
-                        <sup>-1</sup> mod {b} = {mod(inverted, b)}
+                        <sup>-1</sup> mod {b} = {result}
                     </Typography>
                 </Box>
                 <Box>
@@ -186,8 +163,7 @@ function OdwrotnoscTable({ a, b }) {
                         <span className={noSelect}>
                             Double checking result of modular inversion:{' '}
                         </span>
-                        {a} * {mod(inverted, b)} mod {b} ={' '}
-                        {mod(a * mod(inverted, b), b)}
+                        {a} * {result} mod {b} = {mod(a * result, b)}
                     </Typography>
                 </Box>
             </>

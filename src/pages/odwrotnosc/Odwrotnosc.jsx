@@ -1,18 +1,18 @@
-import { Typography, Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
 import useNumberInput from 'utils/useNumberInput';
 import OdwrotnoscTable from './OdwrotnoscTable';
 import PaperTitle from 'styled/PaperTitle';
-import { modInverse } from 'utils/numHelpers';
+import { modInverseAlgorithm } from 'utils/numHelpers';
 import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 
 function Odwrotnosc() {
     const [a, setA] = useNumberInput(215);
     const [n, setN] = useNumberInput(25);
 
-    const solution = modInverse(a, n);
+    const { steps, result, resultBeforeMod } = modInverseAlgorithm(a, n);
 
     return (
         <>
@@ -55,7 +55,7 @@ function Odwrotnosc() {
                             power={-1}
                             variant={'h5'}
                         />{' '}
-                        = {solution}
+                        = {result}
                     </Typography>
                 </Box>
             </PaperTitle>
