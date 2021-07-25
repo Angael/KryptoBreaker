@@ -23,7 +23,7 @@ function Odwrotnosc() {
                             <TextField
                                 variant={'outlined'}
                                 fullWidth
-                                label='Liczba'
+                                label='Number'
                                 type='number'
                                 onChange={setA}
                                 value={a}
@@ -35,7 +35,7 @@ function Odwrotnosc() {
                             <TextField
                                 variant={'outlined'}
                                 fullWidth
-                                label='modulo'
+                                label='Modulo'
                                 placeholder={26}
                                 type='number'
                                 onChange={setN}
@@ -47,7 +47,7 @@ function Odwrotnosc() {
             </PaperTitle>
 
             <PaperTitle title={'Solution'}>
-                <Box p={2}>
+                <Box textAlign={'center'} p={2}>
                     <Typography variant={'h5'}>
                         <DisplayFormula
                             number={a}

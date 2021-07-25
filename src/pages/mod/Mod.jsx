@@ -6,6 +6,7 @@ import { mod } from 'utils/numHelpers';
 
 import useNumberInput from 'utils/useNumberInput';
 import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
+import PaperTitle from 'styled/PaperTitle';
 
 function Mod() {
     const [num, setNum] = useNumberInput(2);
@@ -15,41 +16,49 @@ function Mod() {
 
     return (
         <>
-            <Grid container>
-                <Grid item xs={6}>
-                    <Box p={2}>
-                        <TextField
-                            label='Number'
-                            onChange={setNum}
-                            value={num}
-                            type='number'
-                        />
-                    </Box>
+            <PaperTitle title={'Inputs'}>
+                <Grid container>
+                    <Grid item xs={6} sm={4}>
+                        <Box p={2}>
+                            {' '}
+                            <TextField
+                                fullWidth
+                                variant={'outlined'}
+                                label='Number'
+                                onChange={setNum}
+                                value={num}
+                                type='number'
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={6} sm={4}>
+                        <Box p={2}>
+                            <TextField
+                                fullWidth
+                                variant={'outlined'}
+                                label='Modulo'
+                                onChange={setModulo}
+                                value={modulo}
+                                type='number'
+                            />
+                        </Box>
+                    </Grid>
                 </Grid>
+            </PaperTitle>
 
-                <Grid item xs={6}>
-                    <Box p={2}>
-                        <TextField
-                            label='Modulo'
-                            onChange={setModulo}
-                            value={modulo}
-                            type='number'
-                        />
-                    </Box>
-                </Grid>
-            </Grid>
-            <Box p={2} pb={2} textAlign='center'>
-                <DisplayFormula
-                    number={num}
-                    power={''}
-                    modulo={modulo}
-                    variant={'h4'}
-                />
-                <Typography variant={'h4'} display='inline'>
-                    {' '}
-                    = {result}
-                </Typography>
-            </Box>
+            <PaperTitle title={'Solution'}>
+                <Box textAlign={'center'} p={2}>
+                    <Typography variant={'h5'}>
+                        <DisplayFormula
+                            number={num}
+                            power={''}
+                            modulo={modulo}
+                            variant={'h5'}
+                        />{' '}
+                        = {result}
+                    </Typography>
+                </Box>
+            </PaperTitle>
         </>
     );
 }
