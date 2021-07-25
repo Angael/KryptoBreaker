@@ -1,12 +1,10 @@
 import { useMemo } from 'react';
-import { Typography, Box, useMediaQuery } from '@material-ui/core';
+import { Box, Typography, useMediaQuery } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 import useNumberInput from 'utils/useNumberInput';
 import getFastPowerMod from 'utils/fast-power-table/getFastPowerMod';
-import KluczeDisplay from './KluczeDisplay';
 import DisplayFormula from 'pages/diffie-hellman/DisplayFormula';
 import { mod } from 'utils/numHelpers';
 import FastPowerTable from 'utils/fast-power-table/FastPowerTable';
@@ -135,7 +133,7 @@ function ElGamalSzyfrowanie() {
 
             <PaperTitle title={'Solution'}>
                 <Box p={2}>
-                    <Typography variant='h4' gutterBottom align='center'>
+                    <Typography variant='h4' align='center'>
                         (y<sub>1</sub>, y<sub>2</sub>) = ({y1}, {y2})
                     </Typography>
                 </Box>

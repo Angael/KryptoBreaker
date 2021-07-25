@@ -33,8 +33,8 @@ function ElGamalPodpisWeryfikacja() {
     );
     const solutionPowRight = useMemo(() => getFastPowerMod(u, s, p), [p, u, s]);
 
-    const g = solutionPowF.result;
-    const f = mod(solutionPowLeft.result * solutionPowRight.result, p);
+    const f = solutionPowF.result;
+    const g = mod(solutionPowLeft.result * solutionPowRight.result, p);
 
     return (
         <>
@@ -42,14 +42,14 @@ function ElGamalPodpisWeryfikacja() {
 
             <PaperTitle title='Inputs'>
                 <Grid container>
-                    <Grid item xs={12}>
-                        <Box p={2}>
-                            Bob otrzymał od Alicji wiadomość, której skrót
-                            wynosi h={h}, oraz podpis cyfrowy ELGamala (u, s) =
-                            ({u}, {s}). Zweryfikuj przez Boba otrzymany od
-                            Alicji podpis cyfrowy.
-                        </Box>
-                    </Grid>
+                    {/*<Grid item xs={12}>*/}
+                    {/*    <Box p={2}>*/}
+                    {/*        Bob otrzymał od Alicji wiadomość, której skrót*/}
+                    {/*        wynosi h={h}, oraz podpis cyfrowy ELGamala (u, s) =*/}
+                    {/*        ({u}, {s}). Zweryfikuj przez Boba otrzymany od*/}
+                    {/*        Alicji podpis cyfrowy.*/}
+                    {/*    </Box>*/}
+                    {/*</Grid>*/}
                     <Grid item xs={3}>
                         <Box p={2}>
                             <TextField
@@ -59,7 +59,7 @@ function ElGamalPodpisWeryfikacja() {
                                 onChange={setH}
                                 value={h}
                                 type='number'
-                                helperText='skrót wiadomości'
+                                helperText='Message hash'
                             />
                         </Box>
                     </Grid>
@@ -72,7 +72,7 @@ function ElGamalPodpisWeryfikacja() {
                                 onChange={setU}
                                 value={u}
                                 type='number'
-                                helperText='pierwsza wartość z podpisu'
+                                helperText={`First signature's value`}
                             />
                         </Box>
                     </Grid>
@@ -85,14 +85,14 @@ function ElGamalPodpisWeryfikacja() {
                                 onChange={setS}
                                 value={s}
                                 type='number'
-                                helperText='druga wartość z podpisu'
+                                helperText={`Second signature's value`}
                             />
                         </Box>
                     </Grid>
                 </Grid>
             </PaperTitle>
 
-            <PaperTitle title={'Equation'} p={2}>
+            <PaperTitle title={'Equations'} p={2}>
                 <Typography variant='h4' align='center'>
                     f ={' '}
                     <DisplayFormula
@@ -102,9 +102,28 @@ function ElGamalPodpisWeryfikacja() {
                         variant={'h4'}
                     />
                 </Typography>
+                <Typography variant='h4' align='center'>
+                    g = β<sup>u'</sup> * u'<sup>s'</sup> mod p ={' '}
+                    <DisplayFormula
+                        number={'β'}
+                        power={"u'"}
+                        modulo={'p'}
+                        variant={'h4'}
+                    />{' '}
+                    {'* '}
+                    <DisplayFormula
+                        number={"u'"}
+                        power={"s'"}
+                        modulo={'p'}
+                        variant={'h4'}
+                    />
+                </Typography>
+                <Typography variant='h4' align='center'>
+                    If signature is correct then f = g
+                </Typography>
             </PaperTitle>
 
-            <PaperTitle title={'Calculation'} p={2}>
+            <PaperTitle title={'Calculate "f"'}>
                 <Grid container justify={'center'}>
                     <Grid item xs={12} sm={8} md={6} align='center'>
                         <Box p={2} pb={2} textAlign='center'>
@@ -115,69 +134,85 @@ function ElGamalPodpisWeryfikacja() {
                                 variant={'h5'}
                             />
                             <FastPowerTable stepsObj={solutionPowF} />
+                            <Box p={2} textAlign='center'>
+                                f = {solutionPowF.result}
+                            </Box>
                         </Box>
                     </Grid>
                 </Grid>
             </PaperTitle>
 
-            <Grid container>
-                <Box>
-                    <Box p={2} align='center'>
-                        <Typography variant='body1' component='p'>
-                            <b>
-                                wzór: (a * b) mod c = (a mod c * b mod c) mod c
-                            </b>
-                        </Typography>
-
-                        <Typography variant='body1' component='p'>
-                            g = β<sup>u'</sup> * u'<sup>s'</sup> mod p = 
-                            <DisplayFormula
-                                number={'β'}
-                                power={"u'"}
-                                modulo={'p'}
-                                variant={'body1'}
-                            />{' '}
-                            * 
-                            <DisplayFormula
-                                number={"u'"}
-                                power={"s'"}
-                                modulo={'p'}
-                                variant={'body1'}
-                            />
-                        </Typography>
-                    </Box>
-
-                    <Box p={2} align='center'>
-                        <Grid container justify='center' spacing={2}>
-                            <Grid item xs={6}>
-                                <FastPowerTable stepsObj={solutionPowLeft} />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <FastPowerTable stepsObj={solutionPowRight} />
-                            </Grid>
-                        </Grid>
-                    </Box>
-
-                    <Box p={2} align='center'>
-                        <Typography variant='body1' component='p'>
-                            g =  ({solutionPowLeft.result} *{' '}
-                            {solutionPowRight.result}) mod {p} = 
-                            {solutionPowLeft.result *
-                                solutionPowRight.result}{' '}
-                            mod {p} {g == f ? '=' : '≠'} {f}
-                        </Typography>
-                        <Typography variant='body1' component='p'>
-                            f {g == f ? '=' : '≠'} g
-                        </Typography>
-                        <Typography variant='body1' component='p'>
-                            {f} {g == f ? '=' : '≠'} {g}
-                        </Typography>
-                        <Typography variant='body1' component='p'>
-                            <b>Podpis {g == f ? 'jest' : 'nie jest'} zgodny</b>
-                        </Typography>
-                    </Box>
+            <PaperTitle title={'Calculate "g"'}>
+                <Grid container>
+                    <Grid item xs={12} sm={6}>
+                        <Box p={2} align='center'>
+                            <Typography gutterBottom>
+                                <DisplayFormula
+                                    number={'β'}
+                                    power={"u'"}
+                                    modulo={'p'}
+                                    variant={'h5'}
+                                />
+                            </Typography>
+                            <Typography gutterBottom>
+                                <DisplayFormula
+                                    number={beta}
+                                    power={u}
+                                    modulo={p}
+                                    variant={'h5'}
+                                />
+                            </Typography>
+                            <FastPowerTable stepsObj={solutionPowLeft} />
+                            <Box p={2}>{solutionPowLeft.result}</Box>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Box p={2} align='center'>
+                            <Typography gutterBottom>
+                                <DisplayFormula
+                                    number={"u'"}
+                                    power={"s'"}
+                                    modulo={'p'}
+                                    variant={'h5'}
+                                />
+                            </Typography>
+                            <Typography gutterBottom>
+                                <DisplayFormula
+                                    number={u}
+                                    power={s}
+                                    modulo={p}
+                                    variant={'h5'}
+                                />
+                            </Typography>
+                            <FastPowerTable stepsObj={solutionPowRight} />
+                            <Box p={2}>{solutionPowRight.result}</Box>
+                        </Box>
+                    </Grid>
+                </Grid>
+                <Box p={2} align='center'>
+                    <Typography gutterBottom>
+                        g = ({solutionPowLeft.result} *{' '}
+                        {solutionPowRight.result}) mod {p} ={' '}
+                        {solutionPowLeft.result * solutionPowRight.result} mod{' '}
+                        {p}
+                    </Typography>
+                    <Typography gutterBottom>g = {g}</Typography>
                 </Box>
-            </Grid>
+            </PaperTitle>
+
+            <PaperTitle title={'Solution'}>
+                <Box align={'center'} p={2}>
+                    <Typography variant='body1' component='p'>
+                        f {f == g ? '=' : '≠'} g
+                    </Typography>
+                    <Typography variant='body1' component='p'>
+                        {g} {f == g ? '=' : '≠'} {f}
+                    </Typography>
+                    <Typography variant='body1' component='p'>
+                        <b>Signature {f == g ? 'is' : "isn't"} correct</b>
+                    </Typography>
+                </Box>
+            </PaperTitle>
         </>
     );
 }

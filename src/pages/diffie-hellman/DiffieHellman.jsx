@@ -171,14 +171,16 @@ function DiffieHellman() {
                     </Grid>
                 </Grid>
             </PaperTitle>
-            <Grid container>
-                <Grid item xs={6}>
-                    <Box p={2}></Box>
-                </Grid>
-                <Grid item xs={6}>
-                    <Box p={2}></Box>
-                </Grid>
-            </Grid>
+
+            <PaperTitle title={'Solution'}>
+                <Box align={'center'} p={2}>
+                    <Typography variant={'h5'}>
+                        {solutionPowAMaster.result === solutionPowBMaster.result
+                            ? `Both parties calculated private master key = ${solutionPowBMaster.result}`
+                            : 'Something went wrong, master keys are different'}
+                    </Typography>
+                </Box>
+            </PaperTitle>
         </>
     );
 }

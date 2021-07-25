@@ -43,12 +43,12 @@ const componentList = [
         methods: [
             {
                 component: <Odwrotnosc />,
-                name: 'Odwrotność multiplikatywna',
+                name: 'Modular inverse',
                 keywords: ['modulo'],
             },
             {
                 component: <PotegaMod />,
-                name: 'Potęgowanie modularne',
+                name: 'Modular exponentiation',
                 keywords: [g, 'potęga', 'power'],
             },
             { component: <Mod />, name: 'Modulo', keywords: ['modulo'] },

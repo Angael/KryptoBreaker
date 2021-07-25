@@ -122,7 +122,7 @@ export const PersistentDrawer = ({
                             <LocalCafeIcon />
                         </ListItemIcon>
                         <ListItemText
-                            primary='Kup mi kawę'
+                            primary='Buy me a coffee'
                             secondary='PayPal '
                         />
                     </ListItem>
@@ -136,8 +136,8 @@ export const PersistentDrawer = ({
                             <GitHubIcon />
                         </ListItemIcon>
                         <ListItemText
-                            primary='Github repository'
-                            secondary='source code'
+                            primary='Source code'
+                            secondary='Github'
                         />
                     </ListItem>
                 </List>
