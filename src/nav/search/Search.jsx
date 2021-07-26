@@ -184,7 +184,11 @@ const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
                         root: classes.inputRoot,
                         input: classes.inputInput,
                     }}
-                    inputProps={{ 'aria-label': 'search' }}
+                    inputProps={{
+                        'aria-label': 'search',
+                        autocomplete: 'off',
+                        'aria-autocomplete': 'off',
+                    }}
                     value={value}
                     onChange={onChangeVal}
                     onFocus={onInputFocus}

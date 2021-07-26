@@ -102,7 +102,7 @@ function ElGamalPodpisWeryfikacja() {
                         variant={'h4'}
                     />
                 </Typography>
-                <Typography variant='h4' align='center'>
+                <Typography variant='h4' align='center' gutterBottom>
                     g = β<sup>u'</sup> * u'<sup>s'</sup> mod p ={' '}
                     <DisplayFormula
                         number={'β'}

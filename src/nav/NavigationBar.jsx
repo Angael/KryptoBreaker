@@ -16,81 +16,91 @@ import Search from './search/Search';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		display: 'flex',
-	},
-	appBar: {
-		transition: theme.transitions.create(['margin', 'width'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen,
-		}),
-	},
-	appBarShift: {
-		width: `calc(100% - ${drawerWidth}px)`,
-		marginLeft: drawerWidth,
-		transition: theme.transitions.create(['margin', 'width'], {
-			easing: theme.transitions.easing.easeOut,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-	},
-	rightButton: {
-		marginRight: theme.spacing(2),
-		flex: 1,
-		display: 'flex',
-		justifyContent: 'flex-end',
-	},
-	hide: {
-		display: 'none',
-	},
+    root: {
+        display: 'flex',
+    },
+    appBar: {
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    rightButton: {
+        marginRight: theme.spacing(2),
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'flex-end',
+    },
+    hide: {
+        display: 'none',
+    },
 }));
 
 export const NavigationBar = ({ drawerOpen, openDrawer, setIndexes }) => {
-	const classes = useStyles();
+    const classes = useStyles();
 
-	const [searchOpen, setSearchOpen] = useState(false);
-	const [explanationOpen, setExplanationOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [explanationOpen, setExplanationOpen] = useState(false);
 
-	return (
-		<AppBar
-			position='fixed'
-			className={clsx(classes.appBar, {
-				[classes.appBarShift]: drawerOpen,
-			})}
-		>
-			<Toolbar>
-				<IconButton
-					color='inherit'
-					aria-label='open drawer'
-					onClick={openDrawer}
-					edge='start'
-					className={clsx(classes.menuButton, drawerOpen && classes.hide)}
-				>
-					<MenuIcon />
-				</IconButton>
-				<Hidden xsDown>
-					<Typography variant='h6' noWrap>
-						KryptoBreaker
-					</Typography>
-				</Hidden>
+    return (
+        <AppBar
+            position='fixed'
+            className={clsx(classes.appBar, {
+                [classes.appBarShift]: drawerOpen,
+            })}
+        >
+            <Toolbar>
+                <IconButton
+                    color='inherit'
+                    aria-label='open drawer'
+                    onClick={openDrawer}
+                    edge='start'
+                    className={clsx(
+                        classes.menuButton,
+                        drawerOpen && classes.hide
+                    )}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Hidden xsDown>
+                    <Typography variant='h6' noWrap>
+                        KryptoBreaker
+                    </Typography>
+                </Hidden>
 
-				<Search searchOpen={searchOpen} setSearchOpen={setSearchOpen} setIndexes={setIndexes} />
-				<div className={classes.rightButton}>
-					<Tooltip title='Kiedy używać jaki klucz'>
-						<IconButton
-							color='inherit'
-							aria-label='open drawer'
-							onClick={() => setExplanationOpen(true)}
-							edge='end'
-						>
-							<VpnKeyIcon />
-						</IconButton>
-					</Tooltip>
-					<KeyExplanation isOpen={explanationOpen} onClose={() => setExplanationOpen(false)} />
-				</div>
-			</Toolbar>
-		</AppBar>
-	);
+                <Search
+                    searchOpen={searchOpen}
+                    setSearchOpen={setSearchOpen}
+                    setIndexes={setIndexes}
+                />
+                <div className={classes.rightButton}>
+                    <Tooltip title='When to use which key'>
+                        <IconButton
+                            color='inherit'
+                            aria-label='open drawer'
+                            onClick={() => setExplanationOpen(true)}
+                            edge='end'
+                        >
+                            <VpnKeyIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <KeyExplanation
+                        isOpen={explanationOpen}
+                        onClose={() => setExplanationOpen(false)}
+                    />
+                </div>
+            </Toolbar>
+        </AppBar>
+    );
 };
