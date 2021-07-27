@@ -132,11 +132,14 @@ const useAutoCompleteStyles = makeStyles((theme) => ({
     paper: {
         backgroundColor: 'rgba(255,255,255,0.6)',
     },
+    listbox: {
+        maxHeight: '70vh',
+    },
 }));
 
 const options = {
     includeScore: true,
-    keys: ['category', 'name', 'keywords'],
+    keys: ['fullName', 'keywords'],
 };
 const fuse = new Fuse(componentListFuzzySearchHayStack, options);
 
@@ -150,9 +153,12 @@ const Search = ({ setIndexes }) => {
     };
 
     const results = value.trim()
-        ? fuse.search(value.trim()).filter((result) => {
-              return result.score < 0.3;
-          })
+        ? fuse
+              .search(value.trim())
+              .filter((result) => {
+                  return result.score < 0.3;
+              })
+              .slice(0, 5)
         : [];
 
     const onInputFocus = (e) => {
@@ -172,6 +178,7 @@ const Search = ({ setIndexes }) => {
 
     return (
         <Autocomplete
+            // debug
             classes={acClasses}
             freeSolo
             filterOptions={(x) => x}
@@ -179,7 +186,13 @@ const Search = ({ setIndexes }) => {
             getOptionLabel={(x) => ''}
             renderOption={(x) => (
                 <div className={'opcja'}>
-                    {x.item.category} \ {x.item.name}
+                    <Typography variant={'caption'}>
+                        {x.item.category}
+                    </Typography>
+                    <Typography variant={'h5'}>{x.item.name}</Typography>
+                    <Typography variant={'body1'}>
+                        {x.item.description}
+                    </Typography>
                 </div>
             )}
             onInputChange={onChangeVal}

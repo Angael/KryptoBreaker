@@ -160,7 +160,12 @@ export let componentListFuzzySearchHayStack = [];
 
 componentList.forEach((category, i) => {
     const modules = category.methods.map((method, j) => {
-        return { ...method, category: category.categoryName, indexes: [i, j] };
+        return {
+            ...method,
+            category: category.categoryName,
+            fullName: `${category.categoryName} ${method.name}`,
+            indexes: [i, j],
+        };
     });
     componentListFuzzySearchHayStack.push(...modules);
 });
