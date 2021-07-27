@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 export const NavigationBar = ({ drawerOpen, openDrawer, setIndexes }) => {
     const classes = useStyles();
 
-    const [searchOpen, setSearchOpen] = useState(false);
     const [explanationOpen, setExplanationOpen] = useState(false);
 
     return (
@@ -79,11 +78,7 @@ export const NavigationBar = ({ drawerOpen, openDrawer, setIndexes }) => {
                     </Typography>
                 </Hidden>
 
-                <Search
-                    searchOpen={searchOpen}
-                    setSearchOpen={setSearchOpen}
-                    setIndexes={setIndexes}
-                />
+                <Search setIndexes={setIndexes} />
                 <div className={classes.rightButton}>
                     <Tooltip title='When to use which key'>
                         <IconButton
