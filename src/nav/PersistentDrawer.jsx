@@ -72,6 +72,7 @@ export const PersistentDrawer = ({
                 classes={{
                     paper: classes.drawerPaper,
                 }}
+                style={{ pointerEvents: isOpen ? 'all' : 'none' }}
             >
                 <div className={classes.drawerHeader}>
                     <IconButton onClick={onClose}>
@@ -81,19 +82,21 @@ export const PersistentDrawer = ({
                 {componentList.map((category, i) => (
                     <React.Fragment key={i}>
                         <List>
-                            <ListItem disabled>
-                                <Box
-                                    display='flex'
-                                    align='center'
-                                    alignItems='center'
-                                    justifyContent='center'
-                                    width={'100%'}
-                                >
-                                    <Typography variant='button'>
-                                        {category.categoryName}
-                                    </Typography>
-                                </Box>
-                            </ListItem>
+                            {category.categoryName && (
+                                <ListItem disabled>
+                                    <Box
+                                        display='flex'
+                                        align='center'
+                                        alignItems='center'
+                                        justifyContent='center'
+                                        width={'100%'}
+                                    >
+                                        <Typography variant='button'>
+                                            {category.categoryName}
+                                        </Typography>
+                                    </Box>
+                                </ListItem>
+                            )}
 
                             {category.methods.map((c, j) => (
                                 <ListItem
