@@ -30,9 +30,17 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '5rem',
         padding: theme.spacing(0),
         marginLeft: (isPhone) => (isPhone ? 0 : -drawerWidth),
+        transition: theme.transitions.create(['margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
     },
     contentShift: {
         marginLeft: () => 0, // If this isnt a function, then marginLeft in content:{} wins in priority lol
+        transition: theme.transitions.create(['margin'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
 }));
 
