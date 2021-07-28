@@ -148,14 +148,10 @@ function OdwrotnoscTable({ a, b }) {
                     </Table>
                 </TableContainer>
                 <Box py={1}>
-                    <Typography variant='body1'>
+                    <Typography variant='h5'>
                         {a}
                         <sup>-1</sup> mod {b} = {resultBeforeMod} mod {b} ={' '}
                         {result}
-                    </Typography>
-                    <Typography variant='h5'>
-                        {a}
-                        <sup>-1</sup> mod {b} = {result}
                     </Typography>
                 </Box>
                 <Box>
