@@ -118,7 +118,7 @@ export const PersistentDrawer = ({
                 <List>
                     <ListItem
                         component='a'
-                        href='https://www.paypal.me/krzysztofwidacki'
+                        href='https://www.buymeacoffee.com/widacki'
                         target='_blank'
                     >
                         <ListItemIcon>
@@ -126,7 +126,21 @@ export const PersistentDrawer = ({
                         </ListItemIcon>
                         <ListItemText
                             primary='Buy me a coffee'
-                            secondary='PayPal '
+                            secondary='buymeacoffee.com'
+                        />
+                    </ListItem>
+
+                    <ListItem
+                        component='a'
+                        href='https://www.paypal.me/krzysztofwidacki'
+                        target='_blank'
+                    >
+                        <ListItemIcon>
+                            <LocalCafeIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                            primary='...or just donate'
+                            secondary='PayPal'
                         />
                     </ListItem>
 
