@@ -6,9 +6,15 @@ import { componentListFuzzySearchHayStack } from 'componentList';
 import Fuse from 'fuse.js';
 
 import { cx } from '@emotion/css';
-import { Box, ClickAwayListener, Typography } from '@material-ui/core';
+import {
+    Box,
+    ClickAwayListener,
+    TextField,
+    Typography,
+} from '@material-ui/core';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import clsx from 'clsx';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -25,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: theme.spacing(3),
             width: 'auto',
         },
-        overflow: 'visible',
     },
     searchIcon: {
         padding: theme.spacing(0, 2),
@@ -41,12 +46,14 @@ const useStyles = makeStyles((theme) => ({
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('md')]: {
-            width: '20ch',
+            width: '10ch',
+            '&:focus': {
+                width: '40ch',
+            },
         },
         '&::selection': {
             color: alpha('#fff', 1),
@@ -118,125 +125,98 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const useAutoCompleteStyles = makeStyles((theme) => ({
+    popper: {
+        backdropFilter: 'blur(12px)',
+    },
+    paper: {
+        backgroundColor: 'rgba(255,255,255,0.6)',
+    },
+    listbox: {
+        maxHeight: '70vh',
+    },
+}));
+
 const options = {
     includeScore: true,
-    // includeMatches: true,
-    // Search in `author` and in `tags` array
-    keys: ['category', 'name', 'keywords'],
+    keys: ['fullName', 'keywords'],
 };
 const fuse = new Fuse(componentListFuzzySearchHayStack, options);
 
-// const searcher = new FuzzySearch(componentListFuzzySearchHayStack, ['name', 'inputs', 'category'], {
-// 	caseSensitive: false,
-// });
-
-const Search = ({ searchOpen, setSearchOpen, setIndexes }) => {
+const Search = ({ setIndexes }) => {
     const classes = useStyles();
-    const [value, setValue] = useState('');
-    const [height, setHeight] = useState(300);
-    const resultsRef = useRef();
+    const acClasses = useAutoCompleteStyles();
 
-    const onChangeVal = (e) => {
-        setValue(e.target.value);
-        setSearchOpen(true);
+    const [value, setValue] = useState('');
+    const onChangeVal = (e, v) => {
+        setValue(v);
     };
 
     const results = value.trim()
-        ? fuse.search(value.trim()).filter((result) => {
-              return result.score < 0.3;
-          })
+        ? fuse
+              .search(value.trim())
+              .filter((result) => {
+                  return result.score < 0.3;
+              })
+              .slice(0, 5)
         : [];
-    // const results = value.trim() ? searcher.search(value) : [];
 
     const onInputFocus = (e) => {
         e.target.setSelectionRange(0, value.length);
     };
 
-    const onSearchOptionClick = (indexes) => {
-        setIndexes(indexes);
-        setSearchOpen(false);
-        setValue('');
-    };
-    // console.log(results);
-
-    useLayoutEffect(() => {
-        if (resultsRef.current) {
-            const children = Array.from(resultsRef.current.children);
-            let _height = 0;
-            children.forEach((child) => {
-                _height += child.clientHeight;
-            });
-            setHeight(_height);
+    const onSearchOptionClick = (e, v) => {
+        if (v) {
+            setIndexes(v.item.indexes);
+            setValue('');
+        } else {
+            setValue('');
         }
-    }, [results]);
+    };
 
-    // console.log(results);
+    console.log(results);
 
     return (
-        <ClickAwayListener onClickAway={() => setSearchOpen(false)}>
-            <div className={classes.search} onFocus={() => setSearchOpen(true)}>
-                <div className={classes.searchIcon}>
-                    <SearchIcon />
+        <Autocomplete
+            // debug
+            classes={acClasses}
+            freeSolo
+            filterOptions={(x) => x}
+            options={results}
+            getOptionLabel={(x) => ''}
+            renderOption={(x) => (
+                <div className={'opcja'}>
+                    <Typography variant={'caption'}>
+                        {x.item.category}
+                    </Typography>
+                    <Typography variant={'h5'}>{x.item.name}</Typography>
+                    <Typography variant={'body1'}>
+                        {x.item.description}
+                    </Typography>
                 </div>
-                <InputBase
-                    placeholder='Search…'
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                    }}
-                    inputProps={{
-                        'aria-label': 'search',
-                        autocomplete: 'off',
-                        'aria-autocomplete': 'off',
-                    }}
-                    value={value}
-                    onChange={onChangeVal}
-                    onFocus={onInputFocus}
-                />
-                <div
-                    className={clsx(classes.resultsContainer, {
-                        [classes.hide]: !searchOpen,
-                    })}
-                    style={{ height }}
-                >
-                    <Box ref={resultsRef}>
-                        {results.length === 0 && (
-                            <ButtonBase
-                                className={classes.btn}
-                                style={{ whiteSpace: 'nowrap' }}
-                            >
-                                <Box px={2} py={1}>
-                                    <Typography variant='body1'>
-                                        Wpisz nazwę metody lub zmienne
-                                    </Typography>
-                                    <Typography variant='body2'></Typography>
-                                </Box>
-                            </ButtonBase>
-                        )}
-                        {results.map((result) => {
-                            return (
-                                <ButtonBase
-                                    className={classes.btn}
-                                    style={{ whiteSpace: 'nowrap' }}
-                                    onClick={() =>
-                                        onSearchOptionClick(result.item.indexes)
-                                    }
-                                >
-                                    <Box px={2} py={1}>
-                                        <Typography variant='body1'>
-                                            {result.item.name}
-                                        </Typography>
-                                        <Typography variant='body2'>
-                                            {result.item.category}
-                                        </Typography>
-                                    </Box>
-                                </ButtonBase>
-                            );
-                        })}
-                    </Box>
+            )}
+            onInputChange={onChangeVal}
+            onChange={onSearchOptionClick}
+            renderInput={(params) => (
+                <div className={classes.search} ref={params.InputProps.ref}>
+                    <div className={classes.searchIcon}>
+                        <SearchIcon />
+                    </div>
+                    <InputBase
+                        {...params}
+                        placeholder='Search…'
+                        classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput,
+                        }}
+                        inputProps={{
+                            ...params.inputProps,
+                            onFocus: onInputFocus,
+                        }}
+                    />
                 </div>
-            </div>
-        </ClickAwayListener>
+            )}
+        />
     );
 };
 export default Search;

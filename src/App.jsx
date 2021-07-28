@@ -30,9 +30,17 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: '5rem',
         padding: theme.spacing(0),
         marginLeft: (isPhone) => (isPhone ? 0 : -drawerWidth),
+        transition: theme.transitions.create(['margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
     },
     contentShift: {
         marginLeft: () => 0, // If this isnt a function, then marginLeft in content:{} wins in priority lol
+        transition: theme.transitions.create(['margin'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     },
 }));
 
@@ -84,12 +92,14 @@ function App() {
                 <Container maxWidth='md'>
                     <Box mb={4}>
                         <Breadcrumbs aria-label='breadcrumb'>
-                            <Typography
-                                variant={methodVariant}
-                                color='textSecondary'
-                            >
-                                {selectedCategory.categoryName}
-                            </Typography>
+                            {selectedCategory.categoryName && (
+                                <Typography
+                                    variant={methodVariant}
+                                    color='textSecondary'
+                                >
+                                    {selectedCategory.categoryName}
+                                </Typography>
+                            )}
                             <Typography
                                 variant={methodVariant}
                                 color='textPrimary'
@@ -99,7 +109,7 @@ function App() {
                         </Breadcrumbs>
                     </Box>
 
-                    <Box my={4}>
+                    <Box my={5}>
                         <Suspense fallback={<Box p={4}>Loading...</Box>}>
                             {selectedMethod.component}
                         </Suspense>

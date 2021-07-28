@@ -19,6 +19,7 @@ import ElGamalDeszyfrowanie from './pages/elgamal/ElGamalDeszyfrowanie';
 import ElGamalPodpis from './pages/elgamal/ElGamalPodpis';
 import ElGamalPodpisWeryfikacja from './pages/elgamal/ElGamalPodpisWeryfikacja';
 import CheatSheet from './pages/cheat-sheet/CheatSheet';
+import Home from 'pages/home/Home';
 const Hill = React.lazy(() => import('./pages/hill/Hill'));
 
 const g = ['g', 'generator'];
@@ -38,6 +39,25 @@ const rsaKeys = ['n', 'e', 'd'];
 const elGamalKeys = [alfa, p, beta, 't'];
 
 const componentList = [
+    {
+        categoryName: '',
+        methods: [
+            {
+                component: <Home />,
+                name: 'Home',
+                keywords: [
+                    'home',
+                    'about us',
+                    'website',
+                    'what',
+                    'wtf',
+                    'explanation',
+                    'main',
+                    'index',
+                ],
+            },
+        ],
+    },
     {
         categoryName: 'Helpers',
         methods: [
@@ -160,7 +180,12 @@ export let componentListFuzzySearchHayStack = [];
 
 componentList.forEach((category, i) => {
     const modules = category.methods.map((method, j) => {
-        return { ...method, category: category.categoryName, indexes: [i, j] };
+        return {
+            ...method,
+            category: category.categoryName,
+            fullName: `${category.categoryName} ${method.name}`,
+            indexes: [i, j],
+        };
     });
     componentListFuzzySearchHayStack.push(...modules);
 });
