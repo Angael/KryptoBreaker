@@ -45,9 +45,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+    const theme = useTheme();
+    const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+
     // Category and component indexes in componentList.js
     const [indexes, setIndexes] = useLocalStorage('indexes', [0, 0]);
-    const [drawerOpen, setDrawerOpen] = useLocalStorage('drawerOpen', true);
+
+    const [drawerOpen, setDrawerOpen] = useLocalStorage('drawerOpen', !isPhone);
 
     const selectedCategory = componentList[indexes[0]];
     const selectedMethod = selectedCategory.methods[indexes[1]] || {};
@@ -61,8 +65,7 @@ function App() {
         setIndexes([categoryIndex, componentIndex]);
     };
 
-    const theme = useTheme();
-    const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+
 
     const classes = useStyles(isPhone);
 
