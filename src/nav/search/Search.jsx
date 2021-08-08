@@ -169,6 +169,11 @@ const Search = ({ setIndexes }) => {
         if (v) {
             setIndexes(v.item.indexes);
             setValue('');
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
         } else {
             setValue('');
         }

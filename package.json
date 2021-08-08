@@ -1,6 +1,5 @@
 {
-	"homepage": "http://angael.github.io/KryptoBreaker",
-	"name": "my-app",
+	"name": "kryptobreaker",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
