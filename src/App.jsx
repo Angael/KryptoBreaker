@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import clsx from 'clsx';
+import { Routes, Route, Link } from 'react-router-dom';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import './App.css';
@@ -18,6 +19,9 @@ import componentList from './componentList';
 
 import { PersistentDrawer } from 'nav/PersistentDrawer';
 import { NavigationBar } from './nav/NavigationBar';
+import Analytics, { useAnalytics } from './analytics/useAnalytics';
+import Home from './pages/home/Home';
+import Header from './Header';
 
 const drawerWidth = 240;
 
@@ -48,43 +52,28 @@ function App() {
     const theme = useTheme();
     const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
 
-    // Category and component indexes in componentList.js
-    const [indexes, setIndexes] = useLocalStorage('indexes', [0, 0]);
-
     const [drawerOpen, setDrawerOpen] = useLocalStorage('drawerOpen', !isPhone);
 
-    const selectedCategory = componentList[indexes[0]];
-    const selectedMethod = selectedCategory.methods[indexes[1]] || {};
+    // const selectedCategory = componentList[indexes[0]];
+    // const selectedMethod = selectedCategory.methods[indexes[1]] || {};
 
     const openDrawer = (e) => {
         e.stopPropagation();
         setDrawerOpen(true);
     };
 
-    const onMethodSelect = (categoryIndex, componentIndex) => {
-        setIndexes([categoryIndex, componentIndex]);
-    };
-
-
-
     const classes = useStyles(isPhone);
 
     const methodVariant = isPhone ? 'h5' : 'h4';
 
-    // console.log("<App/>", "app rerender");
+    useAnalytics();
 
     return (
         <div className={classes.root}>
-            <NavigationBar
-                drawerOpen={drawerOpen}
-                openDrawer={openDrawer}
-                setIndexes={setIndexes}
-            />
+            <NavigationBar drawerOpen={drawerOpen} openDrawer={openDrawer} />
             <PersistentDrawer
                 isOpen={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
-                onMethodSelect={onMethodSelect}
-                selectedMethod={indexes}
             />
 
             <div
@@ -93,29 +82,50 @@ function App() {
                 })}
             >
                 <Container maxWidth='md'>
-                    <Box mb={4}>
-                        <Breadcrumbs aria-label='breadcrumb'>
-                            {selectedCategory.categoryName && (
-                                <Typography
-                                    variant={methodVariant}
-                                    color='textSecondary'
-                                >
-                                    {selectedCategory.categoryName}
-                                </Typography>
-                            )}
-                            <Typography
-                                variant={methodVariant}
-                                color='textPrimary'
-                            >
-                                {selectedMethod.name}
-                            </Typography>
-                        </Breadcrumbs>
-                    </Box>
+                    <Header />
+                    {/*<Box mb={4}>*/}
+                    {/*    <Breadcrumbs aria-label='breadcrumb'>*/}
+                    {/*        {selectedCategory.categoryName && (*/}
+                    {/*            <Typography*/}
+                    {/*                variant={methodVariant}*/}
+                    {/*                color='textSecondary'*/}
+                    {/*            >*/}
+                    {/*                {selectedCategory.categoryName}*/}
+                    {/*            </Typography>*/}
+                    {/*        )}*/}
+                    {/*        <Typography*/}
+                    {/*            variant={methodVariant}*/}
+                    {/*            color='textPrimary'*/}
+                    {/*        >*/}
+                    {/*            {selectedMethod.name}*/}
+                    {/*        </Typography>*/}
+                    {/*    </Breadcrumbs>*/}
+                    {/*</Box>*/}
 
                     <Box my={5}>
-                        <Suspense fallback={<Box p={4}>Loading...</Box>}>
-                            {selectedMethod.component}
-                        </Suspense>
+                        <Routes>
+                            <Route path='*' element={<Home />} />
+                            {componentList
+                                .flatMap((category) => category.methods)
+                                .map((route) => (
+                                    <Route
+                                        key={route.path}
+                                        path={route.path}
+                                        element={
+                                            <Suspense
+                                                fallback={
+                                                    <Box p={4}>Loading...</Box>
+                                                }
+                                            >
+                                                {route.component}
+                                            </Suspense>
+                                        }
+                                    />
+                                ))}
+                        </Routes>
+                        {/*<Suspense fallback={<Box p={4}>Loading...</Box>}>*/}
+                        {/*    {selectedMethod.component}*/}
+                        {/*</Suspense>*/}
                     </Box>
                 </Container>
             </div>

@@ -11,7 +11,7 @@ import { Button, Tooltip, Hidden } from '@material-ui/core';
 import KeyExplanation from './key-explanation/KeyExplanation';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 
-import Search from './search/Search';
+import { version } from '../../package.json';
 
 const drawerWidth = 240;
 
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const NavigationBar = ({ drawerOpen, openDrawer, setIndexes }) => {
+export const NavigationBar = ({ drawerOpen, openDrawer }) => {
     const classes = useStyles();
 
     const [explanationOpen, setExplanationOpen] = useState(false);
@@ -93,11 +93,10 @@ export const NavigationBar = ({ drawerOpen, openDrawer, setIndexes }) => {
                 </IconButton>
                 <Hidden xsDown>
                     <Typography variant='h6' noWrap>
-                        KryptoBreaker
+                        KryptoBreaker v{version}
                     </Typography>
                 </Hidden>
 
-                <Search setIndexes={setIndexes} />
                 <div className={classes.rightButton}>
                     <Tooltip title='When to use which key'>
                         <IconButton

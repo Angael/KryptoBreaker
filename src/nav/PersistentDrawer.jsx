@@ -15,6 +15,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import LocalCafeIcon from '@material-ui/icons/LocalCafe';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { useMediaQuery, ClickAwayListener } from '@material-ui/core';
+import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -38,22 +40,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const PersistentDrawer = ({
-    isOpen,
-    onClose,
-    onMethodSelect,
-    selectedMethod,
-}) => {
+export const PersistentDrawer = ({ isOpen, onClose }) => {
     const theme = useTheme();
     const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+    const nagivate = useNavigate();
+    const location = useLocation();
 
     const classes = useStyles(isPhone);
 
-    const onMethodClick = (...params) => {
+    const onMethodClick = (route) => {
         if (isPhone) {
             onClose();
         }
-        onMethodSelect(...params);
+        nagivate(route.path);
     };
 
     const handleClickAway = (params) => {
@@ -98,17 +97,14 @@ export const PersistentDrawer = ({
                                 </ListItem>
                             )}
 
-                            {category.methods.map((c, j) => (
+                            {category.methods.map((route, j) => (
                                 <ListItem
                                     button
                                     key={j}
-                                    onClick={() => onMethodClick(i, j)}
-                                    selected={
-                                        i == selectedMethod[0] &&
-                                        j == selectedMethod[1]
-                                    }
+                                    onClick={() => onMethodClick(route)}
+                                    selected={route.path === location.pathname}
                                 >
-                                    <ListItemText primary={c.name} />
+                                    <ListItemText primary={route.name} />
                                 </ListItem>
                             ))}
                         </List>
@@ -118,20 +114,6 @@ export const PersistentDrawer = ({
                 <List>
                     <ListItem
                         component='a'
-                        href='https://www.buymeacoffee.com/widacki'
-                        target='_blank'
-                    >
-                        <ListItemIcon>
-                            <LocalCafeIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            primary='Buy me a coffee'
-                            secondary='buymeacoffee.com'
-                        />
-                    </ListItem>
-
-                    <ListItem
-                        component='a'
                         href='https://www.paypal.me/krzysztofwidacki'
                         target='_blank'
                     >
@@ -139,8 +121,8 @@ export const PersistentDrawer = ({
                             <LocalCafeIcon />
                         </ListItemIcon>
                         <ListItemText
-                            primary='...or just donate'
-                            secondary='PayPal'
+                            primary='Buy me a coffee?'
+                            secondary='I probably made your exams easier!'
                         />
                     </ListItem>
 
