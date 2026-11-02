@@ -14,7 +14,7 @@ const pages: { path: string; title: string; value: string | RegExp }[] = [
 	{ path: '/rsa/encrypt', title: 'Encryption', value: '1327' },
 	{ path: '/rsa/decrypt', title: 'Decryption', value: '20' },
 	{ path: '/rsa/sign', title: 'Signature', value: '1630' },
-	{ path: '/rsa/verify-signature', title: 'Signature verification', value: /valid signature/ },
+	{ path: '/rsa/verify-signature', title: 'Signature verification', value: /matches the message/ },
 	{ path: '/el-gamal/key-generation', title: 'Key generation', value: /1454/ },
 	{ path: '/el-gamal/encrypt', title: 'Encryption', value: '(130, 414)' },
 	{ path: '/el-gamal/decrypt', title: 'Decryption', value: '20' },
@@ -44,11 +44,14 @@ test('unknown paths fall back to home', async ({ page }) => {
 	await expect(page.getByRole('heading', { level: 1, name: 'KryptoBreaker' })).toBeVisible();
 });
 
-test('pages do not scroll horizontally', async ({ page }) => {
-	for (const p of pages) {
-		await page.goto(p.path);
-		await expect(result(page)).toBeVisible();
-		const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-		expect(overflow, p.path).toBeLessThanOrEqual(0);
-	}
-});
+for (const lang of ['en', 'pl']) {
+	test(`pages do not scroll horizontally (${lang})`, async ({ page }) => {
+		await page.addInitScript((l) => localStorage.setItem('lang', l), lang);
+		for (const p of pages) {
+			await page.goto(p.path);
+			await expect(result(page)).toBeVisible();
+			const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+			expect(overflow, p.path).toBeLessThanOrEqual(0);
+		}
+	});
+}

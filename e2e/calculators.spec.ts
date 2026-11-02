@@ -38,7 +38,7 @@ test('affine: number mode in Z_p', async ({ page }) => {
 test('vigenère: empty key is an error', async ({ page }) => {
 	await page.goto('/vigenere');
 	await fill(page, 'Key', '');
-	await expect(resultError(page)).toHaveText('Key must contain at least one letter.');
+	await expect(resultError(page)).toHaveText('The key must contain at least one letter.');
 });
 
 test('hill: decrypt computes the inverse key and restores the text', async ({ page }) => {
@@ -46,14 +46,14 @@ test('hill: decrypt computes the inverse key and restores the text', async ({ pa
 	await page.getByRole('radio', { name: 'Decrypt', exact: true }).click();
 	await fill(page, 'Ciphertext', 'fqmesyjgq');
 	await expect(result(page)).toHaveText('telewizor');
-	await expect(page.getByRole('table', { name: 'Inverse key' })).toContainText('25');
+	await expect(page.getByRole('table', { name: 'Inverted key K⁻¹' })).toContainText('25');
 });
 
 test('hill: singular key is flagged and cannot decrypt', async ({ page }) => {
 	await page.goto('/hill?key=2,0;0,1&text=abcd');
-	await expect(page.getByText('This key is not invertible mod 26')).toBeVisible();
+	await expect(page.getByText('This key cannot be inverted mod 26')).toBeVisible();
 	await page.getByRole('radio', { name: 'Decrypt', exact: true }).click();
-	await expect(resultError(page)).toContainText('not invertible');
+	await expect(resultError(page)).toContainText('cannot be inverted');
 });
 
 test('hill: resizing the key resets it to identity', async ({ page }) => {
@@ -69,7 +69,7 @@ test('hill: resizing the key resets it to identity', async ({ page }) => {
 test('modular inverse: reports when no inverse exists', async ({ page }) => {
 	await page.goto('/inverse');
 	await fill(page, 'Modulo', '25');
-	await expect(resultError(page)).toHaveText('No inverse: gcd(215, 25) = 5.');
+	await expect(resultError(page)).toHaveText('215 has no inverse modulo 25, because gcd(215, 25) = 5.');
 	await expect(page.getByText('gcd(215, 25) = 5 ≠ 1')).toBeVisible();
 });
 
@@ -84,13 +84,13 @@ test('RSA: invalid key parameters are rejected', async ({ page }) => {
 	await page.goto('/rsa/key-generation?p=3&q=5&e=2');
 	await expect(resultError(page)).toContainText('e must be coprime with φ = 8');
 	await page.goto('/rsa/key-generation?p=4');
-	await expect(resultError(page)).toHaveText('p must be prime.');
+	await expect(resultError(page)).toHaveText('p must be a prime number.');
 });
 
 test('RSA: tampered message fails verification', async ({ page }) => {
 	await page.goto('/rsa/verify-signature');
 	await fill(page, 'h', '358');
-	await expect(result(page)).toContainText('invalid signature');
+	await expect(result(page)).toContainText("doesn't match");
 });
 
 test('ElGamal: forged zero signature is rejected', async ({ page }) => {
@@ -106,7 +106,7 @@ test('ElGamal: randomizer must be coprime with p − 1', async ({ page }) => {
 test('Diffie–Hellman: p must be prime', async ({ page }) => {
 	await page.goto('/diffie-hellman');
 	await fill(page, 'p', '1020');
-	await expect(resultError(page)).toHaveText('p must be prime.');
+	await expect(resultError(page)).toHaveText('p must be a prime number.');
 });
 
 test('inputs are kept in the URL so calculations can be shared', async ({ page }) => {
@@ -122,6 +122,42 @@ test('inputs are kept in the URL so calculations can be shared', async ({ page }
 test('pow table explains a step on hover / focus', async ({ page }) => {
 	await page.goto('/mod-power?g=3&e=5&m=7');
 	await expect(result(page)).toHaveText('5');
-	await page.getByRole('cell', { name: '5', exact: true }).last().focus();
-	await expect(page.getByText('x3: 3 · 4 mod 7 = 5')).toBeVisible();
+	const cell = page.getByRole('cell', { name: '5', exact: true }).last();
+	await cell.focus();
+	await expect(page.getByRole('tooltip')).toHaveText('x₃ = 3 · 4 mod 7 = 5');
+	await cell.blur();
+	await cell.hover();
+	await expect(page.getByRole('tooltip')).toHaveText('x₃ = 3 · 4 mod 7 = 5');
+});
+
+test('number inputs step with arrow keys and the mouse wheel, exactly', async ({ page }) => {
+	await page.goto('/mod-power?g=9007199254740993&e=1&m=100000000000000000000');
+	const input = page.getByLabel('Number', { exact: true });
+	await expect(input).toHaveAttribute('type', 'number');
+	await input.focus();
+	await page.keyboard.press('ArrowUp');
+	await expect(input).toHaveValue('9007199254740994');
+	await input.hover();
+	await page.mouse.wheel(0, 100);
+	await expect(input).toHaveValue('9007199254740993');
+});
+
+test('the result comes after the calculation', async ({ page }) => {
+	await page.goto('/rsa/encrypt');
+	const table = await page.getByRole('region', { name: 'Square-and-multiply steps' }).boundingBox();
+	const answer = await page.getByTestId('result').boundingBox();
+	expect(answer!.y).toBeGreaterThan(table!.y);
+});
+
+test('switching to Polish translates the interface and errors', async ({ page }) => {
+	await page.goto('/diffie-hellman?p=1020');
+	await page.getByRole('button', { name: 'Language: Polski' }).click();
+	await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Diffie–Hellman');
+	await expect(page.getByRole('heading', { name: 'Dane' })).toBeVisible();
+	await expect(resultError(page)).toHaveText('p musi być liczbą pierwszą.');
+	await page.reload();
+	await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
+	await page.getByRole('button', { name: 'Język: English' }).click();
+	await expect(resultError(page)).toHaveText('p must be a prime number.');
 });

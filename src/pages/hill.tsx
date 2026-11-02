@@ -7,6 +7,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 import {
 	type HillMode,
 	HILL_MAX_SIZE,
@@ -26,6 +27,7 @@ const identityKey = (n: number) =>
 	Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => (i === j ? '1' : '0')));
 
 export default function Hill() {
+	const t = useT();
 	const [mode, setMode] = useParam('mode', 'encrypt');
 	const [text, setText] = useParam('text', 'telewizor');
 	const [keyParam, setKeyParam] = useParam('key', DEFAULT_KEY);
@@ -38,8 +40,8 @@ export default function Hill() {
 
 	const result = compute(() => {
 		const key = rows.map((r) => {
-			if (r.length !== size) throw new InputError('Key must be a square matrix.', 'key');
-			return r.map((v) => int(v, 'key', 'Every key entry'));
+			if (r.length !== size) throw new InputError('Key must be a square matrix.', 'key', 'square');
+			return r.map((v) => int(v, 'key', 'keyEntry'));
 		});
 		return hill(text, key, hillMode);
 	});
@@ -61,20 +63,21 @@ export default function Hill() {
 
 	return (
 		<Page>
-			<Section title="Inputs">
+			<Note>{t.hill.intro}</Note>
+			<Section title={t.common.inputs}>
 				<div className="grid gap-5">
 					<Segmented
-						label="Mode"
+						label={t.common.mode}
 						value={hillMode}
 						onChange={setMode}
 						options={[
-							{ value: 'encrypt', label: 'Encrypt' },
-							{ value: 'decrypt', label: 'Decrypt' },
-							{ value: 'decrypt-with-inverse', label: 'Decrypt with K⁻¹' },
+							{ value: 'encrypt', label: t.common.encrypt },
+							{ value: 'decrypt', label: t.hill.decrypt },
+							{ value: 'decrypt-with-inverse', label: t.hill.decryptWithInverse },
 						]}
 					/>
 					<Field
-						label={encrypt ? 'Plaintext' : 'Ciphertext'}
+						label={encrypt ? t.common.plaintext : t.common.ciphertext}
 						value={text}
 						onChange={setText}
 						numeric={false}
@@ -82,14 +85,14 @@ export default function Hill() {
 					/>
 					<div className="grid gap-3">
 						<div className="flex items-center justify-between gap-4">
-							<Label id="hill-size">Key size</Label>
+							<Label id="hill-size">{t.hill.keySize}</Label>
 							<M className="text-sm text-muted-foreground">
 								{size}×{size}
 							</M>
 						</div>
 						<Slider
 							aria-labelledby="hill-size"
-							aria-label="Key size"
+							aria-label={t.hill.keySize}
 							min={HILL_MIN_SIZE}
 							max={HILL_MAX_SIZE}
 							step={1}
@@ -100,43 +103,35 @@ export default function Hill() {
 					</div>
 					<div className="grid gap-2">
 						<span className="text-sm font-medium">
-							{hillMode === 'decrypt-with-inverse' ? 'Inverse key K⁻¹' : 'Key K'}
+							{hillMode === 'decrypt-with-inverse' ? t.hill.inverseKey : t.hill.key}
 						</span>
 						<MatrixInput
-							label="Key"
+							label={t.hill.keyLabel}
+							cellLabel={(r, c) => t.hill.cell(t.hill.keyLabel, r, c)}
 							values={rows}
 							onChange={setCell}
 							invalid={fieldError(result, 'key') || (result.ok && !result.value.keyInvertible)}
 						/>
 						{result.ok && !result.value.keyInvertible && (
-							<p className="text-sm text-destructive">
-								This key is not invertible mod 26 (gcd(det K, 26) ≠ 1), so the result cannot be decrypted.
-							</p>
+							<p className="text-sm text-destructive">{t.hill.notInvertible}</p>
 						)}
 					</div>
 				</div>
 			</Section>
 
-			<Result
-				computed={result}
-				label={encrypt ? 'Ciphertext' : 'Plaintext'}
-				render={(r) => r.output}
-				copy={(r) => r.output}
-			/>
-
 			{result.ok && (
 				<>
 					{(result.value.padding > 0 || result.value.ignored > 0) && (
 						<Note>
-							{result.value.ignored > 0 && `${result.value.ignored} non-letter character(s) were skipped. `}
-							{result.value.padding > 0 &&
-								`The last block was padded with ${result.value.padding} × "a" to fill ${size} letters.`}
+							{result.value.ignored > 0 && t.hill.skipped(result.value.ignored)}
+							{result.value.padding > 0 && t.hill.padded(result.value.padding, size)}
 						</Note>
 					)}
 
 					{result.value.inverse && (
-						<Section title="Inverse key">
+						<Section title={t.hill.inverseTitle}>
 							<div className="grid gap-4">
+								<p className="text-sm text-muted-foreground text-pretty">{t.hill.inverseHowTo}</p>
 								<p className="font-mono text-sm tabular-nums">
 									det K = {result.value.inverse.det.toString()} ≡ {result.value.inverse.detMod.toString()}{' '}
 									(mod 26), (det K)
@@ -146,41 +141,48 @@ export default function Hill() {
 									<span>
 										K<sup>-1</sup> = {result.value.inverse.detInverse.toString()} · adj K =
 									</span>
-									<MatrixView matrix={result.value.inverse.adjugate} label="Adjugate mod 26" />
+									<MatrixView matrix={result.value.inverse.adjugate} label={t.hill.adjugate} />
 									<span>· {result.value.inverse.detInverse.toString()} mod 26 =</span>
-									<MatrixView matrix={result.value.inverse.inverse} label="Inverse key" />
+									<MatrixView matrix={result.value.inverse.inverse} label={t.hill.inverseKey} />
 								</div>
 							</div>
 						</Section>
 					)}
 
-					<Section title="Calculation">
+					<Section title={t.common.calculation}>
 						<div className="grid gap-4">
+							<p className="text-sm text-muted-foreground text-pretty">{t.hill.calcHowTo}</p>
 							<div className="flex flex-wrap items-center gap-3 font-mono">
-								<MatrixView matrix={result.value.textMatrix} label="Text matrix" />
+								<MatrixView matrix={result.value.textMatrix} label={t.hill.textMatrix} />
 								<span aria-hidden>·</span>
-								<MatrixView matrix={result.value.multiplier} label="Key matrix" />
+								<MatrixView matrix={result.value.multiplier} label={t.hill.keyMatrix} />
 								<span aria-hidden>{afterMod ? '≡' : '='}</span>
 								<MatrixView
 									matrix={afterMod ? result.value.product : result.value.productBeforeMod}
-									label="Result matrix"
+									label={t.hill.resultMatrix}
 								/>
 								{afterMod && <span className="text-sm text-muted-foreground">(mod 26)</span>}
 							</div>
 							<div className="flex items-center gap-2">
 								<Switch id="after-mod" checked={afterMod} onCheckedChange={setAfterMod} />
 								<Label htmlFor="after-mod" className="font-normal">
-									After mod 26
+									{t.hill.afterMod}
 								</Label>
 							</div>
 						</div>
 					</Section>
 
-					<Section title="Table">
+					<Section title={t.common.table}>
 						<LetterTable steps={outputSteps} encrypt={encrypt} />
 					</Section>
 				</>
 			)}
+			<Result
+				computed={result}
+				label={encrypt ? t.common.ciphertext : t.common.plaintext}
+				render={(r) => r.output}
+				copy={(r) => r.output}
+			/>
 		</Page>
 	);
 }

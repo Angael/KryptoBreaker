@@ -1,10 +1,15 @@
 /** Thrown when an input is outside an algorithm's domain. `field` names the offending input. */
 export class InputError extends Error {
 	readonly field?: string;
-	constructor(message: string, field?: string) {
+	/** Stable identifier of the problem, so the UI can show a translated message. */
+	readonly code: string;
+	readonly params: Record<string, string>;
+	constructor(message: string, field?: string, code = 'generic', params: Record<string, string> = {}) {
 		super(message);
 		this.name = 'InputError';
 		this.field = field;
+		this.code = code;
+		this.params = params;
 	}
 }
 
@@ -16,7 +21,8 @@ export function parseInteger(raw: string): bigint | null {
 }
 
 export function assertModulus(m: bigint, field = 'modulus'): void {
-	if (m < 1n) throw new InputError('Modulus must be a positive integer.', field);
+	if (m < 1n)
+		throw new InputError('Modulus must be a positive integer.', field, 'positive', { label: 'modulus' });
 }
 
 /** Mathematical modulo: result is always in [0, m). Requires m ≥ 1. */
@@ -149,7 +155,10 @@ export interface PowResult {
 /** Square-and-multiply modular exponentiation with a full trace. Requires exponent ≥ 0 and modulus ≥ 1. */
 export function modPow(base: bigint, exponent: bigint, modulus: bigint): PowResult {
 	assertModulus(modulus);
-	if (exponent < 0n) throw new InputError('Exponent must be a non-negative integer.', 'exponent');
+	if (exponent < 0n)
+		throw new InputError('Exponent must be a non-negative integer.', 'exponent', 'nonNegative', {
+			label: 'exponent',
+		});
 
 	const binary = exponent.toString(2);
 	const bits = [...binary].reverse().map((b) => (b === '1' ? 1 : 0) as 0 | 1);
@@ -229,10 +238,16 @@ export function isPrime(n: bigint): boolean {
 
 /** Throws InputError unless lo ≤ v ≤ hi. */
 export function assertRange(v: bigint, lo: bigint, hi: bigint, field: string, label = field): void {
-	if (hi < lo) throw new InputError(`No valid ${label} exists for these parameters.`, field);
-	if (v < lo || v > hi) throw new InputError(`${label} must be between ${lo} and ${hi}.`, field);
+	if (hi < lo)
+		throw new InputError(`No valid ${label} exists for these parameters.`, field, 'noValid', { label });
+	if (v < lo || v > hi)
+		throw new InputError(`${label} must be between ${lo} and ${hi}.`, field, 'range', {
+			label,
+			lo: String(lo),
+			hi: String(hi),
+		});
 }
 
 export function assertPrime(p: bigint, field = 'p'): void {
-	if (!isPrime(p)) throw new InputError(`${field} must be prime.`, field);
+	if (!isPrime(p)) throw new InputError(`${field} must be prime.`, field, 'prime', { label: field });
 }

@@ -1,6 +1,8 @@
 import { CheckIcon, CopyIcon } from 'lucide-react';
-import { type ReactNode, useEffect, useId, useState } from 'react';
+import { type KeyboardEvent, type ReactNode, useEffect, useId, useRef, useState } from 'react';
 import type { Computed } from '@/hooks/use-compute';
+import { errorText, useT } from '@/i18n';
+import { parseInteger } from '@/lib/crypto';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,6 +43,43 @@ interface FieldProps {
 	className?: string;
 }
 
+/** Steps an integer string by `delta` with BigInt precision; leaves unparsable values alone. */
+function stepInteger(raw: string, delta: bigint): string | null {
+	const v = parseInteger(raw === '' ? '0' : raw);
+	return v === null ? null : (v + delta).toString();
+}
+
+/**
+ * Native number input behaviour (arrows, ↑/↓ keys, wheel while focused), but stepping with BigInt
+ * so large keys don't lose precision.
+ */
+function useIntegerStepper(value: string, onChange?: (v: string) => void) {
+	const ref = useRef<HTMLInputElement>(null);
+	const latest = useRef({ value, onChange });
+	useEffect(() => {
+		latest.current = { value, onChange };
+	});
+	useEffect(() => {
+		const el = ref.current;
+		if (!el) return;
+		const onWheel = (e: WheelEvent) => {
+			if (document.activeElement !== el || e.deltaY === 0) return;
+			e.preventDefault();
+			const next = stepInteger(latest.current.value, e.deltaY < 0 ? 1n : -1n);
+			if (next !== null) latest.current.onChange?.(next);
+		};
+		el.addEventListener('wheel', onWheel, { passive: false });
+		return () => el.removeEventListener('wheel', onWheel);
+	}, []);
+	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+		e.preventDefault();
+		const next = stepInteger(value, e.key === 'ArrowUp' ? 1n : -1n);
+		if (next !== null) onChange?.(next);
+	};
+	return { ref, onKeyDown };
+}
+
 export function Field({
 	label,
 	value,
@@ -52,12 +91,18 @@ export function Field({
 	className,
 }: FieldProps) {
 	const id = useId();
+	const stepper = useIntegerStepper(value, onChange);
+	const isNumberInput = numeric && !!onChange;
 	return (
 		<div className={cn('grid content-start gap-2', className)}>
 			<Label htmlFor={id}>{label}</Label>
 			<Input
+				ref={isNumberInput ? stepper.ref : undefined}
 				id={id}
 				name={name}
+				type={isNumberInput ? 'number' : 'text'}
+				step={isNumberInput ? 1 : undefined}
+				onKeyDown={isNumberInput ? stepper.onKeyDown : undefined}
 				value={value}
 				onChange={onChange ? (e) => onChange(e.target.value) : undefined}
 				readOnly={!onChange}
@@ -107,12 +152,16 @@ export function Segmented<T extends string>({
 	);
 }
 
-export const ENCRYPT_DECRYPT = [
-	{ value: 'encrypt', label: 'Encrypt' },
-	{ value: 'decrypt', label: 'Decrypt' },
-] as const satisfies { value: string; label: string }[];
+export function useEncryptDecrypt() {
+	const t = useT();
+	return [
+		{ value: 'encrypt' as const, label: t.common.encrypt },
+		{ value: 'decrypt' as const, label: t.common.decrypt },
+	];
+}
 
 function CopyButton({ text }: { text: string }) {
+	const t = useT();
 	const [copied, setCopied] = useState(false);
 	useEffect(() => {
 		if (!copied) return;
@@ -124,7 +173,7 @@ function CopyButton({ text }: { text: string }) {
 			variant="ghost"
 			size="icon"
 			className="shrink-0 text-muted-foreground"
-			aria-label={copied ? 'Copied' : 'Copy result'}
+			aria-label={copied ? t.common.copied : t.common.copy}
 			onClick={() => void navigator.clipboard?.writeText(text).then(() => setCopied(true))}
 		>
 			{copied ? <CheckIcon /> : <CopyIcon />}
@@ -144,6 +193,7 @@ export function Result<T>({
 	render: (value: T) => ReactNode;
 	copy?: (value: T) => string;
 }) {
+	const t = useT();
 	return (
 		<div
 			data-testid="result"
@@ -168,7 +218,7 @@ export function Result<T>({
 				</>
 			) : (
 				<p data-testid="result-error" className="text-sm text-destructive text-pretty">
-					{computed.error.message}
+					{errorText(t, computed.error)}
 				</p>
 			)}
 		</div>
@@ -212,7 +262,7 @@ export function DataTable({
 		// Scrollable regions must be keyboard-focusable so wide tables can be scrolled without a mouse.
 		// oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
 		<section className={cn('overflow-x-auto rounded-lg border', className)} aria-label={label} tabIndex={0}>
-			<table className="w-full border-collapse text-center font-mono text-sm tabular-nums [&_td]:border-t [&_td]:px-3 [&_td]:py-2 [&_th]:bg-muted [&_th]:px-3 [&_th]:py-2 [&_th]:font-medium [&_th]:text-muted-foreground [&_th[scope=row]]:text-left">
+			<table className="w-full border-collapse text-center font-mono text-sm tabular-nums [&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-accent/70 [&_td]:border-t [&_td]:px-3 [&_td]:py-2 [&_th]:bg-muted [&_th]:px-3 [&_th]:py-2 [&_th]:font-medium [&_th]:text-muted-foreground [&_th[scope=row]]:text-left">
 				{children}
 			</table>
 		</section>

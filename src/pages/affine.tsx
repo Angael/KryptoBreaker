@@ -1,10 +1,23 @@
-import { ENCRYPT_DECRYPT, Field, Fields, M, Page, Result, Section, Segmented } from '@/components/calc';
+import {
+	Field,
+	Fields,
+	M,
+	Note,
+	Page,
+	Result,
+	Section,
+	Segmented,
+	useEncryptDecrypt,
+} from '@/components/calc';
 import { LetterSteps, LetterTable } from '@/components/math/letters';
 import { compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 import { type Mode, ALPHABET_SIZE, affine, affineNumber, inverseSearch } from '@/lib/crypto';
 
 export default function Affine() {
+	const t = useT();
+	const modes = useEncryptDecrypt();
 	const [mode, setMode] = useParam('mode', 'encrypt');
 	const [input, setInput] = useParam('input', 'word');
 	const [text, setText] = useParam('text', 'kryptografia');
@@ -33,24 +46,25 @@ export default function Affine() {
 
 	return (
 		<Page>
-			<Section title="Inputs">
+			<Note>{t.affine.intro}</Note>
+			<Section title={t.common.inputs}>
 				<div className="grid gap-4">
 					<div className="flex flex-wrap gap-2">
-						<Segmented label="Mode" value={mode as Mode} onChange={setMode} options={ENCRYPT_DECRYPT} />
+						<Segmented label={t.common.mode} value={mode as Mode} onChange={setMode} options={modes} />
 						<Segmented
-							label="Input type"
+							label={t.common.inputType}
 							value={isWord ? 'word' : 'number'}
 							onChange={setInput}
 							options={[
-								{ value: 'word', label: 'Word' },
-								{ value: 'number', label: 'Number' },
+								{ value: 'word', label: t.common.word },
+								{ value: 'number', label: t.common.number },
 							]}
 						/>
 					</div>
 					<Fields>
 						{isWord ? (
 							<Field
-								label={encrypt ? 'Plaintext' : 'Ciphertext'}
+								label={encrypt ? t.common.plaintext : t.common.ciphertext}
 								value={text}
 								onChange={setText}
 								numeric={false}
@@ -63,18 +77,14 @@ export default function Affine() {
 									value={x}
 									onChange={setX}
 									invalid={fieldError(num, 'x')}
-									hint="Number to transform"
+									hint={t.affine.hintX}
 								/>
 								<Field
 									label="p"
 									value={p}
 									onChange={setP}
 									invalid={fieldError(num, 'n')}
-									hint={
-										<>
-											Works in Z<sub>{p}</sub>
-										</>
-									}
+									hint={t.affine.hintP(p)}
 								/>
 							</>
 						)}
@@ -83,42 +93,24 @@ export default function Affine() {
 							value={a}
 							onChange={setA}
 							invalid={fieldError(active, 'a')}
-							hint={`Must be coprime with ${isWord ? 26 : p}`}
+							hint={t.affine.hintA(isWord ? '26' : p)}
 						/>
 						<Field label="b" value={b} onChange={setB} invalid={fieldError(active, 'b')} />
 					</Fields>
 				</div>
 			</Section>
 
-			{isWord ? (
-				<Result
-					computed={word}
-					label={encrypt ? 'Ciphertext' : 'Plaintext'}
-					render={(r) => r.output || '—'}
-					copy={(r) => r.output}
-				/>
-			) : (
-				<Result
-					computed={num}
-					label={
-						<M>
-							{encrypt ? 'e' : 'd'}
-							<sub>{fmtKey}</sub>({x})
-						</M>
-					}
-					render={(r) => r.result.toString()}
-					copy={(r) => r.result.toString()}
-				/>
-			)}
-
 			{word.ok && isWord && (
-				<Section title="Table">
+				<Section title={t.common.table}>
 					<LetterTable steps={word.value.steps} encrypt={encrypt} />
 				</Section>
 			)}
 
 			{search && search.inverse !== null && (
-				<Section title="Inverse of a">
+				<Section title={t.affine.inverseTitle}>
+					<p className="mb-3 text-sm text-muted-foreground text-pretty">
+						{t.affine.inverseHowTo(a, n!.toString())}
+					</p>
 					<ol className="grid gap-0.5 font-mono text-sm tabular-nums">
 						{search.trials.map((t) => (
 							<li
@@ -136,7 +128,7 @@ export default function Affine() {
 			)}
 
 			{active.ok && key.ok && (
-				<Section title="Calculation">
+				<Section title={t.common.calculation}>
 					{isWord && word.ok ? (
 						<LetterSteps
 							steps={word.value.steps}
@@ -161,6 +153,26 @@ export default function Affine() {
 						</p>
 					) : null}
 				</Section>
+			)}
+			{isWord ? (
+				<Result
+					computed={word}
+					label={encrypt ? t.common.ciphertext : t.common.plaintext}
+					render={(r) => r.output || '—'}
+					copy={(r) => r.output}
+				/>
+			) : (
+				<Result
+					computed={num}
+					label={
+						<M>
+							{encrypt ? 'e' : 'd'}
+							<sub>{fmtKey}</sub>({x})
+						</M>
+					}
+					render={(r) => r.result.toString()}
+					copy={(r) => r.result.toString()}
+				/>
 			)}
 		</Page>
 	);

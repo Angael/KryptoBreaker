@@ -1,10 +1,22 @@
+import type { ReactNode } from 'react';
 import { Field, Fields, Note, Page, Result, Section } from '@/components/calc';
 import { PowTable } from '@/components/math/pow-table';
 import { compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
-import { diffieHellman } from '@/lib/crypto';
+import { useT } from '@/i18n';
+import { type PowResult, diffieHellman } from '@/lib/crypto';
+
+function Side({ title, pow }: { title: ReactNode; pow: PowResult }) {
+	return (
+		<div className="grid content-start gap-2">
+			<h3 className="text-sm font-medium">{title}</h3>
+			<PowTable pow={pow} />
+		</div>
+	);
+}
 
 export default function DiffieHellman() {
+	const t = useT();
 	const [p, setP] = useParam('p', '1019');
 	const [g, setG] = useParam('g', '2');
 	const [a, setA] = useParam('a', '638');
@@ -14,79 +26,76 @@ export default function DiffieHellman() {
 
 	return (
 		<Page>
-			<Note>
-				Both parties derive the same shared key over a public channel without ever sending it. Each picks a
-				private key, publishes g<sup>private</sup> mod p, and raises the other's public value to their own
-				private key.
-			</Note>
-			<Section title="Inputs">
+			<div className="grid gap-2">
+				{t.dh.intro.map((line) => (
+					<Note key={line}>{line}</Note>
+				))}
+			</div>
+			<Section title={t.common.inputs}>
 				<Fields className="lg:grid-cols-4">
-					<Field
-						label="p"
-						value={p}
-						onChange={setP}
-						invalid={fieldError(dh, 'p')}
-						hint="Public prime modulus"
-					/>
-					<Field label="g" value={g} onChange={setG} invalid={fieldError(dh, 'g')} hint="Public base" />
-					<Field
-						label="a"
-						value={a}
-						onChange={setA}
-						invalid={fieldError(dh, 'a')}
-						hint="Party 1 private key"
-					/>
-					<Field
-						label="b"
-						value={b}
-						onChange={setB}
-						invalid={fieldError(dh, 'b')}
-						hint="Party 2 private key"
-					/>
+					<Field label="p" value={p} onChange={setP} invalid={fieldError(dh, 'p')} hint={t.dh.hintP} />
+					<Field label="g" value={g} onChange={setG} invalid={fieldError(dh, 'g')} hint={t.dh.hintG} />
+					<Field label="a" value={a} onChange={setA} invalid={fieldError(dh, 'a')} hint={t.dh.hintA} />
+					<Field label="b" value={b} onChange={setB} invalid={fieldError(dh, 'b')} hint={t.dh.hintB} />
 				</Fields>
 			</Section>
-			<Result
-				computed={dh}
-				label="Shared key"
-				render={(r) => r.shared.toString()}
-				copy={(r) => r.shared.toString()}
-			/>
 			{dh.ok && (
 				<>
-					<Section title="Public keys">
-						<div className="grid gap-6 md:grid-cols-2">
-							<div className="grid gap-2">
-								<h3 className="text-sm font-medium">
-									Party 1: A = g<sup>a</sup> mod p
-								</h3>
-								<PowTable pow={dh.value.publicA} />
-							</div>
-							<div className="grid gap-2">
-								<h3 className="text-sm font-medium">
-									Party 2: B = g<sup>b</sup> mod p
-								</h3>
-								<PowTable pow={dh.value.publicB} />
+					<Section title={t.dh.publicKeys}>
+						<div className="grid gap-4">
+							<Note>{t.dh.publicKeysHowTo}</Note>
+							<div className="grid gap-6 md:grid-cols-2">
+								<Side
+									title={
+										<>
+											{t.dh.person1}: A = g<sup>a</sup> mod p
+										</>
+									}
+									pow={dh.value.publicA}
+								/>
+								<Side
+									title={
+										<>
+											{t.dh.person2}: B = g<sup>b</sup> mod p
+										</>
+									}
+									pow={dh.value.publicB}
+								/>
 							</div>
 						</div>
 					</Section>
-					<Section title="Shared key">
-						<div className="grid gap-6 md:grid-cols-2">
-							<div className="grid gap-2">
-								<h3 className="text-sm font-medium">
-									Party 1: B<sup>a</sup> mod p
-								</h3>
-								<PowTable pow={dh.value.sharedFromA} />
-							</div>
-							<div className="grid gap-2">
-								<h3 className="text-sm font-medium">
-									Party 2: A<sup>b</sup> mod p
-								</h3>
-								<PowTable pow={dh.value.sharedFromB} />
+					<Section title={t.dh.sharedKey}>
+						<div className="grid gap-4">
+							<Note>{t.dh.sharedHowTo}</Note>
+							<div className="grid gap-6 md:grid-cols-2">
+								<Side
+									title={
+										<>
+											{t.dh.person1}: B<sup>a</sup> mod p
+										</>
+									}
+									pow={dh.value.sharedFromA}
+								/>
+								<Side
+									title={
+										<>
+											{t.dh.person2}: A<sup>b</sup> mod p
+										</>
+									}
+									pow={dh.value.sharedFromB}
+								/>
 							</div>
 						</div>
 					</Section>
 				</>
 			)}
+			<Result
+				computed={dh}
+				label={t.dh.resultLabel}
+				render={(r) => r.shared.toString()}
+				copy={(r) => r.shared.toString()}
+			/>
+			{dh.ok && <Note>{t.dh.bothGot(dh.value.shared.toString())}</Note>}
 		</Page>
 	);
 }

@@ -40,11 +40,13 @@ export function MatrixInput({
 	onChange,
 	invalid,
 	label,
+	cellLabel,
 }: {
 	values: string[][];
 	onChange: (row: number, col: number, value: string) => void;
 	invalid?: boolean;
 	label: string;
+	cellLabel: (row: number, col: number) => string;
 }) {
 	return (
 		<div className="max-w-full overflow-x-auto">
@@ -57,7 +59,7 @@ export function MatrixInput({
 									<input
 										value={v}
 										inputMode="numeric"
-										aria-label={`${label} row ${i + 1} column ${j + 1}`}
+										aria-label={cellLabel(i + 1, j + 1)}
 										aria-invalid={invalid || undefined}
 										onChange={(e) => onChange(i, j, e.target.value)}
 										onFocus={(e) => e.target.select()}

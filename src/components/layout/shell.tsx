@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet';
 import { Tooltip } from '@/components/ui/tooltip';
 import { useTheme } from '@/hooks/use-theme';
+import { LANGS, useLang, useT } from '@/i18n';
 import { logRouteVisit } from '@/lib/analytics';
 import { findRoute } from '@/routes';
 import { cn } from '@/lib/utils';
@@ -44,6 +45,9 @@ export function Shell({ children }: { children: ReactNode }) {
 	const [sidebarOpen, setSidebarOpen] = usePersistentBoolean('sidebar-open', true);
 	const [sheetOpen, setSheetOpen] = useState(false);
 	const { theme, toggle } = useTheme();
+	const t = useT();
+	const [lang, setLang] = useLang();
+	const nextLang = LANGS.find((l) => l.value !== lang)!;
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -59,14 +63,14 @@ export function Shell({ children }: { children: ReactNode }) {
 		<div className="min-h-dvh">
 			<title>
 				{route && route.path !== '/'
-					? `${route.name}${group ? ` · ${group.name}` : ''} · KryptoBreaker`
+					? `${t.routes[route.id]}${group ? ` · ${t.groups[group.id]}` : ''} · KryptoBreaker`
 					: 'KryptoBreaker'}
 			</title>
 			<a
 				href="#main"
 				className="fixed top-2 left-2 z-[60] -translate-y-16 rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground focus:translate-y-0"
 			>
-				Skip to content
+				{t.shell.skip}
 			</a>
 			<header className="sticky top-0 z-40 border-b bg-background/85 pt-[env(safe-area-inset-top)] backdrop-blur-md">
 				<div className="flex h-14 items-center gap-1 px-2 pr-[max(0.5rem,env(safe-area-inset-right))] pl-[max(0.5rem,env(safe-area-inset-left))]">
@@ -74,7 +78,7 @@ export function Shell({ children }: { children: ReactNode }) {
 						variant="ghost"
 						size="icon"
 						onClick={toggleMenu}
-						aria-label="Toggle navigation"
+						aria-label={t.shell.toggleNav}
 						aria-expanded={sheetOpen || undefined}
 					>
 						<MenuIcon className="size-5" />
@@ -87,18 +91,30 @@ export function Shell({ children }: { children: ReactNode }) {
 						KryptoBreaker
 					</Link>
 					<div className="ml-auto flex items-center gap-1">
+						<Tooltip content={`${t.shell.language}: ${nextLang.label}`}>
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => setLang(nextLang.value)}
+								aria-label={`${t.shell.language}: ${nextLang.label}`}
+								lang={nextLang.value}
+								className="font-mono text-xs font-semibold uppercase"
+							>
+								{nextLang.value}
+							</Button>
+						</Tooltip>
 						<KeyUsageDialog>
-							<Button variant="ghost" size="icon" aria-label="When to use which key">
+							<Button variant="ghost" size="icon" aria-label={t.shell.keyUsage}>
 								<KeyRoundIcon className="size-5" />
 							</Button>
 						</KeyUsageDialog>
-						<Tooltip content={theme === 'dark' ? 'Light theme' : 'Dark theme'}>
-							<Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle dark theme">
+						<Tooltip content={theme === 'dark' ? t.shell.lightTheme : t.shell.darkTheme}>
+							<Button variant="ghost" size="icon" onClick={toggle} aria-label={t.shell.toggleTheme}>
 								{theme === 'dark' ? <SunIcon className="size-5" /> : <MoonIcon className="size-5" />}
 							</Button>
 						</Tooltip>
 						<Button variant="ghost" size="icon" asChild className="hidden sm:inline-flex">
-							<a href={REPO_URL} target="_blank" rel="noreferrer" aria-label="Source code on GitHub">
+							<a href={REPO_URL} target="_blank" rel="noreferrer" aria-label={t.shell.github}>
 								<GithubMark />
 							</a>
 						</Button>
@@ -110,7 +126,7 @@ export function Shell({ children }: { children: ReactNode }) {
 				<SheetContent aria-describedby={undefined}>
 					<div className="flex h-14 shrink-0 items-center border-b px-4 pt-[env(safe-area-inset-top)]">
 						<SheetTitle className="font-semibold">KryptoBreaker</SheetTitle>
-						<SheetDescription className="sr-only">Pages</SheetDescription>
+						<SheetDescription className="sr-only">{t.shell.pages}</SheetDescription>
 					</div>
 					<Nav onNavigate={() => setSheetOpen(false)} />
 					<SidebarFooter />
@@ -118,7 +134,7 @@ export function Shell({ children }: { children: ReactNode }) {
 			</Sheet>
 
 			<aside
-				aria-label="Pages"
+				aria-label={t.shell.pages}
 				className={cn(
 					'fixed top-14 bottom-0 left-0 z-30 hidden w-64 flex-col border-r bg-background pl-[env(safe-area-inset-left)]',
 					sidebarOpen && 'lg:flex',
@@ -135,8 +151,8 @@ export function Shell({ children }: { children: ReactNode }) {
 				>
 					{route && route.path !== '/' && (
 						<header className="mb-6">
-							{group && <p className="text-sm text-muted-foreground">{group.name}</p>}
-							<h1 className="text-2xl font-semibold text-balance sm:text-3xl">{route.name}</h1>
+							{group && <p className="text-sm text-muted-foreground">{t.groups[group.id]}</p>}
+							<h1 className="text-2xl font-semibold text-balance sm:text-3xl">{t.routes[route.id]}</h1>
 						</header>
 					)}
 					<Suspense fallback={<div className="min-h-[50dvh]" aria-busy="true" />}>{children}</Suspense>
@@ -147,6 +163,7 @@ export function Shell({ children }: { children: ReactNode }) {
 }
 
 function SidebarFooter() {
+	const t = useT();
 	return (
 		<div className="mt-auto grid gap-1 border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-sm">
 			<a
@@ -155,7 +172,7 @@ function SidebarFooter() {
 				rel="noreferrer"
 				className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 			>
-				Buy me a coffee
+				{t.shell.coffee}
 			</a>
 			<a
 				href={REPO_URL}
@@ -163,7 +180,7 @@ function SidebarFooter() {
 				rel="noreferrer"
 				className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 			>
-				Source code
+				{t.shell.source}
 			</a>
 			<p className="px-3 pt-1 text-xs text-muted-foreground">v{version}</p>
 		</div>

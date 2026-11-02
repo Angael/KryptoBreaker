@@ -1,6 +1,7 @@
 import { Field, Fields, M, Section } from '@/components/calc';
 import { type Computed, fieldError } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 
 export function useRsaKeyParams() {
 	const [e, setE] = useParam('e', '1001');
@@ -16,9 +17,10 @@ export function RsaKeyFields({
 	keys: ReturnType<typeof useRsaKeyParams>;
 	computed: Computed<unknown>;
 }) {
+	const t = useT();
 	const { e, setE, d, setD, n, setN } = keys;
 	return (
-		<Section title="Keys">
+		<Section title={t.common.keys}>
 			<div className="grid gap-4">
 				<Fields>
 					<Field label="e" value={e} onChange={setE} invalid={fieldError(computed, 'e')} />
@@ -32,10 +34,11 @@ export function RsaKeyFields({
 }
 
 export function KeyPair({ e, d, n }: { e: string; d: string; n: string }) {
+	const t = useT();
 	return (
 		<dl className="grid gap-1 text-sm sm:grid-cols-2">
 			<div>
-				<dt className="text-muted-foreground">Public key</dt>
+				<dt className="text-muted-foreground">{t.common.publicKey}</dt>
 				<dd>
 					<M>
 						k<sub>1</sub> = (e, n) = ({e}, {n})
@@ -43,7 +46,7 @@ export function KeyPair({ e, d, n }: { e: string; d: string; n: string }) {
 				</dd>
 			</div>
 			<div>
-				<dt className="text-muted-foreground">Private key</dt>
+				<dt className="text-muted-foreground">{t.common.privateKey}</dt>
 				<dd>
 					<M>
 						k<sub>2</sub> = (d, n) = ({d}, {n})

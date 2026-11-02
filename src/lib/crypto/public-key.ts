@@ -27,7 +27,7 @@ export interface DiffieHellmanResult {
 
 export function diffieHellman(p: bigint, g: bigint, a: bigint, b: bigint): DiffieHellmanResult {
 	assertPrime(p);
-	if (p < 5n) throw new InputError('p must be at least 5.', 'p');
+	if (p < 5n) throw new InputError('p must be at least 5.', 'p', 'atLeast', { label: 'p', min: '5' });
 	assertRange(g, 2n, p - 2n, 'g');
 	assertRange(a, 2n, p - 2n, 'a');
 	assertRange(b, 2n, p - 2n, 'b');
@@ -51,23 +51,28 @@ export interface RsaKeys {
 export function rsaKeys(p: bigint, q: bigint, e: bigint): RsaKeys {
 	assertPrime(p, 'p');
 	assertPrime(q, 'q');
-	if (p === q) throw new InputError('p and q must be different primes.', 'q');
+	if (p === q) throw new InputError('p and q must be different primes.', 'q', 'distinctPrimes');
 	const n = p * q;
 	const phi = (p - 1n) * (q - 1n);
 	assertRange(e, 2n, phi - 1n, 'e');
 	const euclid = extendedEuclid(e, phi);
 	if (euclid.inverse === null) {
-		throw new InputError(`e must be coprime with φ = ${phi} (gcd = ${euclid.gcd}).`, 'e');
+		throw new InputError(`e must be coprime with φ = ${phi} (gcd = ${euclid.gcd}).`, 'e', 'coprime', {
+			label: 'e',
+			n: `φ = ${phi}`,
+			gcd: String(euclid.gcd),
+		});
 	}
 	return { n, phi, e, d: euclid.inverse, euclid };
 }
 
 function assertRsaModulus(n: bigint): void {
-	if (n < 2n) throw new InputError('n must be at least 2.', 'n');
+	if (n < 2n) throw new InputError('n must be at least 2.', 'n', 'atLeast', { label: 'n', min: '2' });
 }
 
 function assertExponent(v: bigint, field: string): void {
-	if (v < 1n) throw new InputError(`${field} must be a positive integer.`, field);
+	if (v < 1n)
+		throw new InputError(`${field} must be a positive integer.`, field, 'positive', { label: field });
 }
 
 /** y = xᵉ mod n. Requires 0 ≤ x < n. */
@@ -117,7 +122,7 @@ export interface ElGamalKeys {
 
 function assertElGamalGroup(p: bigint, alpha: bigint): void {
 	assertPrime(p);
-	if (p < 3n) throw new InputError('p must be at least 3.', 'p');
+	if (p < 3n) throw new InputError('p must be at least 3.', 'p', 'atLeast', { label: 'p', min: '3' });
 	assertRange(alpha, 2n, p - 1n, 'alpha', 'α');
 }
 
@@ -173,10 +178,19 @@ export interface ElGamalSignature {
 /** Requires 1 ≤ r ≤ p − 2 with gcd(r, p − 1) = 1. */
 export function elgamalSign(keys: ElGamalKeys, h: bigint, r: bigint): ElGamalSignature {
 	const { p, alpha, t } = keys;
-	if (h < 0n) throw new InputError('h must be non-negative.', 'h');
+	if (h < 0n) throw new InputError('h must be non-negative.', 'h', 'nonNegative', { label: 'h' });
 	assertRange(r, 1n, p - 2n, 'r');
 	if (gcd(r, p - 1n) !== 1n) {
-		throw new InputError(`r must be coprime with p − 1 = ${p - 1n} (gcd = ${gcd(r, p - 1n)}).`, 'r');
+		throw new InputError(
+			`r must be coprime with p − 1 = ${p - 1n} (gcd = ${gcd(r, p - 1n)}).`,
+			'r',
+			'coprime',
+			{
+				label: 'r',
+				n: `p − 1 = ${p - 1n}`,
+				gcd: String(gcd(r, p - 1n)),
+			},
+		);
 	}
 	const u = modPow(alpha, r, p);
 	const rInverse = extendedEuclid(r, p - 1n);
@@ -199,7 +213,7 @@ export interface ElGamalVerification {
 /** Valid when αʰ ≡ βᵘ·uˢ (mod p). Requires 1 ≤ u ≤ p − 1 and 0 ≤ s ≤ p − 2. */
 export function elgamalVerify(keys: ElGamalKeys, h: bigint, u: bigint, s: bigint): ElGamalVerification {
 	const { p, alpha, beta } = keys;
-	if (h < 0n) throw new InputError('h must be non-negative.', 'h');
+	if (h < 0n) throw new InputError('h must be non-negative.', 'h', 'nonNegative', { label: 'h' });
 	assertRange(u, 1n, p - 1n, 'u');
 	assertRange(s, 0n, p - 2n, 's');
 	const f = modPow(alpha, h, p);

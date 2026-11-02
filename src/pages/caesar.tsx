@@ -1,14 +1,19 @@
-import { ENCRYPT_DECRYPT, Field, Fields, Page, Result, Section, Segmented } from '@/components/calc';
+import { Field, Fields, Note, Page, Result, Section, Segmented, useEncryptDecrypt } from '@/components/calc';
 import { LetterSteps, LetterTable } from '@/components/math/letters';
 import { compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 import { type Mode, caesar } from '@/lib/crypto';
 
 export default function Caesar() {
+	const t = useT();
+	const modes = useEncryptDecrypt();
 	const [mode, setMode] = useParam('mode', 'encrypt');
 	const [text, setText] = useParam('text', 'kryptografia');
 	const [k, setK] = useParam('k', '3');
 	const encrypt = mode !== 'decrypt';
+	const textLabel = encrypt ? t.common.plaintext : t.common.ciphertext;
+	const outLabel = encrypt ? t.common.ciphertext : t.common.plaintext;
 
 	const result = compute(() => {
 		const key = int(k, 'k', 'Key');
@@ -17,39 +22,34 @@ export default function Caesar() {
 
 	return (
 		<Page>
-			<Section title="Inputs">
+			<Note>{t.caesar.intro}</Note>
+			<Section title={t.common.inputs}>
 				<div className="grid gap-4">
-					<Segmented label="Mode" value={mode as Mode} onChange={setMode} options={ENCRYPT_DECRYPT} />
+					<Segmented label={t.common.mode} value={mode as Mode} onChange={setMode} options={modes} />
 					<Fields>
 						<Field
-							label={encrypt ? 'Plaintext' : 'Ciphertext'}
+							label={textLabel}
 							value={text}
 							onChange={setText}
 							numeric={false}
 							className="sm:col-span-2"
 						/>
 						<Field
-							label="Key"
+							label={t.common.key}
 							value={k}
 							onChange={setK}
 							invalid={fieldError(result, 'k')}
-							hint={encrypt ? 'Added to every letter' : 'Subtracted from every letter'}
+							hint={encrypt ? t.caesar.hintEncrypt : t.caesar.hintDecrypt}
 						/>
 					</Fields>
 				</div>
 			</Section>
-			<Result
-				computed={result}
-				label={encrypt ? 'Ciphertext' : 'Plaintext'}
-				render={(r) => r.output || '—'}
-				copy={(r) => r.output}
-			/>
 			{result.ok && (
 				<>
-					<Section title="Table">
+					<Section title={t.common.table}>
 						<LetterTable steps={result.value.steps} encrypt={encrypt} />
 					</Section>
-					<Section title="Calculation">
+					<Section title={t.common.calculation}>
 						<LetterSteps
 							steps={result.value.steps}
 							render={(s) => (
@@ -62,6 +62,7 @@ export default function Caesar() {
 					</Section>
 				</>
 			)}
+			<Result computed={result} label={outLabel} render={(r) => r.output || '—'} copy={(r) => r.output} />
 		</Page>
 	);
 }

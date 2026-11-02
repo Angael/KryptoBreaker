@@ -1,12 +1,14 @@
-import { Field, Fields, Formula, M, Page, PowExpr, Result, Section } from '@/components/calc';
+import { Field, Fields, Formula, M, Note, Page, PowExpr, Result, Section } from '@/components/calc';
 import { EuclidTable } from '@/components/math/euclid-table';
 import { PowTable } from '@/components/math/pow-table';
 import { compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 import { elgamalSign } from '@/lib/crypto';
 import { ElGamalKeyFields, useElGamalKeys } from './key-fields';
 
 export default function ElGamalSign() {
+	const t = useT();
 	const state = useElGamalKeys();
 	const [h, setH] = useParam('h', '357');
 	const [r, setR] = useParam('r', '515');
@@ -17,16 +19,17 @@ export default function ElGamalSign() {
 
 	return (
 		<Page>
+			<Note>{t.elgamal.signIntro}</Note>
 			<ElGamalKeyFields state={state} computed={sig} />
-			<Section title="Message">
+			<Section title={t.common.message}>
 				<Fields>
-					<Field label="h" value={h} onChange={setH} invalid={fieldError(sig, 'h')} hint="Message hash" />
+					<Field label="h" value={h} onChange={setH} invalid={fieldError(sig, 'h')} hint={t.elgamal.hintH} />
 					<Field
 						label="r"
 						value={r}
 						onChange={setR}
 						invalid={fieldError(sig, 'r')}
-						hint="Random, coprime with p − 1"
+						hint={t.elgamal.hintRSign}
 					/>
 				</Fields>
 			</Section>
@@ -38,18 +41,12 @@ export default function ElGamalSign() {
 					s = r<sup>-1</sup> · (h − t · u) mod (p − 1)
 				</div>
 			</Formula>
-			<Result
-				computed={sig}
-				label="Signature (u, s)"
-				render={(v) => `(${v.u.result}, ${v.s})`}
-				copy={(v) => `(${v.u.result}, ${v.s})`}
-			/>
 			{sig.ok && (
 				<>
-					<Section title="Calculate u">
+					<Section title={t.elgamal.calcU}>
 						<PowTable pow={sig.value.u} />
 					</Section>
-					<Section title="Calculate s">
+					<Section title={t.elgamal.calcS}>
 						<div className="grid gap-4">
 							<EuclidTable euclid={sig.value.rInverse} />
 							<M className="text-sm">
@@ -61,6 +58,12 @@ export default function ElGamalSign() {
 					</Section>
 				</>
 			)}
+			<Result
+				computed={sig}
+				label={t.elgamal.signature}
+				render={(v) => `(${v.u.result}, ${v.s})`}
+				copy={(v) => `(${v.u.result}, ${v.s})`}
+			/>
 		</Page>
 	);
 }

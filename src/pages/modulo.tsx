@@ -1,9 +1,11 @@
-import { Field, Fields, M, Page, Result, Section } from '@/components/calc';
+import { Field, Fields, M, Note, Page, Result, Section } from '@/components/calc';
 import { compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 import { mod } from '@/lib/crypto';
 
 export default function Modulo() {
+	const t = useT();
 	const [x, setX] = useParam('x', '2');
 	const [m, setM] = useParam('m', '1019');
 
@@ -16,26 +18,27 @@ export default function Modulo() {
 
 	return (
 		<Page>
-			<Section title="Inputs">
+			<Note>{t.modulo.intro}</Note>
+			<Section title={t.common.inputs}>
 				<Fields>
-					<Field label="Number" value={x} onChange={setX} invalid={fieldError(result, 'x')} />
-					<Field label="Modulo" value={m} onChange={setM} invalid={fieldError(result, 'modulus')} />
+					<Field label={t.common.number} value={x} onChange={setX} invalid={fieldError(result, 'x')} />
+					<Field label={t.common.modulo} value={m} onChange={setM} invalid={fieldError(result, 'modulus')} />
 				</Fields>
 			</Section>
-			<Result
-				computed={result}
-				label={<M>{`${x} mod ${m}`}</M>}
-				render={(v) => v.r.toString()}
-				copy={(v) => v.r.toString()}
-			/>
 			{result.ok && (
-				<Section title="Calculation">
+				<Section title={t.common.calculation}>
 					<p className="font-mono text-sm tabular-nums">
 						{result.value.xv.toString()} = {result.value.q.toString()} · {result.value.mv.toString()} +{' '}
 						<strong>{result.value.r.toString()}</strong>
 					</p>
 				</Section>
 			)}
+			<Result
+				computed={result}
+				label={<M>{`${x} mod ${m}`}</M>}
+				render={(v) => v.r.toString()}
+				copy={(v) => v.r.toString()}
+			/>
 		</Page>
 	);
 }

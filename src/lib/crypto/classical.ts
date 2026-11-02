@@ -58,7 +58,11 @@ export interface AffineKey {
 
 function affineInverse(a: bigint, n: bigint): bigint {
 	if (gcd(a, n) !== 1n) {
-		throw new InputError(`a must be coprime with ${n} (gcd(${a}, ${n}) = ${gcd(a, n)}).`, 'a');
+		throw new InputError(`a must be coprime with ${n} (gcd(${a}, ${n}) = ${gcd(a, n)}).`, 'a', 'coprime', {
+			label: 'a',
+			n: String(n),
+			gcd: String(gcd(a, n)),
+		});
 	}
 	return modInverse(a, n)!;
 }
@@ -101,7 +105,7 @@ export function affineNumber(
 	mode: Mode,
 	n: bigint,
 ): { raw: bigint; result: bigint; aInverse: bigint } {
-	if (n < 2n) throw new InputError('n must be at least 2.', 'n');
+	if (n < 2n) throw new InputError('n must be at least 2.', 'n', 'atLeast', { label: 'n', min: '2' });
 	const aInverse = affineInverse(key.a, n);
 	return { ...affineValue(x, key, mode, n), aInverse };
 }
@@ -117,7 +121,8 @@ export interface VigenereStep extends LetterStep {
  */
 export function vigenere(text: string, key: string, mode: Mode): CipherResult<VigenereStep> {
 	const keyChars = [...key].filter((c) => letterToCode(c) !== null);
-	if (keyChars.length === 0) throw new InputError('Key must contain at least one letter.', 'key');
+	if (keyChars.length === 0)
+		throw new InputError('Key must contain at least one letter.', 'key', 'keyLetter');
 	let k = 0;
 	const steps = [...text].map((char): VigenereStep => {
 		const code = letterToCode(char);

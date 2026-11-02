@@ -1,13 +1,15 @@
 import { NavLink } from 'react-router';
 import { groups } from '@/routes';
+import { useT } from '@/i18n';
 import { cn } from '@/lib/utils';
 
 export function Nav({ onNavigate }: { onNavigate?: () => void }) {
+	const t = useT();
 	return (
-		<nav aria-label="Calculators" className="flex-1 overflow-y-auto overscroll-contain px-3 py-4">
+		<nav aria-label={t.shell.calculators} className="flex-1 overflow-y-auto overscroll-contain px-3 py-4">
 			{groups.map((group) => (
-				<div key={group.name} className="mb-5 last:mb-0">
-					<h2 className="px-3 pb-1.5 text-xs font-medium text-muted-foreground">{group.name}</h2>
+				<div key={group.id} className="mb-5 last:mb-0">
+					<h2 className="px-3 pb-1.5 text-xs font-medium text-muted-foreground">{t.groups[group.id]}</h2>
 					<ul className="grid gap-0.5">
 						{group.routes.map((route) => (
 							<li key={route.path}>
@@ -23,7 +25,7 @@ export function Nav({ onNavigate }: { onNavigate?: () => void }) {
 										)
 									}
 								>
-									{route.name}
+									{t.routes[route.id]}
 								</NavLink>
 							</li>
 						))}

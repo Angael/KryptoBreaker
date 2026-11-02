@@ -1,11 +1,13 @@
-import { Field, Fields, Formula, M, Page, Result, Section } from '@/components/calc';
+import { Field, Fields, Formula, M, Note, Page, Result, Section } from '@/components/calc';
 import { PowTable } from '@/components/math/pow-table';
 import { compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 import { elgamalDecrypt } from '@/lib/crypto';
 import { ElGamalKeyFields, useElGamalKeys } from './key-fields';
 
 export default function ElGamalDecrypt() {
+	const t = useT();
 	const state = useElGamalKeys();
 	const [y1, setY1] = useParam('y1', '130');
 	const [y2, setY2] = useParam('y2', '414');
@@ -16,8 +18,9 @@ export default function ElGamalDecrypt() {
 
 	return (
 		<Page>
+			<Note>{t.elgamal.decryptIntro}</Note>
 			<ElGamalKeyFields state={state} computed={pt} />
-			<Section title="Ciphertext">
+			<Section title={t.common.ciphertext}>
 				<Fields>
 					<Field
 						label={
@@ -45,9 +48,8 @@ export default function ElGamalDecrypt() {
 				x = y<sub>2</sub> · y<sub>1</sub>
 				<sup>p − 1 − t</sup> mod p
 			</Formula>
-			<Result computed={pt} label="Message x" render={(v) => v.x.toString()} copy={(v) => v.x.toString()} />
 			{pt.ok && (
-				<Section title="Calculation">
+				<Section title={t.common.calculation}>
 					<div className="grid gap-3">
 						<M className="text-sm">
 							p − 1 − t = {state.p} − 1 − {state.t} = {pt.value.exponent.toString()}
@@ -59,6 +61,12 @@ export default function ElGamalDecrypt() {
 					</div>
 				</Section>
 			)}
+			<Result
+				computed={pt}
+				label={t.rsa.messageX}
+				render={(v) => v.x.toString()}
+				copy={(v) => v.x.toString()}
+			/>
 		</Page>
 	);
 }

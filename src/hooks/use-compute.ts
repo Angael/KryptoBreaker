@@ -15,7 +15,7 @@ export function compute<T>(fn: () => T): Computed<T> {
 /** Parses an integer input or throws an InputError for that field. */
 export function int(raw: string, field: string, label = field): bigint {
 	const v = parseInteger(raw);
-	if (v === null) throw new InputError(`${label} must be a whole number.`, field);
+	if (v === null) throw new InputError(`${label} must be a whole number.`, field, 'wholeNumber', { label });
 	return v;
 }
 

@@ -18,8 +18,10 @@ export function isSquare(m: Matrix): boolean {
 export function matMul(a: Matrix, b: Matrix): Matrix {
 	const inner = b.length;
 	const isRect = (m: Matrix) => m.every((row) => row.length === (m[0]?.length ?? 0));
-	if (!isRect(a) || !isRect(b)) throw new InputError('Matrix rows must all have the same length.');
-	if (a.some((row) => row.length !== inner)) throw new InputError('Matrix dimensions do not match.');
+	if (!isRect(a) || !isRect(b))
+		throw new InputError('Matrix rows must all have the same length.', undefined, 'square');
+	if (a.some((row) => row.length !== inner))
+		throw new InputError('Matrix dimensions do not match.', undefined, 'square');
 	const cols = b[0]?.length ?? 0;
 	return a.map((row) =>
 		Array.from({ length: cols }, (_, j) => row.reduce((s, v, k) => s + v * b[k]![j]!, 0n)),
@@ -32,7 +34,7 @@ export function matMod(m: Matrix, n: bigint = ALPHABET_SIZE): Matrix {
 
 /** Exact integer determinant (Bareiss fraction-free elimination). */
 export function determinant(m: Matrix): bigint {
-	if (!isSquare(m)) throw new InputError('Matrix must be square.');
+	if (!isSquare(m)) throw new InputError('Matrix must be square.', undefined, 'square');
 	const n = m.length;
 	const a = m.map((row) => [...row]);
 	let sign = 1n;
@@ -60,7 +62,7 @@ function minor(m: Matrix, row: number, col: number): Matrix {
 
 /** Adjugate (transpose of the cofactor matrix). */
 export function adjugate(m: Matrix): Matrix {
-	if (!isSquare(m)) throw new InputError('Matrix must be square.');
+	if (!isSquare(m)) throw new InputError('Matrix must be square.', undefined, 'square');
 	const n = m.length;
 	if (n === 1) return [[1n]];
 	return Array.from({ length: n }, (_, i) =>
@@ -119,15 +121,24 @@ export interface HillResult {
  * - `decrypt-with-inverse`: the given matrix already is K⁻¹; multiply by it.
  */
 export function hill(text: string, key: Matrix, mode: HillMode): HillResult {
-	if (!isSquare(key)) throw new InputError('Key must be a square matrix.', 'key');
+	if (!isSquare(key)) throw new InputError('Key must be a square matrix.', 'key', 'square');
 	const size = key.length;
 	if (size < HILL_MIN_SIZE || size > HILL_MAX_SIZE) {
-		throw new InputError(`Key size must be between ${HILL_MIN_SIZE} and ${HILL_MAX_SIZE}.`, 'key');
+		throw new InputError(
+			`Key size must be between ${HILL_MIN_SIZE} and ${HILL_MAX_SIZE}.`,
+			'key',
+			'keySize',
+			{
+				min: String(HILL_MIN_SIZE),
+				max: String(HILL_MAX_SIZE),
+			},
+		);
 	}
 	const chars = [...text];
 	const codes = chars.map(letterToCode).filter((c): c is number => c !== null);
 	const ignored = chars.length - codes.length;
-	if (codes.length === 0) throw new InputError('Text must contain at least one letter.', 'text');
+	if (codes.length === 0)
+		throw new InputError('Text must contain at least one letter.', 'text', 'textLetter');
 
 	const remainder = codes.length % size;
 	let padding = 0;
@@ -136,6 +147,8 @@ export function hill(text: string, key: Matrix, mode: HillMode): HillResult {
 			throw new InputError(
 				`Ciphertext length must be a multiple of ${size} (got ${codes.length} letters).`,
 				'text',
+				'blockMultiple',
+				{ size: String(size), count: String(codes.length) },
 			);
 		}
 		padding = size - remainder;
@@ -151,7 +164,7 @@ export function hill(text: string, key: Matrix, mode: HillMode): HillResult {
 	if (mode === 'decrypt') {
 		inverse = invertMatrixMod(key);
 		if (!inverse) {
-			throw new InputError('Key is not invertible mod 26: gcd(det K, 26) must be 1.', 'key');
+			throw new InputError('Key is not invertible mod 26: gcd(det K, 26) must be 1.', 'key', 'notInvertible');
 		}
 		multiplier = inverse.inverse;
 	}

@@ -1,6 +1,7 @@
 import { Field, Fields, M, Section } from '@/components/calc';
 import { type Computed, compute, fieldError, int } from '@/hooks/use-compute';
 import { useParam } from '@/hooks/use-param';
+import { useT } from '@/i18n';
 import { elgamalKeys } from '@/lib/crypto';
 
 export function useElGamalKeys() {
@@ -18,10 +19,11 @@ export function ElGamalKeyFields({
 	state: ReturnType<typeof useElGamalKeys>;
 	computed: Computed<unknown>;
 }) {
+	const tr = useT();
 	const { p, setP, alpha, setAlpha, t, setT, keys } = state;
 	const beta = keys.ok ? keys.value.beta.result.toString() : '';
 	return (
-		<Section title="Keys">
+		<Section title={tr.common.keys}>
 			<div className="grid gap-4">
 				<Fields className="lg:grid-cols-4">
 					<Field
@@ -29,23 +31,23 @@ export function ElGamalKeyFields({
 						value={p}
 						onChange={setP}
 						invalid={fieldError(computed, 'p')}
-						hint="Prime modulus"
+						hint={tr.elgamal.hintP}
 					/>
 					<Field
 						label="α"
 						value={alpha}
 						onChange={setAlpha}
 						invalid={fieldError(computed, 'alpha')}
-						hint="Public base"
+						hint={tr.elgamal.hintAlpha}
 					/>
 					<Field
 						label="t"
 						value={t}
 						onChange={setT}
 						invalid={fieldError(computed, 't')}
-						hint="Private exponent"
+						hint={tr.elgamal.hintT}
 					/>
-					<Field label="β" value={beta} hint="αᵗ mod p" />
+					<Field label="β" value={beta} hint={tr.elgamal.hintBeta} />
 				</Fields>
 				<ElGamalKeyPair p={p} alpha={alpha} beta={beta || '?'} t={t} />
 			</div>
@@ -54,10 +56,11 @@ export function ElGamalKeyFields({
 }
 
 export function ElGamalKeyPair({ p, alpha, beta, t }: { p: string; alpha: string; beta: string; t: string }) {
+	const tr = useT();
 	return (
 		<dl className="grid gap-1 text-sm sm:grid-cols-2">
 			<div>
-				<dt className="text-muted-foreground">Public key</dt>
+				<dt className="text-muted-foreground">{tr.common.publicKey}</dt>
 				<dd>
 					<M>
 						k<sub>1</sub> = (p, α, β) = ({p}, {alpha}, {beta})
@@ -65,7 +68,7 @@ export function ElGamalKeyPair({ p, alpha, beta, t }: { p: string; alpha: string
 				</dd>
 			</div>
 			<div>
-				<dt className="text-muted-foreground">Private key</dt>
+				<dt className="text-muted-foreground">{tr.common.privateKey}</dt>
 				<dd>
 					<M>
 						k<sub>2</sub> = (p, t) = ({p}, {t})

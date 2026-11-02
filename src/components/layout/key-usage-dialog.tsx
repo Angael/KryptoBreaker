@@ -1,40 +1,31 @@
 import type { ReactNode } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useT } from '@/i18n';
+
+const b = (s: string) => <strong className="text-foreground">{s}</strong>;
 
 export function KeyUsageDialog({ children }: { children: ReactNode }) {
+	const t = useT();
+	const k = t.keyUsage;
 	return (
 		<Dialog>
 			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent>
-				<DialogTitle>When to use which key</DialogTitle>
-				<DialogDescription className="sr-only">
-					Which key encrypts, decrypts, signs and verifies.
-				</DialogDescription>
+				<DialogTitle>{t.shell.keyUsage}</DialogTitle>
+				<DialogDescription className="sr-only">{k.description}</DialogDescription>
 				<div className="grid gap-5 text-sm">
 					<section className="grid gap-2">
-						<h3 className="font-medium">Encrypting a message</h3>
+						<h3 className="font-medium">{k.encrypting}</h3>
 						<ol className="grid list-decimal gap-1 pl-5 text-muted-foreground">
-							<li>
-								The <strong className="text-foreground">sender</strong> encrypts with the{' '}
-								<strong className="text-foreground">receiver's public key</strong>.
-							</li>
-							<li>
-								The <strong className="text-foreground">receiver</strong> decrypts with{' '}
-								<strong className="text-foreground">their own private key</strong>.
-							</li>
+							<li>{k.enc1(b)}</li>
+							<li>{k.enc2(b)}</li>
 						</ol>
 					</section>
 					<section className="grid gap-2">
-						<h3 className="font-medium">Signing a message</h3>
+						<h3 className="font-medium">{k.signing}</h3>
 						<ol className="grid list-decimal gap-1 pl-5 text-muted-foreground">
-							<li>
-								The <strong className="text-foreground">sender</strong> signs with{' '}
-								<strong className="text-foreground">their own private key</strong>.
-							</li>
-							<li>
-								The <strong className="text-foreground">receiver</strong> verifies with the{' '}
-								<strong className="text-foreground">sender's public key</strong>.
-							</li>
+							<li>{k.sign1(b)}</li>
+							<li>{k.sign2(b)}</li>
 						</ol>
 					</section>
 				</div>
