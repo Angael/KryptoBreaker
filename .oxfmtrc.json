@@ -1,0 +1,7 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"useTabs": true,
+	"singleQuote": true,
+	"printWidth": 110,
+	"ignorePatterns": ["dist", "dev-dist", "playwright-report", "test-results", "bun.lock"]
+}
