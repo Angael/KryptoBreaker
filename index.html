@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<link rel="icon" href="/logo/kryptobreakerlogo_1uu_icon.ico" />
+		<link rel="apple-touch-icon" href="/logo192.png" />
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+		<meta
+			name="description"
+			content="Step-by-step calculators for Caesar, affine, Vigenère, Hill, RSA, ElGamal, Diffie–Hellman and modular arithmetic."
+		/>
+		<title>KryptoBreaker</title>
+		<script>
+			try {
+				const t = localStorage.getItem('theme');
+				const dark = t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+				document.documentElement.classList.toggle('dark', dark);
+			} catch {}
+		</script>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.tsx"></script>
+	</body>
+</html>

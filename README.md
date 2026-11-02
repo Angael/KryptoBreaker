@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+# KryptoBreaker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Step-by-step calculators for classical and public-key cryptography. Enter your keys and messages, and you get the answer along with every intermediate value: the square-and-multiply tables, the extended Euclid tables, the per-letter working, and the matrix inverses.
 
-## Available Scripts
+**Ciphers:** Caesar, affine, Vigenère, Hill  
+**Public key:** RSA and ElGamal (key generation, encryption, decryption, signatures, verification), Diffie–Hellman  
+**Helpers:** modular inverse, modular exponentiation, modulo, letter ↔ number table
 
-In the project directory, you can run:
+Every page works offline as an installable PWA. Inputs live in the URL, so any calculation can be shared as a link.
 
-### `yarn start`
+## Correctness
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+All maths lives in [`src/lib/crypto`](src/lib/crypto) as pure, UI-free functions:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- `BigInt` everywhere, so results stay exact far beyond 2⁵³.
+- Inputs outside an algorithm's domain throw an `InputError` naming the offending field. Examples: a non-invertible affine or Hill key, `gcd(e, φ) ≠ 1`, a composite `p`, an ElGamal nonce not coprime with `p − 1`, out-of-range signature values. The UI shows the error next to the result instead of a wrong answer.
+- Unit tests cover known vectors and edge cases. Property-based tests ([fast-check](https://fast-check.dev)) check that decrypting an encryption returns the input, that signatures verify, that Bézout identities hold, and that `modPow` and the determinants agree with independent reference implementations.
 
-### `yarn test`
+Classical ciphers use the 26-letter Latin alphabet (`a = 0 … z = 25`). Other characters pass through unchanged; Hill skips them and pads the last block with `a`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Stack
 
-### `yarn build`
+React 19 · TypeScript · Vite · Tailwind CSS v4 · shadcn/ui (Radix) · React Router · Vitest · Playwright · oxlint / oxfmt · Bun
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Development
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```sh
+bun install
+bun run dev        # http://localhost:5173
+bun run check      # typecheck, lint, format check, unit tests
+bun run e2e        # Playwright: desktop, Pixel 7 and iPhone viewports, plus axe accessibility checks
+bun run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deployment
 
-### `yarn eject`
+```sh
+docker build -t kryptobreaker .
+docker run -p 8080:80 kryptobreaker
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The image builds the app with Bun and serves `dist/` with nginx. Firebase Analytics config is read from `VITE_FIREBASE_*` variables (see `.env.production`); analytics loads lazily after the first paint.

@@ -1,0 +1,33 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["typescript", "react", "react-perf", "jsx-a11y", "import", "vitest"],
+	"categories": {
+		"correctness": "error",
+		"suspicious": "warn"
+	},
+	"rules": {
+		"react/react-in-jsx-scope": "off",
+		"react-perf/jsx-no-new-object-as-prop": "off",
+		"react-perf/jsx-no-new-array-as-prop": "off",
+		"react-perf/jsx-no-new-function-as-prop": "off",
+		"react-perf/jsx-no-jsx-as-prop": "off",
+		"no-shadow": "off",
+		"import/no-named-as-default-member": "off",
+		"import/no-unassigned-import": [
+			"warn",
+			{
+				"allow": ["**/*.css"]
+			}
+		]
+	},
+	"ignorePatterns": ["dist", "dev-dist", "playwright-report", "test-results"],
+	"overrides": [
+		{
+			"files": ["**/*.test.ts"],
+			"rules": {
+				"vitest/no-conditional-expect": "off",
+				"vitest/expect-expect": "off"
+			}
+		}
+	]
+}
